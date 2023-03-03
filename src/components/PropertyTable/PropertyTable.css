@@ -1,0 +1,45 @@
+.property-table__table {
+    min-width: 600px;
+}
+
+.property-table__caption {
+    caption-side: top;
+    background-color: var(--bs-table-bg);
+    color: var(--bs-table-color);
+}
+
+.property-table__icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+    color: #ccc;
+    transition: transform, color 200ms ease;
+}
+
+.property-table__icon:hover {
+    transform: scale(1.2);
+    color: #fff;
+}
+
+.property-table__input {
+    background-color: #eee;
+}
+
+.property-table__input__invalid {
+    background-color: #eee;
+    border: 1px solid #ff0000d3 !important;
+}
+
+.property-table__collapse__collapsed {
+    display: none;
+}
+
+@media screen and (max-width: 800px) {
+    .property-table__collapse__expanded {
+        display: none;
+    }
+
+    .property-table__collapse__collapsed {
+        display: table-cell;
+    }
+}
