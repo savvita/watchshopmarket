@@ -1,0 +1,89 @@
+import db from '../db/db_access';
+
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+export const getAsync = createAsyncThunk(
+    'dialtype/get',
+    async () => {
+      const response = await db.DialTypes.get();
+      return response;
+    }
+  );
+
+  export const createAsync = createAsyncThunk(
+    'dialtype/create',
+    async (entity) => {
+      const response = await db.DialTypes.create(entity);
+      return response;
+    }
+  );
+
+  export const updateAsync = createAsyncThunk(
+    'dialtype/update',
+    async (entity) => {
+      const response = await db.DialTypes.update(entity);
+      return response;
+    }
+  );
+
+  export const deleteAsync = createAsyncThunk(
+    'dialtype/delete',
+    async (entity) => {
+      const response = await db.DialTypes.remove(entity);
+      return response;
+    }
+  );
+
+export const dialtypeSlice = createSlice({
+        name: 'dialtype',
+        initialState: {
+            values: [],
+            status: "idle"
+        },
+        reducers: {
+        },
+        extraReducers: (builder) => {
+            builder
+              .addCase(getAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(getAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action.payload) {
+                    state.values = action.payload;
+                  }
+                  else {
+                      state.values = [];
+                  }
+              })
+              .addCase(createAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(createAsync.fulfilled, (state) => {
+                state.status = 'idle';
+                return state;
+              })
+              .addCase(updateAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(updateAsync.fulfilled, (state) => {
+                state.status = 'idle';
+                return state;
+              })
+              .addCase(deleteAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(deleteAsync.fulfilled, (state) => {
+                state.status = 'idle';
+                return state;
+              });
+          },
+    }
+);
+
+// export const { } = categoriesSlice.actions
+
+export const selectValues = (state) => state.dialtype.values;
+export const selectStatus = (state) => state.dialtype.status;
+
+export default dialtypeSlice.reducer
