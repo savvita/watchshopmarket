@@ -1,0 +1,20 @@
+.catalog__sidebar-offcanvas-btn {
+    display: none;
+}
+
+.catalog__sidebar-offcanvas__opened {
+    transform: translateX(0) !important;
+    z-index: 5;
+}
+
+@media screen and (max-width: 992px) {
+    .catalog__sidebar-offcanvas {
+        position: absolute;
+        transform: translateX(-100%);
+        z-index: 5;
+        transition: transform 500ms ease-out;
+    }
+    .catalog__sidebar-offcanvas-btn {
+        display: block;
+    }
+}

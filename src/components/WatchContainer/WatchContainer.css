@@ -1,0 +1,39 @@
+.watch-container__card {
+    box-shadow: 0px 0px 17px 1px #000;
+    transition: transform 200ms ease-out;
+}
+
+.watch-container__card:hover {
+    cursor: pointer;
+    transform: scale(1.02);
+}
+
+.watch-container__card:hover .watch-container__card-description {
+    height: 5.9rem;
+    overflow: visible;
+}
+
+.watch-container__card-description {
+    position: absolute;
+    height: 2.9rem;
+    background-color: #000;
+    background-image: linear-gradient(180deg, #000 65%, #fff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    overflow: hidden;
+    transition: height 200ms ease-out; color: #5f1d1d;
+}
+
+.watch-container__card-btn {
+    background-color: #6c757d;
+    color: #fff;
+    margin: 0 auto;
+    padding: 5px 30px;
+    transition: background-color, color 200ms ease-out;
+}
+
+.watch-container__card-btn:active {
+    background-color: #fff !important;
+    color: #333 !important;
+}
