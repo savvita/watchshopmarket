@@ -111,66 +111,102 @@ const db_remove = async (url) => {
 const addArrayToQuery = (url, array, filterName) => {
     if(array) {
         for(let item of array) {
-            url += `&${filterName}=${item.id}`;
+            url += `&${filterName}=${item}`;
         }
     }
 
     return url;
 }
 
-const getUrl = (page, perPage, model, brands, collections, styles, movementTypes, glassTypes, caseShapes, caseMaterials, strapTypes, caseColors, strapColors, dialColors, waterResistances, incrustationTypes, dialTypes, genders, minPrice, maxPrice, onSale, isTop) => {
+// const getUrl = (page, perPage, model, brands, collections, styles, movementTypes, glassTypes, caseShapes, caseMaterials, strapTypes, caseColors, strapColors, dialColors, waterResistances, incrustationTypes, dialTypes, genders, minPrice, maxPrice, onSale, isTop) => {
+const getUrl = (filters) => {
 
-    if(!page) {
-        page = 1;
+    if(!filters.page) {
+        filters.page = 1;
     }
 
-    if(!perPage) {
-        perPage = 10;
+    if(!filters.perPage) {
+        filters.perPage = 10;
     }
 
-    let url = `${api}/watches/page/${page}?perPage=${perPage}`;
+    let url = `${api}/watches/page/${filters.page}?perPage=${filters.perPage}`;
 
-    if(model) {
-        url += `&model=${model}`;
+    if(filters.model) {
+        url += `&model=${filters.model}`;
     }
 
-    url = addArrayToQuery(url, brands, 'brandIds');
-    url = addArrayToQuery(url, collections, 'collectionIds');
-    url = addArrayToQuery(url, styles, 'styleIds');
-    url = addArrayToQuery(url, movementTypes, 'movementTypeIds');
-    url = addArrayToQuery(url, glassTypes, 'glassTypeIds');
-    url = addArrayToQuery(url, caseShapes, 'caseShapeIds');
-    url = addArrayToQuery(url, caseMaterials, 'caseMaterialIds');
-    url = addArrayToQuery(url, strapTypes, 'strapTypeIds');
-    url = addArrayToQuery(url, caseColors, 'caseColorIds');
-    url = addArrayToQuery(url, strapColors, 'strapColorIds');
-    url = addArrayToQuery(url, dialColors, 'dialColorIds');
-    url = addArrayToQuery(url, waterResistances, 'waterResistanceIds');
-    url = addArrayToQuery(url, incrustationTypes, 'incrustationTypeIds');
-    url = addArrayToQuery(url, dialTypes, 'dialTypeIds');
-    url = addArrayToQuery(url, genders, 'genderIds');
+    url = addArrayToQuery(url, filters.brands, 'brandIds');
+    url = addArrayToQuery(url, filters.collections, 'collectionIds');
+    url = addArrayToQuery(url, filters.styles, 'styleIds');
+    url = addArrayToQuery(url, filters.movementTypes, 'movementTypeIds');
+    url = addArrayToQuery(url, filters.glassTypes, 'glassTypeIds');
+    url = addArrayToQuery(url, filters.caseShapes, 'caseShapeIds');
+    url = addArrayToQuery(url, filters.caseMaterials, 'caseMaterialIds');
+    url = addArrayToQuery(url, filters.strapTypes, 'strapTypeIds');
+    url = addArrayToQuery(url, filters.caseColors, 'caseColorIds');
+    url = addArrayToQuery(url, filters.strapColors, 'strapColorIds');
+    url = addArrayToQuery(url, filters.dialColors, 'dialColorIds');
+    url = addArrayToQuery(url, filters.waterResistances, 'waterResistanceIds');
+    url = addArrayToQuery(url, filters.incrustationTypes, 'incrustationTypeIds');
+    url = addArrayToQuery(url, filters.dialTypes, 'dialTypeIds');
+    url = addArrayToQuery(url, filters.genders, 'genderIds');
 
-    if(minPrice) {
-        url += `&minPrice=${minPrice}`;
+    if(filters.minPrice) {
+        url += `&minPrice=${filters.minPrice}`;
     }
 
-    if(maxPrice) {
-        url += `&maxPrice=${maxPrice}`;
+    if(filters.maxPrice) {
+        url += `&maxPrice=${filters.maxPrice}`;
     }
 
-    if(onSale) {
-        for(let item of onSale) {
+    if(filters.onSale) {
+        for(let item of filters.onSale) {
             url += `&onSale=${item}`;
         }
     }
 
-    if(isTop) {
-        for(let item of isTop) {
+    if(filters.isTop) {
+        for(let item of filters.isTop) {
             url += `&isTop=${item}`;
         }
     }
 
     return url;
+}
+
+const db_uploadFiles = async (url, files) => {
+    if(!files) {
+        return undefined;
+    }
+
+    let results = {};
+    const formData = new FormData();
+    formData.append('title', 'files');
+
+    for (let i = 0; i < files.length; i++) {
+        formData.append('files', files[i]);
+    }
+    
+    await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Authorization': "Bearer " + token.getToken()
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(response => {
+    if(response.token) {
+        token.setToken(response.token);
+    }
+    
+    results = response;
+    })
+    .catch(() => {
+        results = undefined;
+    });
+    
+    return results;
 }
 
 const basic = function (url) {
@@ -193,6 +229,12 @@ const basic = function (url) {
     
     this.remove = async function (id) {
         return await db_remove(`${this.url}/${id}`);
+    }
+}
+
+const Files = function() {
+    this.upload = async function (files) {
+        return await db_uploadFiles(`${api}/files`, files);
     }
 }
 
@@ -268,29 +310,33 @@ Orders.create = async function() {
 const StrapTypes = new basic(`${api}/straptypes`);
 const Styles = new basic(`${api}/styles`);
 
-const Users = new basic(`${api}/users`);
-Users.create = () => {
-    return undefined;
-}
-Users.restore = async function(id) {
-    if(!id) {
+const Users = function() {
+    basic.call(this, `${api}/users`);
+    this.create = function() {
         return undefined;
     }
-
-    return await db_put(`${this.url}/restore/${id}`, {});
-}
-
-const Watches = new basic(`${api}/watches`);
-Watches.getByFilters = async function (filters) {
-    let url = getUrl(...filters);
-    return await db_get(url);
-}
-Watches.restore = async function (id) {
-    if(!id) {
-        return undefined;
+    this.restore = async function(id) {
+        if(!id) {
+            return undefined;
+        }
+    
+        return await db_put(`${this.url}/restore/${id}`, {});
     }
+}
 
-    return await db_put(`${this.url}/restore/${id}`, {});
+const Watches = function() {
+    basic.call(this, `${api}/watches`);
+    this.getByFilters = async function (filters) {
+        let url = getUrl(filters);
+        return await db_get(url);
+    }
+    this.restore = async function (id) {
+        if(!id) {
+            return undefined;
+        }
+    
+        return await db_put(`${this.url}/restore/${id}`, {});
+    }
 }
 
 const WaterResistances = new basic(`${api}/waterresistances`);
@@ -339,9 +385,9 @@ const functions = {
     signIn: signIn,
     signUp: signUp,
     Basket: Basket,
-    Watches: Watches,
+    Watches: new Watches(),
     WaterResistances: WaterResistances,
-    Users: Users,
+    Users: new Users(),
     StrapTypes: StrapTypes,
     Styles: Styles,
     Orders: Orders,
@@ -356,7 +402,8 @@ const functions = {
     Functions: Functions,
     Genders: Genders,
     GlassTypes: GlassTypes,
-    IncrustationTypes: IncrustationTypes
+    IncrustationTypes: IncrustationTypes,
+    Files: new Files()
 };
 
 export default functions;
