@@ -1,11 +1,12 @@
 import tbl from '../../modules/sort'; 
 
-import PropertyTableRow from './PropertyTableRow';
+import BrandPropertyTableRow from './BrandPropertyTableRow';
 import Pagination from '../Pagination';
 import ConfirmDeletingModal from '../ConfirmDeletingModal';
 import InfoModal from '../InfoModal';
 
 import { useSelector, useDispatch } from 'react-redux';
+import { selectValues as selectCountries, getAsync as getCountries } from '../../app/countrySlice';
 
 import { useEffect, useState } from 'react';
 import React from 'react';
@@ -15,9 +16,10 @@ import { FaPlus } from "react-icons/fa";
 import PerPageSelect from '../PerPageSelect';
 
 
-const PropertyTable = ({ selectValues, selectStatus, title, get, update, create, remove }) => {
+const BrandPropertyTable = ({ selectValues, selectStatus, title, get, update, create, remove }) => {
     const values = useSelector(selectValues);
     const status = useSelector(selectStatus);
+    const countries = useSelector(selectCountries);
     const dispatch = useDispatch();
 
     const [items, setItems] = useState([]);
@@ -49,6 +51,8 @@ const PropertyTable = ({ selectValues, selectStatus, title, get, update, create,
         pages.push(20);
         pages.push(50);
         setPages(pages);
+
+        dispatch(getCountries());
     }, []);
 
     useEffect(() => {
@@ -184,6 +188,7 @@ const PropertyTable = ({ selectValues, selectStatus, title, get, update, create,
                         <th className='text-center sortable' onClick={ tbl.sort }>№</th>
                         <th className="sortable" onClick={ tbl.sort }>Id</th>
                         <th className="sortable" onClick={ tbl.sort }>Значення</th>
+                        <th className="sortable" onClick={ tbl.sort }>Країна</th>
                         <th colSpan="3" className="text-center property-table__collapse__collapsed">Дії</th>
                         <th className='property-table__collapse__expanded'>Переглянути</th>
                         <th className='property-table__collapse__expanded'>Редагувати</th>
@@ -191,14 +196,14 @@ const PropertyTable = ({ selectValues, selectStatus, title, get, update, create,
                     </tr>
                 </thead>
                 <tbody>
-                    <PropertyTableRow className={ addMode ? '' : 'd-none' } onCancel={ () => setAddMode(false) } onAccept={ saveItem } onError={ onError } />
+                    <BrandPropertyTableRow countries={ countries } className={ addMode ? '' : 'd-none' } onCancel={ () => setAddMode(false) } onAccept={ saveItem } onError={ onError } />
                     { itemsPage && itemsPage.map((item, idx) => 
-                        item && <PropertyTableRow key={ item.id } idx={ (currentPage - 1) * perPage + idx + 1 } item={ item } onDelete={ (item) => showCofirmModal(item) } onAccept={ saveItem } onError={ onError } />)
+                        item && <BrandPropertyTableRow key={ item.id } countries={ countries } idx={ (currentPage - 1) * perPage + idx + 1 } item={ item } onDelete={ (item) => showCofirmModal(item) } onAccept={ saveItem } onError={ onError } />)
                     }
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colSpan="6">
+                        <td colSpan="7">
                             <div className={ status === 'loading' ? 'd-flex justify-content-center' : 'd-none' }><Spinner color="light">Loading...</Spinner></div>
                             <Pagination currentPage={ currentPage } hits={ items.length } perPage={ perPage } className={ status !== 'idle' && 'd-none' } onPageChanged={ (page) => setCurrentPage(page) } />
                         </td>
@@ -211,4 +216,4 @@ const PropertyTable = ({ selectValues, selectStatus, title, get, update, create,
     );
 }
 
-export default PropertyTable;
+export default BrandPropertyTable;

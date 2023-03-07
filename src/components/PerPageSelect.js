@@ -19,6 +19,7 @@ const PerPageSelect = ({ values, onChange }) => {
 
     const changePerPage = (idx) => {
         setCurrent(idx);
+        onChange && onChange(idx);
     }
 
     return (

@@ -1,0 +1,13 @@
+.property-table__collapse__collapsed {
+    display: none;
+}
+
+@media screen and (max-width: 800px) {
+    .property-table__collapse__expanded {
+        display: none;
+    }
+
+    .property-table__collapse__collapsed {
+        display: table-cell;
+    }
+}
