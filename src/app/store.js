@@ -16,6 +16,7 @@ import collectionReducer from './collectionSlice';
 import caseshapeReducer from './caseshapeSlice';
 import brandReducer from './brandSlice';
 import watchReducer from './watchSlice';
+import filterReducer from './filterSlice';
 
 export const store = configureStore( {
     reducer: {
@@ -35,5 +36,6 @@ export const store = configureStore( {
         caseshape: caseshapeReducer,
         brand: brandReducer,
         watch: watchReducer,
+        filter: filterReducer,
     }
 });

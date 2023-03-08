@@ -44,7 +44,7 @@ const FilterSidebar = ({ onFilter }) => {
         {
             title: "Водозахист",
             items: waterResistances.value,
-            onAccept: (selected) => setSelectedFilters({ ...selectedFilters, waterResistance: [...selected]})
+            onAccept: (selected) => setSelectedFilters({ ...selectedFilters, waterResistances: [...selected]})
         },
         {
             title: "Стиль",
