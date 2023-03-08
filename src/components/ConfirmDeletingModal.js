@@ -2,6 +2,9 @@
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 
 const ConfirmDeletingModal = ({ isOpen, item, onAccept, onCancel }) => {
+    if(item === null) {
+        return;
+    }
     return (
         <Modal isOpen={isOpen}>
             <ModalHeader>Видалення строки { item.value }</ModalHeader>

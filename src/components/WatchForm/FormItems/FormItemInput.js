@@ -2,21 +2,30 @@
 import { useEffect, useState } from 'react';
 import { FormGroup, Input, Label, FormFeedback } from 'reactstrap';
 
-const FormItemInput = ({ name, title, inititalValue, validation, validationErrorText, onInput }) => {
+const FormItemInput = ({ name, title, initialValue, validation, validationErrorText, onInput }) => {
     const [value, setValue] = useState('');
     const [isValid, setIsValid] = useState(false);
 
     useEffect(() => {
-        if(inititalValue) {
-            setValue(inititalValue);
+        if(initialValue) {
+            setValue(initialValue.toString());
             if(validation) {
-                setIsValid(validation(inititalValue));
+                setIsValid(validation(initialValue.toString()));
             }
             else {
                 setIsValid(true);
             }
         }
-    }, [inititalValue]);
+        else {
+            setValue("");
+            if(validation) {
+                setIsValid(validation(""));
+            }
+            else {
+                setIsValid(true);
+            }
+        }
+    }, [initialValue]);
 
     useEffect(() => {
         if(validation) {
@@ -25,7 +34,9 @@ const FormItemInput = ({ name, title, inititalValue, validation, validationError
         else {
             setIsValid(true);
         }
+        
     }, [validation, value]);
+
 
 
     const handleInput = (e) => {

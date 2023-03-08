@@ -2,9 +2,21 @@
 import { useEffect, useState } from 'react';
 import { FormGroup, Input, Label, FormFeedback } from 'reactstrap';
 
-const FormItemNumber = ({ name, title, validation, validationErrorText, min, max, onChange }) => {
+const FormItemTextArea = ({ name, title, initialValue, validation, validationErrorText, onInput }) => {
     const [value, setValue] = useState('');
     const [isValid, setIsValid] = useState(false);
+
+    useEffect(() => {
+        if(initialValue) {
+            setValue(initialValue);
+            if(validation) {
+                setIsValid(validation(initialValue));
+            }
+            else {
+                setIsValid(true);
+            }
+        }
+    }, [initialValue]);
 
     useEffect(() => {
         if(validation) {
@@ -13,7 +25,7 @@ const FormItemNumber = ({ name, title, validation, validationErrorText, min, max
         else {
             setIsValid(true);
         }
-    }, [validation]);
+    }, [validation, value]);
 
     const handleInput = (e) => {
         setValue(e.target.value);
@@ -24,22 +36,15 @@ const FormItemNumber = ({ name, title, validation, validationErrorText, min, max
             setIsValid(true);
         }
 
-        onChange && onChange(e.target.value);
-    }
-
-    const handleKeyUp = (e) => {
-        if((e.which < 48 || e.which > 57) && (e.which != 46 && e.which != 8))
-        {
-            setIsValid(false);
-        }
+        onInput && onInput(e.target.value);
     }
     return (
         <FormGroup className='position-relative'>
             <Label className="ps-2">{ title }</Label>
-            <Input name={ name } type="number" min={ min } max={ max } value={ value } onInput ={ handleInput } invalid={ !isValid } onKeyUp={ handleKeyUp } />
+            <Input name={ name } type="textarea" value={ value } onInput ={ handleInput } invalid={ !isValid } />
             { validationErrorText && <FormFeedback tooltip>{ validationErrorText }</FormFeedback> }
         </FormGroup>
     );
 }
 
-export default FormItemNumber;
+export default FormItemTextArea;

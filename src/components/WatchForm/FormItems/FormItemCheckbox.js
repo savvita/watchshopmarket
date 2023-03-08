@@ -3,16 +3,19 @@ import { FormGroup, Input, Label } from 'reactstrap';
 
 import { useEffect, useState } from 'react';
 
-const FormItemCheckbox = ({ name, title, onChange }) => {
+const FormItemCheckbox = ({ name, title, initialState, onChange }) => {
     const [state, setState] = useState(true);
+
+    useEffect(() => {
+        if(initialState !== undefined) {
+            setState(initialState);
+        }
+    }, []);
 
     const switchState = () => {
         setState(!state);
-    }
-
-    useEffect(() => {
         onChange && onChange(state);
-    }, [state]);
+    }
 
     return (
         <FormGroup switch>

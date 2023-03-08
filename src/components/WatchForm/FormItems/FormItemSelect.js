@@ -3,6 +3,7 @@
 import { FormGroup, Input, Label } from 'reactstrap';
 
 const FormItemSelect = ({ name, title, items, initialIndex, onChange }) => {
+
     return (
         <FormGroup>
             <Label className="ps-2">{ title }</Label>

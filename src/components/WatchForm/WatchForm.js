@@ -1,11 +1,9 @@
-import FormItemInput from './FormItemInput';
-import FormItemSelect from './FormItemSelect';
-import FormItemCheckbox from './FormItemCheckbox';
-import FormItemTextArea from './FormItemTextArea';
-import FormItemNumber from './FormItemNumber';
-import FormItemSelectInto from './FormItemSelectInto';
-import FormItemImageFile from './FormItemImageFile';
 import InfoModal from '../InfoModal';
+import GeneralInfoTab from './Tabs/GeneralInfoTab';
+import CaseInfoTab from './Tabs/CaseInfoTab';
+import DialInfoTab from './Tabs/DialInfoTab';
+import StrapInfoTab from './Tabs/StrapInfoTab';
+import AdditionalInfoTab from './Tabs/AdditionalInfoTab';
 
 import validation from '../../modules/validation';
 
@@ -25,14 +23,17 @@ import { selectValues as selectWaterResistances, getAsync as getWaterResistances
 import { selectValues as selectFunctions, getAsync as getFunctions } from '../../app/functionSlice';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { TabPane, TabContent, NavLink, NavItem, Nav, Modal, ModalHeader, ModalBody, ModalFooter, Button, Input } from 'reactstrap';
+import { TabContent, NavLink, NavItem, Nav, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 
 import { useEffect, useState } from 'react';
 
 import './WatchForm.css';
+import DescriptionTab from './Tabs/DescriptionTab';
+import ImageTab from './Tabs/ImagesTab';
+import SalesInfoTab from './Tabs/SalesInfoTab';
 
-const WatchForm = ({ isOpen, item, onAccept, onCancel }) => {
-    const dialtypes = useSelector(selectDialTypes);
+const WatchForm = ({ isOpen, item, setItem, onAccept, onCancel }) => {
+    const dialTypes = useSelector(selectDialTypes);
     const brands = useSelector(selectBrands);
     const collections = useSelector(selectCollections);
     const styles = useSelector(selectStyles);
@@ -43,12 +44,11 @@ const WatchForm = ({ isOpen, item, onAccept, onCancel }) => {
     const glassTypes = useSelector(selectGlassTypes);
     const incrustationTypes = useSelector(selectIncrustationTypes);
     const materials = useSelector(selectMaterials);
-    const straptypes = useSelector(selectStrapTypes);
+    const strapTypes = useSelector(selectStrapTypes);
     const waterResistances = useSelector(selectWaterResistances);
     const functions = useSelector(selectFunctions);
     const dispatch = useDispatch();
 
-    const [watch, setWatch] = useState({});
     const [imgs, setImgs] = useState({});
 
     const [infoModal, setInfoModal] = useState(false);
@@ -56,9 +56,12 @@ const WatchForm = ({ isOpen, item, onAccept, onCancel }) => {
 
     const [errorMsg, setErrorMsg] = useState([]);
 
+    const [activeTab, setActiveTab] = useState('1');
+
     useEffect(() => {
 
         if(isOpen) {
+            setActiveTab('1');
             dispatch(getDialTypes());
             dispatch(getBrands());
             dispatch(getCollections());
@@ -73,79 +76,38 @@ const WatchForm = ({ isOpen, item, onAccept, onCancel }) => {
             dispatch(getStrapTypes());
             dispatch(getWaterResistances());
             dispatch(getFunctions());
-        }
 
-        if(item) {
-            setWatch(item);
+            if(!item) {
+                dispatch(setItem({ isTop: true, onSale: true }));
+            }
         }
     }, [isOpen]);
 
-    const [activeTab, setActiveTab] = useState('1');
 
-    const positiveFloadValidation = (value) => {
-        if(!value) {
-            return true;
-        }
+    // useEffect(() => {
+    //     if(item) {
+    //         setWatch({ ...item });
+    //     }
+    // }, [item]);
 
-        return validation.positiveFloatValidationRule(value);
-    }
-
-    const discountValidation = (value) => {
-        if(!value) {
-            return true;
-        }
-
-        return validation.positiveFloatValidationRule(value) && parseFloat(value) < 100;
-    }
-
-    const positiveIntValidation = (value) => {
-        if(!value) {
-            return true;
-        }
-        return validation.positiveIntValidationRule(value);
-    }
 
     const accept = () => { 
-        errorMsg.splice(0, errorMsg.length);
-
-        if(!watch.title || !watch.model || !watch.price || !watch.available) {
-            errorMsg.push('Не всі обов’язкові поля заповнені');
-        }
-
-        if(watch.weight && !validation.positiveFloatValidationRule(watch.weight)) {
-            errorMsg.push('Значення поля Вага має бути позитивним числом');
-        }
-
-        if(watch.caseSize && !validation.positiveFloatValidationRule(watch.caseSize)) {
-            errorMsg.push('Значення поля Розмір корпусу має бути позитивним числом');
-            console.log(watch);
-        }
-
-        if(!validation.positiveFloatValidationRule(watch.price)) {
-            errorMsg.push('Значення поля Ціна має бути позитивним числом');
-        }
-
-        if(!discountValidation(watch.discount)) {
-            errorMsg.push('Значення поля Знижка має бути позитивним числом');
-        }
-
-        if(!validation.positiveIntValidationRule(watch.available)) {
-            errorMsg.push('Значення поля В наявності має бути позитивним числом');
-        }
-
-        if(errorMsg.length > 0) {
-            setErrorMsg([ "Одно чи більше полей заповнені невірно:", ...errorMsg ]);
+        const errors = validation.validateWatch(item);
+       
+        if(errors.length > 0) {
+            setErrorMsg([ "Одно чи більше полей заповнені невірно:", ...errors ]);
             showError('Некоректні дані');
             return;
         }
 
-        onAccept && onAccept(watch, imgs.map(img => img.file));
+        onAccept && onAccept(item, imgs.map(img => img.file).filter(img => img.file));
     }
 
     const showError = (title) => {
         setInfoHeader(title ?? 'Інформація');
         setInfoModal(true);
     }
+
     
     return (
         <>
@@ -195,49 +157,22 @@ const WatchForm = ({ isOpen, item, onAccept, onCancel }) => {
                         </NavItem>
                     </Nav>
                     <TabContent activeTab={ activeTab }>
-                        <TabPane tabId="1">
-                            <FormItemInput name="title" title="Назва" inititalValue={ item && item.title } validation={ validation.notEmptyValidationRule } validationErrorText='Обов’язкове поле' onInput={ (value) => setWatch({ ...watch, title: value }) } />
-                            <FormItemInput name="model" title="Модель" inititalValue={ item && item.model } validation={ validation.notEmptyValidationRule } validationErrorText='Обов’язкове поле' onInput={ (value) => setWatch({ ...watch, model: value }) } />
-                            <FormItemSelect name="brand" title="Виробник" items={ brands } inititalValue={ item && item.brand && item.brand.id } onChange={ (value) => setWatch({ ...watch, brand: brands.value.find(item => item.id == value) }) } />
-                            <FormItemSelect name="collection" title="Колекція" items={ collections } onChange={ (value) => setWatch({ ...watch, collection: collections.value.find(item => item.id == value) }) } />
-                            <FormItemSelect name="style" title="Стиль" items={ styles } onChange={ (value) => setWatch({ ...watch, style: styles.value.find(item => item.id == value) }) } />
-                            <FormItemSelect name="gender" title="Стать" items={ genders} onChange={ (value) => setWatch({ ...watch, gender: genders.value.find(item => item.id == value) }) } />
-                            <FormItemSelect name="movementtype" title="Тип механізму" items={ movementTypes } onChange={ (value) => setWatch({ ...watch, movementType: movementTypes.value.find(item => item.id == value) }) } />
-                            <FormItemInput name="weight" title="Вага" inititalValue={ item && item.weight } validation={ positiveFloadValidation } validationErrorText='Має бути позитивним числом'  onInput={ (value) => setWatch({ ...watch, weight: value }) } />
-                        </TabPane>
-                        <TabPane tabId="2">
-                            <FormItemSelect name="caseshape" title="Форма корпусу" items={ caseShapes} onChange={ (value) => setWatch({ ...watch, caseShape: caseShapes.value.find(item => item.id == value) }) } />
-                            <FormItemSelect name="casematerial" title="Матеріал корпусу" items={ materials} onChange={ (value) => setWatch({ ...watch, caseMaterial: materials.value.find(item => item.id == value) }) } />
-                            <FormItemInput name="casesize" title="Розмір корпусу" validation={ positiveFloadValidation } validationErrorText='Має бути позитивним числом' onInput={ (value) => setWatch({ ...watch, caseSize: value }) } />
-                            <FormItemSelect name="casecolor" title="Колір корпусу" items={ colors } onChange={ (value) => setWatch({ ...watch, caseColor: colors.value.find(item => item.id == value) }) } />
-                        </TabPane>
-                        <TabPane tabId="3">
-                            <FormItemSelect name="dialtype" title="Тип циферблату" items={ dialtypes } onChange={ (value) => setWatch({ ...watch, dialType: dialtypes.value.find(item => item.id == value) }) } />
-                            <FormItemSelect name="dialcolor" title="Колір циферблату" items={ colors } onChange={ (value) => setWatch({ ...watch, dialColor: colors.value.find(item => item.id == value) }) } />
-                            <FormItemSelect name="glasstype" title="Скло" items={ glassTypes } onChange={ (value) => setWatch({ ...watch, glassType: glassTypes.value.find(item => item.id == value) }) } />
-                        </TabPane>
-                        <TabPane tabId="4">
-                            <FormItemSelect name="straptype" title="Браслет/ремінець" items={ straptypes } onChange={ (value) => setWatch({ ...watch, strapType: straptypes.value.find(item => item.id == value) }) } />
-                            <FormItemSelect name="strapcolor" title="Колір браслету/ремінця" items={ colors } onChange={ (value) => setWatch({ ...watch, strapColor: colors.value.find(item => item.id == value) }) } />
-                        </TabPane>
-                        <TabPane tabId="5">
-                            <FormItemSelect name="waterresistance" title="Водозахист" items={ waterResistances } onChange={ (value) => setWatch({ ...watch, waterResistance: waterResistances.value.find(item => item.id == value) }) } />
-                            <FormItemSelect name="incrustationtype" title="Інкрустація" items={ incrustationTypes } onChange={ (value) => setWatch({ ...watch, incrustationType: incrustationTypes.value.find(item => item.id == value) }) } />
-                            <FormItemSelectInto name="function" title="Функції" items={ functions } onChange={ (items) => setWatch({ ...watch, functions: [...items] }) } />
-                        </TabPane>
-                        <TabPane tabId="6">
-                            <FormItemTextArea name="description" title="Опис" onInput={ (value) => setWatch({ ...watch, description: value }) } />
-                        </TabPane>
-                        <TabPane tabId="7">
-                            <FormItemImageFile onChange={ (imgs => setImgs([...imgs])) } />
-                        </TabPane>
-                        <TabPane tabId="8">
-                            <FormItemInput name="price" title="Ціна" validation={ validation.positiveFloatValidationRule } validationErrorText='Обов’язкове поле' onInput={ (value) => setWatch({ ...watch, price: value }) } />
-                            <FormItemInput name="discount" title="Знижка (%)" validation={ discountValidation } validationErrorText='Має бути позитивним числом менше 100' onInput={ (value) => setWatch({ ...watch, discount: value }) } />
-                            <FormItemCheckbox name="onsale" title="В продажі" onChange={ (value) => setWatch({ ...watch, onSale: value }) } />
-                            <FormItemCheckbox name="istop" title="Популярний товар" onChange={ (value) => setWatch({ ...watch, isTop: value }) } />
-                            <FormItemNumber name="available" title="В наявності" validation={ positiveIntValidation } validationErrorText='Має бути цілим позитивним числом' min="0" onChange={ (value) => setWatch({ ...watch, available: value }) } />
-                        </TabPane>
+
+                        <GeneralInfoTab item={ item } tabId="1" setItem={ (value) => dispatch(setItem(value)) } brands={ brands } collections={ collections } styles={ styles } genders={ genders } movementTypes={ movementTypes } />
+
+                        <CaseInfoTab item={ item } tabId="2" setItem={ (value) => dispatch(setItem(value)) } caseShapes={ caseShapes } colors={ colors } materials={ materials } />
+
+                        <DialInfoTab item={ item } tabId="3" setItem={ (value) => dispatch(setItem(value)) } dialTypes={ dialTypes } colors={ colors } glassTypes={ glassTypes } />
+
+                        <StrapInfoTab item={ item } tabId="4" setItem={ (value) => dispatch(setItem(value)) } strapTypes={ strapTypes } colors={ colors } />
+                        
+                        <AdditionalInfoTab item={ item } tabId="5" setItem={ (value) => dispatch(setItem(value)) } waterResistances={ waterResistances } incrustationTypes={ incrustationTypes } functions={ functions } />
+
+                        <DescriptionTab item={ item } tabId="6" setItem={ (value) => dispatch(setItem(value)) } />
+
+                        <ImageTab item={ item } tabId="7" setImages={ (imgs) => setImgs([...imgs]) } />
+
+                        <SalesInfoTab item={ item } tabId="8" setItem={ (value) => dispatch(setItem(value)) } />
                     </TabContent>
                 </ModalBody>
                 <ModalFooter>

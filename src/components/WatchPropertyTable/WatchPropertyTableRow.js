@@ -7,8 +7,33 @@ import { useState, useEffect } from 'react';
 
 import './WatchPropertyTable.css';
 
-const WatchPropertyTableRow = ({ idx, item, className, onEdit, onDelete, onView, onOnSaleChange, onIsTopChange }) => {
+const WatchPropertyTableRow = ({ idx, item, className, onEdit, onView, onOnSaleChange, onIsTopChange }) => {
+    const [onSale, setOnSale] = useState(item && item.onSale);
+    const [isTop, setIsTop] = useState(item && item.isTop);
 
+    const onSaleChange = async (e) => {
+        if(!item || !onOnSaleChange) {
+            return;
+        }
+
+        const res = await onOnSaleChange(item.id, e.target.checked);
+
+        if(res === true) {
+            setOnSale(!onSale);
+        }
+    }
+
+    const isTopChange = async (e) => {
+        if(!item || !onIsTopChange) {
+            return;
+        }
+
+        const res = await onIsTopChange(item.id, e.target.checked);
+
+        if(res === true) {
+            setIsTop(!onSale);
+        }
+    }
 
     return (
         <tr className={ className }>
@@ -21,12 +46,12 @@ const WatchPropertyTableRow = ({ idx, item, className, onEdit, onDelete, onView,
             <td>{ item && item.available }</td>
             <td>
                 <FormGroup switch>
-                    <Input type="switch" checked={ item && item.onSale } onChange={ onOnSaleChange } />
+                    <Input type="switch" checked={ onSale } onChange={ onSaleChange } />
                 </FormGroup>
             </td>
             <td>
                 <FormGroup switch>
-                    <Input type="switch" checked={ item && item.isTop } onChange={ onIsTopChange } />
+                    <Input type="switch" checked={ isTop } onChange={ isTopChange } />
                 </FormGroup>
             </td>
             <CollapsedActions item={ item } editMode={ false } onView={ () => item && onView && onView(item.id) } onEdit={ () => item && onEdit && onEdit(item.id)} />

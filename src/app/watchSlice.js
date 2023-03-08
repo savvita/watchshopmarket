@@ -42,13 +42,27 @@ export const getAsync = createAsyncThunk(
     }
   );
 
+  export const restoreAsync = createAsyncThunk(
+    'watch/restore',
+    async (entity) => {
+      const response = await db.Watches.restore(entity);
+      return response;
+    }
+  );
+
 export const watchSlice = createSlice({
         name: 'watch',
         initialState: {
             values: [],
+            currentValue: null,
             status: "idle"
         },
         reducers: {
+          setCurrentValue: (state, action) => {
+            if(action) {
+              state.currentValue = action.payload;
+            }
+          },
         },
         extraReducers: (builder) => {
             builder
@@ -69,6 +83,12 @@ export const watchSlice = createSlice({
               })
               .addCase(getByIdAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
+                if(action && action.payload && action.payload.value) {
+                  state.currentValue = action.payload.value;
+                }
+                else {
+                  state.currentValue = null;
+                }
                 return state;
               })
               .addCase(createAsync.pending, (state) => {
@@ -91,14 +111,22 @@ export const watchSlice = createSlice({
               .addCase(deleteAsync.fulfilled, (state) => {
                 state.status = 'idle';
                 return state;
+              })
+              .addCase(restoreAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(restoreAsync.fulfilled, (state) => {
+                state.status = 'idle';
+                return state;
               });
           },
     }
 );
 
-// export const { } = categoriesSlice.actions
+export const { setCurrentValue } = watchSlice.actions
 
 export const selectValues = (state) => state.watch.values;
+export const selectCurrent = (state) => state.watch.currentValue;
 export const selectStatus = (state) => state.watch.status;
 
 export default watchSlice.reducer

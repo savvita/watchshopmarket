@@ -1,9 +1,8 @@
-import FormItemSelect from './FormItemSelect';
 
 import { useEffect, useState } from 'react';
 import { FormGroup, Input, Label, Row, Col, Button } from 'reactstrap';
 
-const FormItemSelectInto = ({ name, title, items, onChange }) => {
+const FormItemSelectInto = ({ name, title, items, initialValues, onChange }) => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [notSelectedItems, setNotSelectedItems] = useState([]);
 
@@ -11,7 +10,18 @@ const FormItemSelectInto = ({ name, title, items, onChange }) => {
     const [notSelectedItem, setNotSelectedItem] = useState(-1);
 
     useEffect(() => {
-        setNotSelectedItems(items);
+        if(initialValues) {
+            setSelectedItems(initialValues);
+            if(items && items.value) {
+                setNotSelectedItems(items.value.filter(i => !initialValues.includes(i)));
+            }
+        }
+    }, [initialValues]);
+
+    useEffect(() => {
+        if(items && items.value) {
+            setNotSelectedItems(items.value);
+        }
     }, [items]);
 
     const addToSelected = () => {
@@ -19,12 +29,13 @@ const FormItemSelectInto = ({ name, title, items, onChange }) => {
             return;
         }
 
-        const item = notSelectedItems.value.find(item => item.id === parseInt(notSelectedItem));
+        const item = notSelectedItems.find(item => item.id === parseInt(notSelectedItem));
 
         if(item) {
             setSelectedItems([...selectedItems, item]);
-            setNotSelectedItems({ value: notSelectedItems.value.filter(item => item.id !== parseInt(notSelectedItem)) });
+            setNotSelectedItems(notSelectedItems.filter(item => item.id !== parseInt(notSelectedItem)));
             setSelectedItem(notSelectedItem);
+            onChange && onChange([...selectedItems, item]);
         }
     }
 
@@ -38,14 +49,15 @@ const FormItemSelectInto = ({ name, title, items, onChange }) => {
         if(item) {
             const items = selectedItems.filter(item => item.id !== parseInt(selectedItem));
             setSelectedItems(items);
-            setNotSelectedItems({ value: [...notSelectedItems.value, item] });
+            setNotSelectedItems([...notSelectedItems, item]);
             setSelectedItem(items.length > 0 ? items[0].id : -1);
+            onChange && onChange(items);
         }
     }
 
-    useEffect(() => {
-        onChange && onChange(selectedItems);
-    }, [selectedItems]);
+    // useEffect(() => {
+    //     onChange && onChange(selectedItems);
+    // }, [selectedItems]);
 
 
     return (
@@ -53,7 +65,13 @@ const FormItemSelectInto = ({ name, title, items, onChange }) => {
             <legend className="fs-6 ps-2">{ title }</legend>
             <Row>
                 <Col md="6" sm="12">
-                    <FormItemSelect name={ name } title='&nbsp;' items={ notSelectedItems } onChange={ (value) => setNotSelectedItem(value) } />
+                    <FormGroup>
+                        <Label className="ps-2">&nbsp;</Label>
+                        <Input name={ name } type="select" value={ notSelectedItem } onChange={ (e) => setNotSelectedItem(e.target.value) }>
+                            <option value={ 0 }>Виберіть...</option>
+                            { notSelectedItems && notSelectedItems.map(item => <option key={ item.id } value={ item.id }>{ item.value }</option>)}
+                        </Input>
+                    </FormGroup>
                     <Button style={{ width: '13rem' }} onClick={ addToSelected }>Додати</Button>
                 </Col>
                 <Col md="6" sm="12">

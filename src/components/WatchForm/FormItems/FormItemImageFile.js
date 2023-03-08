@@ -3,8 +3,14 @@ import ImagePreview from './ImagePreview';
 import { useEffect, useState } from 'react';
 import { Input } from 'reactstrap';
 
-const FormItemImageFile = ({ onChange }) => {
+const FormItemImageFile = ({ initialValues, onChange }) => {
     const [imgs, setImgs] = useState([]);
+
+    useEffect(() => {
+        if(initialValues) {
+            setImgs(initialValues);
+        }
+    }, [initialValues]);
 
     const deleteImage = (img) => {
         setImgs(imgs.filter(item => item.file !== img.file));
@@ -48,7 +54,7 @@ const FormItemImageFile = ({ onChange }) => {
 
 
     return (
-        <div>
+        <div className='pt-2'>
             <Input name="file" type="file" onChange={ handleFiles } multiple />
             { imgs && imgs.map((item, idx) => <ImagePreview key={ idx } img={ item } onDelete={ deleteImage } />) } 
         </div>
