@@ -1,0 +1,75 @@
+
+import token from '../../db/token';
+
+import AccountMenu from './AccountMenu';
+
+import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, Input, NavLink, Button, Row, Col } from 'reactstrap';
+
+import { FaShoppingBasket } from 'react-icons/fa';
+
+import { useEffect, useState } from 'react';
+import { NavLink as RRNavLink, useLocation, Link } from 'react-router-dom';
+
+import { selectValue, set } from '../../app/filterSlice';
+import { useSelector, useDispatch } from 'react-redux';
+
+import './Header.css';
+
+const Header = () => {
+    const location = useLocation();
+
+    const filters = useSelector(selectValue);
+    const dispatch = useDispatch();
+
+    const [collapsed, setCollapsed] = useState(true);
+    const toggleNavbar = () => setCollapsed(!collapsed);
+
+    const [user, setUser] = useState(token.getUserInfo());
+
+    const [searchTxt, setSearchTxt] = useState('');
+    
+    const onLogOut = () => {
+        setUser(token.logOut());
+    }
+
+    const search = () => {
+        dispatch(set({ ...filters, model: searchTxt }));
+    }
+
+    return (
+        <header className="border-bottom border-light pt-2 pb-5">
+            <Navbar dark expand={"lg"} className="p-3">
+                    <NavbarBrand tag={RRNavLink} to="/" className="fs-1 fw-weight-bold">Watch Market</NavbarBrand>
+                    <NavbarToggler onClick={ toggleNavbar } />
+                    <Collapse navbar isOpen={ !collapsed }>
+                        <Nav className="flex-grow-1" navbar>
+                            <NavLink tag={RRNavLink} to="/">Головна</NavLink>
+                            <NavLink tag={RRNavLink} to="/catalog">Каталог</NavLink>
+                            <NavLink tag={RRNavLink} to="/about">Про нас</NavLink>
+
+                            <AccountMenu user={ user } onLogOut={ onLogOut } />
+                            { location.pathname === '/catalog' && 
+                                <Row className='flex-grow-1'>
+                                    <Col md="12" lg="9">
+                                        <Input name="search" placeholder="Пошук" type="search" value={ searchTxt } onInput={ (e) => setSearchTxt(e.target.value) } /> 
+                                    </Col>
+                                    <Col md="12" lg="3">
+                                        <Button onClick={ search }>Шукати</Button> 
+                                    </Col>
+                                </Row>
+                            }
+                        </Nav>
+                    </Collapse>
+
+                    { location.pathname.startsWith('/manager') && <h2 className="text-white">Панель менеджера</h2> }
+                    { location.pathname.startsWith('/admin') && <h2 className="text-white">Панель адміністратора</h2> }
+                </Navbar>
+                <div className="d-flex justify-content-end pe-6">
+                    <p className="text-white pe-4">{ user.username !== '' && `${ user.username }` }</p>
+                    <Link to="basket"><FaShoppingBasket className="header__basket-icon" style={{ visibility: user.isUser ? 'visible' : 'hidden' }} /></Link>
+                </div>
+        </header>
+    );
+}
+
+export default Header;

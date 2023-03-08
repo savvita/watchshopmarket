@@ -22,6 +22,7 @@ import StrapType from './layouts/StrapType';
 import Brand from './layouts/Brand';
 import Watch from './layouts/Watch';
 import Catalog from './layouts/Catalog/Catalog';
+import Main from './layouts/Main';
 
 function App() {
   return (
@@ -29,7 +30,10 @@ function App() {
       <Router>
         <Routes>
           <Route path="/auth" element={ <Authorization /> } />
-          <Route path="/catalog" element={ <Catalog /> } />
+          <Route path="/" element={ <Main /> }>
+            <Route path="signin" element={ <Authorization /> } />  
+            <Route path="catalog" element={ <Catalog /> } />
+          </Route>
           {/* <Route path="/" exact element={ <Index /> } />         */}
           <Route path="/manager" element={ <Manager /> }>        
             <Route path="waterresistance" element={ <WaterResistance /> } />  

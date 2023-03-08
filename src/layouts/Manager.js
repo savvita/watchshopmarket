@@ -3,8 +3,6 @@ import { Outlet } from "react-router-dom";
 import ManagerSidebar from "../components/ManagerSidebar";
 
 
-import { Row, Col } from 'reactstrap';
-
 const Manager = () => {
     return (
         <div>
