@@ -1,6 +1,7 @@
 import token from './token';
 
-const api = 'https://localhost:7231/api';
+//const api = 'https://localhost:7231/api';
+const api = 'https://watchwebapi20230228182952.azurewebsites.net/api';
 
 const db_get = async (url) => {
     let results = {};
