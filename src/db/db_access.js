@@ -118,7 +118,6 @@ const addArrayToQuery = (url, array, filterName) => {
     return url;
 }
 
-// const getUrl = (page, perPage, model, brands, collections, styles, movementTypes, glassTypes, caseShapes, caseMaterials, strapTypes, caseColors, strapColors, dialColors, waterResistances, incrustationTypes, dialTypes, genders, minPrice, maxPrice, onSale, isTop) => {
 const getUrl = (filters) => {
 
     if(!filters.page) {
@@ -341,33 +340,35 @@ const Watches = function() {
 
 const WaterResistances = new basic(`${api}/waterresistances`);
 
-const Basket = new basic(`${api}/baskets`);
-Basket.get = async function() {
-    if(!token.getToken()) {
+const Basket = function() {
+    basic.call(this, `${api}/baskets`);
+    this.get = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/baskets`);
+    }
+
+    this.create = function() {
         return undefined;
     }
 
-    return await db_get(`${api}/baskets`);
-}
-
-Basket.create = function() {
-    return undefined;
-}
-
-Basket.update = async function(basket) {
-    if(!basket || !token.getToken()) {
-        return undefined;
+    this.update = async function(basket) {
+        if(!basket || !token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_put(this.url, basket.details);
     }
 
-    return await db_put(this.url, basket.details);
-}
-
-Basket.remove = async function() {
-    if(!token.getToken()) {
-        return undefined;
+    this.remove = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_remove(this.url);
     }
-
-    return await db_remove(this.url);
 }
 
 //========= Authorization ====================
@@ -384,7 +385,7 @@ const signUp = async (login, email, password) => {
 const functions = {
     signIn: signIn,
     signUp: signUp,
-    Basket: Basket,
+    Basket: new Basket(),
     Watches: new Watches(),
     WaterResistances: WaterResistances,
     Users: new Users(),

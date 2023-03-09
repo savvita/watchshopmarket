@@ -23,6 +23,7 @@ import Brand from './layouts/Brand';
 import Watch from './layouts/Watch';
 import Catalog from './layouts/Catalog/Catalog';
 import Main from './layouts/Main';
+import Basket from './layouts/Basket';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/" element={ <Main /> }>
             <Route path="signin" element={ <Authorization /> } />  
             <Route path="catalog" element={ <Catalog /> } />
+            <Route path="basket" element={ <Basket /> } />
           </Route>
           {/* <Route path="/" exact element={ <Index /> } />         */}
           <Route path="/manager" element={ <Manager /> }>        
