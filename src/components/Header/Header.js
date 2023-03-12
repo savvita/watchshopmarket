@@ -11,6 +11,9 @@ import { useEffect, useState } from 'react';
 import { NavLink as RRNavLink, useLocation, Link } from 'react-router-dom';
 
 import { selectValue, set } from '../../app/filterSlice';
+import { selectCurrent as selectUser } from '../../app/authSlice';
+
+
 import { useSelector, useDispatch } from 'react-redux';
 
 import './Header.css';
@@ -19,18 +22,14 @@ const Header = () => {
     const location = useLocation();
 
     const filters = useSelector(selectValue);
+    const user = useSelector(selectUser);
+
     const dispatch = useDispatch();
 
     const [collapsed, setCollapsed] = useState(true);
     const toggleNavbar = () => setCollapsed(!collapsed);
 
-    const [user, setUser] = useState(token.getUserInfo());
-
     const [searchTxt, setSearchTxt] = useState('');
-    
-    const onLogOut = () => {
-        setUser(token.logOut());
-    }
 
     const search = () => {
         dispatch(set({ ...filters, model: searchTxt }));
@@ -47,7 +46,7 @@ const Header = () => {
                             <NavLink tag={RRNavLink} to="/catalog">Каталог</NavLink>
                             <NavLink tag={RRNavLink} to="/about">Про нас</NavLink>
 
-                            <AccountMenu user={ user } onLogOut={ onLogOut } />
+                            <AccountMenu />
                             { location.pathname === '/catalog' && 
                                 <Row className='flex-grow-1'>
                                     <Col md="12" lg="9">
@@ -65,8 +64,8 @@ const Header = () => {
                     { location.pathname.startsWith('/admin') && <h2 className="text-white">Панель адміністратора</h2> }
                 </Navbar>
                 <div className="d-flex justify-content-end pe-6">
-                    <p className="text-white pe-4">{ user.username !== '' && `${ user.username }` }</p>
-                    <Link to="basket"><FaShoppingBasket className="header__basket-icon" style={{ visibility: user.isUser ? 'visible' : 'hidden' }} /></Link>
+                    <p className="text-white pe-4">{ user && user.userName !== '' && `${ user.userName }` }</p>
+                    <Link to="basket"><FaShoppingBasket className="header__basket-icon" style={{ visibility: user && user.isUser && user.isActive ? 'visible' : 'hidden' }} /></Link>
                 </div>
         </header>
     );

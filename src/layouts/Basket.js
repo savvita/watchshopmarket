@@ -3,18 +3,30 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { useNavigate } from 'react-router-dom';
+
 import { selectValues, getAsync, set } from '../app/basketSlice';
+import { selectCurrent as selectUser } from '../app/authSlice';
 
 import BasketActions from '../components/BasketActions';
 import BasketTable from '../components/BasketTable/BasketTable';
 
 const Basket = () => {
     const basket = useSelector(selectValues);
+    const user = useSelector(selectUser);
     const dispatch = useDispatch();
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(getAsync());
     }, []);
+
+    useEffect(() => {
+        if(!user || !user.isUser || !user.isActive) {
+            navigate("/signin");
+        }
+    }, [user]);
 
     const changeBasket = (id, count) => {
         if(!basket || !basket.details || !id || !count) {

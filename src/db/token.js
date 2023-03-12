@@ -1,32 +1,36 @@
 const token_key = 'token'; 
 
 const setToken = (token) => {
-    sessionStorage.setItem(token_key, token);
+    localStorage.setItem(token_key, token);
 }
 
 const getToken = () => {
-    return sessionStorage.getItem(token_key);
+    return localStorage.getItem(token_key);
 }
 
 const getUserInfo = () => {
     const token = getToken();
-  
+    
     if(!token) {
         return {
-            username: '',
+            userName: '',
+            expired: true,
             isUser: false,
             isManager: false,
-            isAdmin: false
+            isAdmin: false,
+            isActive: false
         };
     }
-
+    
     const parsedToken = parseJwt(token);
 
     return {
-        username: Object.values(parsedToken)[0],
-        isUser: Object.values(parsedToken)[2].includes('User'),
-        isManager: Object.values(parsedToken)[2].includes('Manager'),
-        isAdmin: Object.values(parsedToken)[2].includes('Admin')
+        userName: Object.values(parsedToken)[0],
+        expired: Date.now() - parseInt(Object.values[1]) > 0,
+        isActive: Object.values(parsedToken)[2] === 'True',
+        isUser: Object.values(parsedToken)[3].includes('User'),
+        isManager: Object.values(parsedToken)[3].includes('Manager'),
+        isAdmin: Object.values(parsedToken)[3].includes('Admin')
     };
 }
 

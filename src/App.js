@@ -24,6 +24,7 @@ import Watch from './layouts/Watch';
 import Catalog from './layouts/Catalog/Catalog';
 import Main from './layouts/Main';
 import Basket from './layouts/Basket';
+import WatchInfoPage from './components/WatchInfoPage/WatchInfoPage';
 
 function App() {
   return (
@@ -32,9 +33,11 @@ function App() {
         <Routes>
           <Route path="/auth" element={ <Authorization /> } />
           <Route path="/" element={ <Main /> }>
-            <Route path="signin" element={ <Authorization /> } />  
+            <Route path="signin" element={ <Authorization signIn /> } />  
+            <Route path="signup" element={ <Authorization signUp /> } />  
             <Route path="catalog" element={ <Catalog /> } />
             <Route path="basket" element={ <Basket /> } />
+            <Route path="watches/:id" element={ <WatchInfoPage /> } />
           </Route>
           {/* <Route path="/" exact element={ <Index /> } />         */}
           <Route path="/manager" element={ <Manager /> }>        

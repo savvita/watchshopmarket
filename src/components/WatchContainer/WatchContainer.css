@@ -1,6 +1,12 @@
 .watch-container__card {
     box-shadow: 0px 0px 17px 1px #000;
     transition: transform 200ms ease-out;
+    height: 35rem;
+}
+
+.watch-container__link {
+    text-decoration: none;
+    color: #333;
 }
 
 .watch-container__card:hover {
@@ -9,7 +15,7 @@
 }
 
 .watch-container__card:hover .watch-container__card-description {
-    height: 5.9rem;
+    height: 5rem;
     overflow: visible;
 }
 
@@ -36,4 +42,16 @@
 .watch-container__card-btn:active {
     background-color: #fff !important;
     color: #333 !important;
+}
+
+.watch-container__card-img {
+    height: 20rem;
+    overflow: hidden;
+    object-fit: cover;
+    text-align: center;
+}
+
+.watch-container__card-img img {
+    height: 20rem;
+    object-fit: cover;
 }
