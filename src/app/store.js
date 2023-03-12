@@ -19,6 +19,8 @@ import watchReducer from './watchSlice';
 import filterReducer from './filterSlice';
 import basketReducer from './basketSlice';
 import authReducer from './authSlice';
+import deliveryReducer from './deliverySlice';
+import paymentReducer from './paymentSlice';
 
 export const store = configureStore( {
     reducer: {
@@ -41,5 +43,7 @@ export const store = configureStore( {
         filter: filterReducer,
         basket: basketReducer,
         auth: authReducer,
+        delivery: deliveryReducer,
+        payment: paymentReducer,
     }
 });

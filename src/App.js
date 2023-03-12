@@ -6,6 +6,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Manager from './layouts/Manager';
+import Admin from './layouts/Admin';
+import Delivery from './layouts/Delivery';
+import Payment from './layouts/Payment';
 import Style from './layouts/Style';
 import CaseShape from './layouts/CaseShape';
 import Collection from './layouts/Collection';
@@ -31,7 +34,6 @@ function App() {
     <div className="container-fluid p-0 m-0">
       <Router>
         <Routes>
-          <Route path="/auth" element={ <Authorization /> } />
           <Route path="/" element={ <Main /> }>
             <Route path="signin" element={ <Authorization signIn /> } />  
             <Route path="signup" element={ <Authorization signUp /> } />  
@@ -58,6 +60,10 @@ function App() {
             <Route path="straptype" element={ <StrapType /> } />  
             <Route path="watch" element={ <Watch /> } />  
           </Route>      
+          <Route path="/admin" element={ <Admin /> }>
+            <Route path="payment" element={ <Payment /> } />
+            <Route path="delivery" element={ <Delivery /> } />
+          </Route>
         </Routes>
       </Router>
     </div>

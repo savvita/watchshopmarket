@@ -1,7 +1,7 @@
 import token from './token';
 
-//const api = 'https://localhost:7231/api';
-const api = 'https://watchwebapi20230228182952.azurewebsites.net/api';
+const api = 'https://localhost:7231/api';
+//const api = 'https://watchwebapi20230228182952.azurewebsites.net/api';
 
 const db_get = async (url) => {
     let results = {};
@@ -324,6 +324,20 @@ const Users = function() {
     }
 }
 
+const Payments = function() {
+    basic.call(this, `${api}/payments`);
+    this.getAll = async function() {
+        return await db_get(`${this.url}?all=true`);
+    }
+}
+
+const Deliveries = function() {
+    basic.call(this, `${api}/deliveries`);
+    this.getAll = async function() {
+        return await db_get(`${this.url}?all=true`);
+    }
+}
+
 const Watches = function() {
     basic.call(this, `${api}/watches`);
     this.getByFilters = async function (filters) {
@@ -390,6 +404,8 @@ const functions = {
     Watches: new Watches(),
     WaterResistances: WaterResistances,
     Users: new Users(),
+    Payments: new Payments(),
+    Deliveries: new Deliveries(),
     StrapTypes: StrapTypes,
     Styles: Styles,
     Orders: Orders,
