@@ -84,7 +84,7 @@ const PropertyTable = ({ selectValues, selectStatus, title, get, update, create,
         }
 
         if(res.payload.value === false) {
-            showError(undefined, 'Рядок не знайдено у базі даних. Можливо її було видалено іншим користувачем');
+            showError(undefined, 'Рядок не знайдено у базі даних. Можливо його було видалено іншим користувачем');
             return;
         }
 

@@ -10,6 +10,7 @@ import { selectCurrent as selectUser } from '../app/authSlice';
 
 import BasketActions from '../components/BasketActions';
 import BasketTable from '../components/BasketTable/BasketTable';
+import MakeOrderForm from '../components/MakeOrderForm/MakeOrderForm';
 
 const Basket = () => {
     const basket = useSelector(selectValues);
@@ -45,6 +46,7 @@ const Basket = () => {
             <div>
                 <BasketTable basket={ basket } onChange={ changeBasket } />
                 <BasketActions />
+                <MakeOrderForm />
             </div>
         }
         </div>

@@ -6,6 +6,22 @@ const notEmptyValidationRule = (value) => {
     return value.length > 0;
 }
 
+const digitsOnlyValidationRule = (value) => {
+    if(!value) {
+        return;
+    }
+
+    if(value.length !== 10) {
+        return false;
+    }
+
+    if(value.split('').some(i => i < '0' || i > '9')) {
+        return false;
+    }
+
+    return true;
+}
+
 const positiveFloatValidationRule = (value) => {
     if(!value) {
         return false;
@@ -87,7 +103,8 @@ const functions = {
     positiveIntValidationRule: positiveIntValidationRule,
     nullOrPositiveFloatValidationRule: nullOrPositiveFloatValidationRule,
     discountValidation: discountValidation,
-    validateWatch: validateWatch
+    validateWatch: validateWatch,
+    digitsOnlyValidationRule: digitsOnlyValidationRule
 };
 
 export default functions;

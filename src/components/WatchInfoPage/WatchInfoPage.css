@@ -1,0 +1,47 @@
+.watch-image-view__preview {
+    width: 4rem;
+    opacity: 0.7;
+    transition: opacity 500ms ease-out;
+}
+
+.watch-image-view__preview:hover {
+    cursor: pointer;
+    opacity: 1;
+}
+
+.watch-image-view__preview__active{
+    opacity: 1 !important;
+}
+
+
+.watch-image-view__img {
+    height: 25rem;
+    overflow: hidden;
+    transition: transform 200ms ease-out;
+}
+
+.watch-image-view__img:hover {
+    cursor: pointer;
+    transform: scale(1.01);
+}
+
+.watch-image-view__img img {
+    object-fit: contain;
+    height: 100%;
+}
+
+.watch-info_details-tabs {
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.watch-info_details-tabs:hover {
+    color: #333 !important;
+    background-color: #ccc !important;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.watch-info_details-tabs__active {
+    cursor: pointer;
+}

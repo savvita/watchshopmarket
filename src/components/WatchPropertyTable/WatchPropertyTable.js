@@ -144,7 +144,7 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
                 else {
                     watch.images = [];
                 }
-                watch.images.push(filesRes.value.map(item => { return { value: item } }));
+                watch.images = filesRes.value.map(item => { return { value: item } });
             }
         }
 

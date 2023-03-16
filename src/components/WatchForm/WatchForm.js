@@ -84,13 +84,6 @@ const WatchForm = ({ isOpen, item, setItem, onAccept, onCancel }) => {
     }, [isOpen]);
 
 
-    // useEffect(() => {
-    //     if(item) {
-    //         setWatch({ ...item });
-    //     }
-    // }, [item]);
-
-
     const accept = () => { 
         const errors = validation.validateWatch(item);
        
@@ -100,7 +93,7 @@ const WatchForm = ({ isOpen, item, setItem, onAccept, onCancel }) => {
             return;
         }
 
-        onAccept && onAccept(item, imgs.map(img => img.file).filter(img => img.file));
+        onAccept && onAccept(item, imgs.filter(img => img.file).map(img => img.file));
     }
 
     const showError = (title) => {

@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/a93bafe6-f2c2-4fa3-960e-0d7ef74b3794/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/watchmarketshop/subscriptions/a93bafe6-f2c2-4fa3-960e-0d7ef74b3794/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/watchmarket",
+    "appService.deploySubpath": "."
+}

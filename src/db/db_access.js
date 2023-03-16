@@ -277,34 +277,36 @@ Materials.get = async function (id, type) {
 
 const MovementTypes = new basic(`${api}/movementtypes`);
 
-const Orders = new basic(`${api}/orders`);
-Orders.getByUser = async function(id) {
-    if(!id) {
-        return undefined;
+const Orders = function() {
+    basic.call(this, `${api}/orders`);
+    this.getByUser = async function(id) {
+        if(!id) {
+            return undefined;
+        }
+    
+        return await db_get(`${this.url}/user/${id}`);
     }
-
-    return await db_get(`${this.url}/user/${id}`);
-}
-Orders.getByManager = async function(id) {
-    if(!id) {
-        return undefined;
+    this.getByManager = async function(id) {
+        if(!id) {
+            return undefined;
+        }
+    
+        return await db_get(`${this.url}/manager/${id}`);
     }
-
-    return await db_get(`${this.url}/manager/${id}`);
-}
-Orders.update = async function(id) {
-    if(!id) {
-        return undefined;
+    this.update = async function(id) {
+        if(!id) {
+            return undefined;
+        }
+    
+        return await db_put(`${this.url}/${id}`, {});
     }
-
-    return await db_put(`${this.url}/${id}`, {});
-}
-Orders.create = async function() {
-    if(!token.getToken()) {
-        return undefined;
+    this.create = async function(info) {
+        if(!token.getToken() || !info) {
+            return undefined;
+        }
+    
+        await db_post(this.url, info);
     }
-
-    await db_post(this.url, {});
 }
 
 const StrapTypes = new basic(`${api}/straptypes`);
