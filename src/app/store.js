@@ -21,6 +21,8 @@ import basketReducer from './basketSlice';
 import authReducer from './authSlice';
 import deliveryReducer from './deliverySlice';
 import paymentReducer from './paymentSlice';
+import cityReducer from './citySlice';
+import warehouseReducer from './warehouseSlice';
 
 export const store = configureStore( {
     reducer: {
@@ -45,5 +47,7 @@ export const store = configureStore( {
         auth: authReducer,
         delivery: deliveryReducer,
         payment: paymentReducer,
+        city: cityReducer,
+        warehouse: warehouseReducer
     }
 });

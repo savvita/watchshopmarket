@@ -28,6 +28,7 @@ import Catalog from './layouts/Catalog/Catalog';
 import Main from './layouts/Main';
 import Basket from './layouts/Basket';
 import WatchInfoPage from './components/WatchInfoPage/WatchInfoPage';
+import NP from './layouts/NP';
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
           <Route path="/admin" element={ <Admin /> }>
             <Route path="payment" element={ <Payment /> } />
             <Route path="delivery" element={ <Delivery /> } />
+            <Route path="np" element={ <NP /> } />
           </Route>
         </Routes>
       </Router>

@@ -16,9 +16,17 @@ const AdminSidebar = () => {
         }
     ];
 
+    const np = [
+        {
+            heading: 'Міста та відділення',
+            link: 'np'
+        }
+    ]
+
     return (
         <div className='d-flex flex-column'>
             <Collapse heading='Продаж' items={ articles } />
+            <Collapse heading='Нова пошта' items={ np } />
         </div>
     );
 }

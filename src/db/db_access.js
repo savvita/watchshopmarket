@@ -355,6 +355,32 @@ const Watches = function() {
     }
 }
 
+const Cities = function() {
+    this.url = `${api}/cities`;
+    this.get = async function() {
+        return await db_get(this.url);
+    }
+    this.update = async function() {
+        return await db_put(this.url, {});
+    }
+    this.getLastUpdate = async function() {
+        return await db_get(`${this.url}/update`);
+    }
+}
+
+const Warehouses = function() {
+    this.url = `${api}/warehouses`;
+    this.get = async function() {
+        return await db_get(this.url);
+    }
+    this.update = async function() {
+        return await db_put(this.url, {});
+    }
+    this.getLastUpdate = async function() {
+        return await db_get(`${this.url}/update`);
+    }
+}
+
 const WaterResistances = new basic(`${api}/waterresistances`);
 
 const Basket = function() {
@@ -423,7 +449,9 @@ const functions = {
     Genders: Genders,
     GlassTypes: GlassTypes,
     IncrustationTypes: IncrustationTypes,
-    Files: new Files()
+    Files: new Files(),
+    Cities: new Cities(),
+    Warehouses: new Warehouses()
 };
 
 export default functions;
