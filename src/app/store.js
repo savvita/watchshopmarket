@@ -23,6 +23,7 @@ import deliveryReducer from './deliverySlice';
 import paymentReducer from './paymentSlice';
 import cityReducer from './citySlice';
 import warehouseReducer from './warehouseSlice';
+import orderReducer from './orderSlice';
 
 export const store = configureStore( {
     reducer: {
@@ -48,6 +49,7 @@ export const store = configureStore( {
         delivery: deliveryReducer,
         payment: paymentReducer,
         city: cityReducer,
-        warehouse: warehouseReducer
+        warehouse: warehouseReducer,
+        order: orderReducer
     }
 });

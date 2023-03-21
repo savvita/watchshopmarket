@@ -1,8 +1,19 @@
 
+import { useEffect, useState } from "react";
 import { FormGroup, Input, Label } from "reactstrap";
 
-const RadioFormGroup = ({ items, title, onChange, children }) => {
+const RadioFormGroup = ({ items, initialValue, title, onChange, children }) => {
 
+    const [value, setValue] = useState(-1);
+
+    useEffect(() => {
+        setValue(initialValue ?? -1)
+    }, [initialValue]);
+
+    const change = (id) => {
+        setValue(id);
+        onChange && onChange(id);
+    }
 
     if(!items) {
         return null;
@@ -13,7 +24,7 @@ const RadioFormGroup = ({ items, title, onChange, children }) => {
             <legend className="fs-5">{ title }</legend>
             { items && items.map((item, idx) => 
                 <FormGroup key={ item.id } check>
-                    <Input id={ `${ title }${ item.id }` } name={ title } type="radio" onChange={ () => onChange && onChange(item.id) } />
+                    <Input id={ `${ title }${ item.id }` } name={ title } type="radio" onChange={ () => change(item.id) } checked={ item.id === value } />
                     <Label for={ `${ title }${ item.id }` } check>{ item.value }</Label>
                 </FormGroup>
             )}

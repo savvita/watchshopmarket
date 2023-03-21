@@ -1,0 +1,17 @@
+
+
+.make-order-form__np-form-group {
+    height: 0;
+    overflow: hidden;
+    transition: height 200ms ease-in;
+}
+
+.make-order-form__np-form-group.expanded {
+    height: 6rem;
+    overflow: visible;
+    animation: show-overflow 400ms;
+}
+
+@keyframes show-overflow {
+    from { overflow: hidden; }
+  }

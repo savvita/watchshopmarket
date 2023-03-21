@@ -3,18 +3,20 @@ import { useEffect, useState } from "react";
 import { FormGroup, Label, Input, FormFeedback, Row, Col } from "reactstrap";
 
 
-const InputFormGroup = ({ title, placeholder, name, validationRule, validationErrorText, onChange }) => {
+const InputFormGroup = ({ title, initialValue, placeholder, name, validationRule, validationErrorText, onChange }) => {
     const [value, setValue] = useState('');
     const [isValid, setIsValid] = useState(false);
 
     useEffect(() => {
+        setValue(initialValue ?? "");
+        
         if(validationRule) {
-            setIsValid(validationRule(value));
+            setIsValid(validationRule(initialValue));
         }
         else {
             setIsValid(true);
         }
-    }, []);
+    }, [initialValue]);
 
     const handleInput = (e) => {
         setValue(e.target.value);

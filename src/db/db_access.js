@@ -305,7 +305,7 @@ const Orders = function() {
             return undefined;
         }
     
-        await db_post(this.url, info);
+        return await db_post(this.url, info);
     }
 }
 
@@ -370,8 +370,8 @@ const Cities = function() {
 
 const Warehouses = function() {
     this.url = `${api}/warehouses`;
-    this.get = async function() {
-        return await db_get(this.url);
+    this.get = async function(ref) {
+        return await db_get(`${this.url}?cityRef=${ref}`);
     }
     this.update = async function() {
         return await db_put(this.url, {});
@@ -436,7 +436,7 @@ const functions = {
     Deliveries: new Deliveries(),
     StrapTypes: StrapTypes,
     Styles: Styles,
-    Orders: Orders,
+    Orders: new Orders(),
     MovementTypes: MovementTypes,
     Materials: Materials,
     Brands: Brands,

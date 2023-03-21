@@ -21,12 +21,11 @@ const getUserInfo = () => {
             isActive: false
         };
     }
-    
     const parsedToken = parseJwt(token);
 
     return {
         userName: Object.values(parsedToken)[0],
-        expired: Date.now() - parseInt(Object.values[1]) > 0,
+        expired: Date.now() - parsedToken["exp"] * 1000 > 0,
         isActive: Object.values(parsedToken)[2] === 'True',
         isUser: Object.values(parsedToken)[3].includes('User'),
         isManager: Object.values(parsedToken)[3].includes('Manager'),

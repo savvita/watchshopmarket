@@ -5,8 +5,10 @@ import BasketTableRow from "./BasketTableRow";
 import { Table } from 'reactstrap';
 import { useEffect, useState } from "react";
 
+import './BasketTable.css';
 
-const BasketTable = ({ basket, onChange }) => {
+
+const BasketTable = ({ basket, onChange, onDelete }) => {
 
     const [total, setTotal] = useState(0);
 
@@ -23,6 +25,10 @@ const BasketTable = ({ basket, onChange }) => {
         onChange && onChange(id, value);
     }
 
+    const deleteFromBasket = (id) => {
+        onDelete && onDelete(id);
+    }
+
     return (
         <Table dark>
             <thead>
@@ -35,7 +41,7 @@ const BasketTable = ({ basket, onChange }) => {
                 </tr>
             </thead>
             <tbody>
-                { basket && basket.details && basket.details.map((item, idx) => <BasketTableRow key={ item.id } idx={ idx + 1 } item={ item } onChange={ (value) => changeBasket(item.id, value) } />) }
+                { basket && basket.details && basket.details.map((item, idx) => <BasketTableRow key={ item.id } idx={ idx + 1 } item={ item } onChange={ (value) => changeBasket(item.id, value) } onDelete= { deleteFromBasket }/>) }
             </tbody>
             <tfoot>
                 <tr>

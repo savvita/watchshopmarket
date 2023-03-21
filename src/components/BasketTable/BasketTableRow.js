@@ -1,5 +1,5 @@
 
-import { FormGroup, Input, FormFeedback } from 'reactstrap';
+import { FormGroup, Input, FormFeedback, UncontrolledTooltip } from 'reactstrap';
 
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,7 +8,7 @@ import { selectCurrent, getByIdAsync } from '../../app/watchSlice';
 
 import validation from '../../modules/validation';
 
-const BasketTableRow = ({ item, idx, onChange }) => {
+const BasketTableRow = ({ item, idx, onChange, onDelete }) => {
     const watch = useSelector(selectCurrent);
     
     const [isValid, setIsValid] = useState(false);
@@ -40,8 +40,16 @@ const BasketTableRow = ({ item, idx, onChange }) => {
 
     }
 
+    const remove = () => {
+        if(!item || !onDelete) {
+            return;
+        }
+
+        onDelete(item.id);
+    }
+
     return (
-        <tr>
+        <tr className='border border-light border-2 position-relative'>
             <th scope="row" className='text-center ms-4 me-4'><p className="p-1 m-0">{ idx }</p></th>
             <td style={{ width: '100%' }}>{ watch && watch.title }</td>
             <td className="text-center">{ item && item.unitPrice }&nbsp;&#8372;</td>
@@ -51,7 +59,13 @@ const BasketTableRow = ({ item, idx, onChange }) => {
                     <FormFeedback tooltip>Некоректне значення</FormFeedback>
                 </FormGroup>
             </td>
-            <td className="text-center">{ item && item.count && item.unitPrice && item.unitPrice * item.count }&nbsp;&#8372;</td>
+            <td className="text-center pe-5">{ item && item.count && item.unitPrice && item.unitPrice * item.count }&nbsp;&#8372;</td>
+            <td onClick={ remove } className='position-absolute top-0 end-0 text-white m-0 p-0 pe-1 border-0 basket-table__close-icon'>
+                <span id={ item ? `basket-table-row__close-icon__${ item.id }` : 'basket-table-row__close-icon' }>X</span>
+                <UncontrolledTooltip placement="right" target={ item ? `basket-table-row__close-icon__${ item.id }` : 'basket-table-row__close-icon' }>
+                    Видалити
+                </UncontrolledTooltip>
+            </td>
         </tr>
     );
 }

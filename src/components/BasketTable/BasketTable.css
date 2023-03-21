@@ -1,0 +1,9 @@
+.basket-table__close-icon:hover {
+    cursor: pointer;
+    color: #05a538 !important;
+}
+
+.basket-table__close-icon {
+    color: #fff;
+    transition: color 200ms ease-in;
+}

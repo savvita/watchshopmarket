@@ -4,8 +4,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export const getAsync = createAsyncThunk(
     'warehouse/get',
-    async () => {
-      const response = await db.Warehouses.get();
+    async (ref) => {
+      const response = await db.Warehouses.get(ref);
       return response;
     }
   );

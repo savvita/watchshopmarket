@@ -5,8 +5,9 @@ import { Button } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectValues, deleteAsync, updateAsync, getAsync } from '../app/basketSlice';
+import { useEffect } from 'react';
 
-const BasketActions = () => {
+const BasketActions = ({ onOrdering }) => {
     const basket = useSelector(selectValues);
     const dispatch = useDispatch();
 
@@ -22,9 +23,9 @@ const BasketActions = () => {
 
     return (
         <div>
-            <Button onClick={ updateBasket }>Зберегти</Button>
-            <Button onClick={ clearBasket }>Очистити</Button>
-            <Button>Оформити замовлення</Button>
+            <Button className='m-2' onClick={ updateBasket }>Зберегти</Button>
+            <Button className='m-2' onClick={ clearBasket } disabled={ basket && basket.details && basket.details.length === 0 }>Очистити</Button>
+            <Button className='m-2' disabled={ basket && basket.details && basket.details.length === 0 } onClick={ onOrdering }>Оформити замовлення</Button>
         </div>
     );
 }

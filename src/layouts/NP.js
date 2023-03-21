@@ -77,7 +77,7 @@ const NP = () => {
             </FormGroup>
             <p className="text-white">* Рекомендовано оновлювати довідники раз на добу</p>
 
-            <Button onClick={ update } disabled={ cityStatus === 'loading' || warehouseStatus === 'loading '}>Оновити</Button>
+            <Button onClick={ update } disabled={ cityStatus === 'loading' || warehouseStatus === 'loading'}>Оновити</Button>
             { (cityStatus === 'loading' || warehouseStatus === 'loading') && <p className="text-white mt-3">Зачекайте, будь ласка. Оновлення може зайняти декілька хвилин</p> }
         </div>
     );

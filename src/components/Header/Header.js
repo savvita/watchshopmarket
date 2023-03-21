@@ -1,6 +1,4 @@
 
-import token from '../../db/token';
-
 import AccountMenu from './AccountMenu';
 
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, Input, NavLink, Button, Row, Col } from 'reactstrap';
@@ -63,10 +61,11 @@ const Header = () => {
                     { location.pathname.startsWith('/manager') && <h2 className="text-white">Панель менеджера</h2> }
                     { location.pathname.startsWith('/admin') && <h2 className="text-white">Панель адміністратора</h2> }
                 </Navbar>
+                { user && user.isUser && user.isActive && !user.expired && 
                 <div className="d-flex justify-content-end pe-6">
-                    <p className="text-white pe-4">{ user && user.userName !== '' && `${ user.userName }` }</p>
-                    <Link to="basket"><FaShoppingBasket className="header__basket-icon" style={{ visibility: user && user.isUser && user.isActive ? 'visible' : 'hidden' }} /></Link>
-                </div>
+                    <p className="text-white pe-4">{ user.userName !== '' && `${ user.userName }` }</p>
+                    <Link to="basket"><FaShoppingBasket className="header__basket-icon"/></Link>
+                </div> }
         </header>
     );
 }
