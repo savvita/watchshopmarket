@@ -15,7 +15,7 @@ import { FaPlus } from "react-icons/fa";
 import PerPageSelect from '../PerPageSelect';
 
 
-const PropertyTable = ({ selectValues, selectStatus, title, get, update, create, remove }) => {
+const PropertyTable = ({ selectValues, selectStatus, title, get, update, create, remove, link }) => {
     const values = useSelector(selectValues);
     const status = useSelector(selectStatus);
     const dispatch = useDispatch();
@@ -193,7 +193,7 @@ const PropertyTable = ({ selectValues, selectStatus, title, get, update, create,
                 <tbody>
                     <PropertyTableRow className={ addMode ? '' : 'd-none' } onCancel={ () => setAddMode(false) } onAccept={ saveItem } onError={ onError } />
                     { itemsPage && itemsPage.map((item, idx) => 
-                        item && <PropertyTableRow key={ item.id } idx={ (currentPage - 1) * perPage + idx + 1 } item={ item } onDelete={ (item) => showCofirmModal(item) } onAccept={ saveItem } onError={ onError } />)
+                        item && <PropertyTableRow key={ item.id } idx={ (currentPage - 1) * perPage + idx + 1 } item={ item } onDelete={ (item) => showCofirmModal(item) } onAccept={ saveItem } onError={ onError } link={ link } />)
                     }
                 </tbody>
                 <tfoot>

@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 
 import './PropertyTable.css';
 
-const PropertyTableRow = ({ idx, item, className, onDelete, onCancel, onAccept, onError, onView }) => {
+const PropertyTableRow = ({ idx, item, className, onDelete, onCancel, onAccept, onError, link }) => {
 
     const [editMode, setEditMode] = useState(!item);
     const [value, setValue] = useState('');
@@ -72,7 +72,7 @@ const PropertyTableRow = ({ idx, item, className, onDelete, onCancel, onAccept, 
                     <FormFeedback tooltip>Обов’язкове поле</FormFeedback>
                 </div>
             </td>
-            <CollapsedActions item={ item } editMode={ editMode } onDelete={ () => onDelete && onDelete(item) } onEdit={ () => setEditMode(true) } onView={ () => item && onView && onView(item.id) } />
+            <CollapsedActions item={ item } editMode={ editMode } onDelete={ () => onDelete && onDelete(item) } onEdit={ () => setEditMode(true) } link={ `${link}/${ item && item.id }` } />
         </tr>
     );
 }

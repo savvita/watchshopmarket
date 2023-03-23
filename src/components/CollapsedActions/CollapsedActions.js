@@ -3,8 +3,9 @@ import { UncontrolledDropdown, DropdownToggle, DropdownMenu, UncontrolledTooltip
 import { FaRegTrashAlt, FaRegEdit, FaRegEye, FaBars } from "react-icons/fa";
 
 import './CollapsedActions.css';
+import { Link } from 'react-router-dom';
 
-const CollapsedActions = ({ item, editMode, onView, onEdit, onDelete, className }) => {
+const CollapsedActions = ({ item, editMode, link, onEdit, onDelete, className }) => {
 
 
     return (
@@ -17,9 +18,11 @@ const CollapsedActions = ({ item, editMode, onView, onEdit, onDelete, className 
                         </DropdownToggle>
                         <DropdownMenu dark className='text-center'>
                             <DropdownItem>
-                                <div id={ item ? `table_row_dropdown_${ item.id }_view` : `table_row_dropdown_view` } className={ editMode ? 'd-none' : "d-inline-block overflow-hidden p-1" }>
-                                    <FaRegEye className="property-table__icon" onClick={ onView } />
-                                </div>
+                                <Link to={ link }>
+                                    <div id={ item ? `table_row_dropdown_${ item.id }_view` : `table_row_dropdown_view` } className={ editMode ? 'd-none' : "d-inline-block overflow-hidden p-1" }>
+                                        <FaRegEye className="property-table__icon" />
+                                    </div>
+                                </Link>
                                 <UncontrolledTooltip placement="right" target={ item ? `table_row_dropdown_${ item.id }_view` : `table_row_dropdown_view` } >
                                     Переглянути
                                 </UncontrolledTooltip>
@@ -45,9 +48,11 @@ const CollapsedActions = ({ item, editMode, onView, onEdit, onDelete, className 
                     </UncontrolledDropdown>
                 </td>
                 <td className={ className ? `text-center property-table__collapse__expanded ${ className }` : 'text-center property-table__collapse__expanded' } >
-                    <div id={ item ? `table_row_${ item.id }_view` : `table_row_view` } className={ editMode ? 'd-none' : "d-inline-block overflow-hidden p-1" }>
-                        <FaRegEye className="property-table__icon" onClick={ onView } />
-                    </div>
+                    <Link to={ link }>
+                        <div id={ item ? `table_row_${ item.id }_view` : `table_row_view` } className={ editMode ? 'd-none' : "d-inline-block overflow-hidden p-1" }>
+                            <FaRegEye className="property-table__icon" />
+                        </div>
+                    </Link>
                     <UncontrolledTooltip placement="right" target={ item ? `table_row_${ item.id }_view` : `table_row_view` } >
                         Переглянути
                     </UncontrolledTooltip>
