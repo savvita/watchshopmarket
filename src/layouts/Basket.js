@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { selectValues, getAsync, set, updateAsync } from '../app/basketSlice';
-import { selectValues as selectOrder, createAsync as makeOrder } from '../app/orderSlice';
+import { createAsync as makeOrder } from '../app/orderSlice';
 import { selectCurrent as selectUser } from '../app/authSlice';
 
 import BasketActions from '../components/BasketActions';
@@ -17,7 +17,6 @@ import InfoModal from '../components/InfoModal';
 const Basket = () => {
     const basket = useSelector(selectValues);
     const user = useSelector(selectUser);
-    const order = useSelector(selectOrder);
     const dispatch = useDispatch();
 
     const navigate = useNavigate();

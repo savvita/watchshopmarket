@@ -19,6 +19,7 @@ const BasketTable = ({ basket, onChange, onDelete }) => {
 
             setTotal(sum);
         }
+
     }, [basket]);
 
     const changeBasket = (id, value) => {

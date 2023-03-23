@@ -5,7 +5,6 @@ import { Button } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectValues, deleteAsync, updateAsync, getAsync } from '../app/basketSlice';
-import { useEffect } from 'react';
 
 const BasketActions = ({ onOrdering }) => {
     const basket = useSelector(selectValues);

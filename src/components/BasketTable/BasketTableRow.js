@@ -2,14 +2,14 @@
 import { FormGroup, Input, FormFeedback, UncontrolledTooltip } from 'reactstrap';
 
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { selectCurrent, getByIdAsync } from '../../app/watchSlice';
+import { getByIdAsync } from '../../app/watchSlice';
 
 import validation from '../../modules/validation';
 
 const BasketTableRow = ({ item, idx, onChange, onDelete }) => {
-    const watch = useSelector(selectCurrent);
+    const [watch, setWatch] = useState(null);
     
     const [isValid, setIsValid] = useState(false);
     
@@ -22,7 +22,16 @@ const BasketTableRow = ({ item, idx, onChange, onDelete }) => {
 
         setIsValid(validateCount(item.count));
 
-        dispatch(getByIdAsync(item.watchId));
+        const getWatch = async () => {
+            let res = await dispatch(getByIdAsync(item.watchId));
+
+            if(res && res.payload && res.payload.value) {
+                setWatch(res.payload.value);
+            }
+        }
+
+        getWatch();
+
     }, [item]);
 
     const handleInput = (e) => {
@@ -31,13 +40,8 @@ const BasketTableRow = ({ item, idx, onChange, onDelete }) => {
         onChange && onChange(e.target.value);
     }
 
-    const validateCount = (value) => {
-        if(!watch) {
-            return false;
-        }
-        
+    const validateCount = (value) => {    
         return validation.positiveIntValidationRule(value);
-
     }
 
     const remove = () => {
