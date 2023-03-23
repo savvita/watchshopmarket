@@ -238,6 +238,12 @@ const Files = function() {
     }
 }
 
+const OrderStatusses = function() {
+    this.get = async function () {
+        return await db_get(`${api}/orderstatusses`);
+    }
+}
+
 const Brands = new basic(`${api}/brands`);
 const Caseshapes = new basic(`${api}/caseshapes`);
 const Collections = new basic(`${api}/collections`);
@@ -279,26 +285,67 @@ const MovementTypes = new basic(`${api}/movementtypes`);
 
 const Orders = function() {
     basic.call(this, `${api}/orders`);
-    this.getByUser = async function(id) {
-        if(!id) {
-            return undefined;
+
+    this.get = async function(params) {
+        let request = this.url;
+
+        if(params) {
+            request += '?';
+
+            if(params.isUser !== undefined) {
+                request += `&isUser=${params.isUser}`;
+            }
+            if(params.isManager !== undefined) {
+                request += `&isManager=${params.isManager}`;
+            }
+            if(params.statusses !== undefined) {
+                request = addArrayToQuery(request, params.statusses, 'statusses');
+            }
         }
-    
-        return await db_get(`${this.url}/user/${id}`);
+
+        return await db_get(request);
     }
-    this.getByManager = async function(id) {
-        if(!id) {
+
+    this.getByFilters = async function(filters) {
+        if(!filters) {
             return undefined;
         }
-    
-        return await db_get(`${this.url}/manager/${id}`);
+ 
+        let request = `${this.url}?`;
+
+        for(let prop in filters) {
+            request += `&${prop}=${filters[prop]}`;
+        }  
+
+        return await db_get(request);
     }
-    this.update = async function(id) {
+
+    this.getById = async function(id) {
         if(!id) {
             return undefined;
         }
     
-        return await db_put(`${this.url}/${id}`, {});
+        return await db_get(`${this.url}/${id}`);
+    }
+
+    this.update = async function(id, params) {
+        if(!id) {
+            return undefined;
+        }
+
+        let url = `${ this.url }/${ id }?`;
+
+        if(params) {
+            if(params.statusId) {
+                url += `statusId=${ params.statusId }`;
+            }
+
+            if(params.en) {
+                url += `&en=${ params.en }`;
+            }
+        }
+    
+        return await db_put(url, {});
     }
     this.create = async function(info) {
         if(!token.getToken() || !info) {
@@ -434,6 +481,7 @@ const functions = {
     Users: new Users(),
     Payments: new Payments(),
     Deliveries: new Deliveries(),
+    OrderStatusses: new OrderStatusses(),
     StrapTypes: StrapTypes,
     Styles: Styles,
     Orders: new Orders(),

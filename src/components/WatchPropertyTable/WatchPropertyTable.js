@@ -41,7 +41,6 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
         if(!get) {
             return;
         }
-        dispatch(get({ page: 1, perPage: perPage }));
         pages.splice(0, pages.length);
         pages.push(10);
         pages.push(20);
@@ -308,8 +307,8 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
                     </tr>
                 </thead>
                 <tbody>
-                    { values && values.value && values.value.map((item, idx) => 
-                        item && <WatchPropertyTableRow key={ item.id } idx={ (currentPage - 1) * perPage + idx + 1 } item={ item } onEdit={ editItem } onOnSaleChange={ onOnSaleChange } onIsTopChange={ onIsTopChange } />)
+                    { values && values.value && values.value.map((item, i) => 
+                        item && <WatchPropertyTableRow key={ item.id } idx={ (currentPage - 1) * perPage + i + 1 } item={ item } onEdit={ editItem } onOnSaleChange={ onOnSaleChange } onIsTopChange={ onIsTopChange } />)
                     }
                 </tbody>
                 <tfoot>

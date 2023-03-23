@@ -29,6 +29,9 @@ import Main from './layouts/Main';
 import Basket from './layouts/Basket';
 import WatchInfoPage from './components/WatchInfoPage/WatchInfoPage';
 import NP from './layouts/NP';
+import Orders from './layouts/Orders';
+import OrderDetail from './layouts/OrderDetail';
+import WaterResistanceDetail from './layouts/WaterResistanceDetail';
 
 function App() {
   return (
@@ -40,7 +43,9 @@ function App() {
             <Route path="signup" element={ <Authorization signUp /> } />  
             <Route path="catalog" element={ <Catalog /> } />
             <Route path="basket" element={ <Basket /> } />
+            <Route path="myorders" element={ <Orders isUserMode={ true } /> } />
             <Route path="watches/:id" element={ <WatchInfoPage /> } />
+            <Route path="orders/:id" element={ <OrderDetail isManagerMode={ false } /> } />
           </Route>
           {/* <Route path="/" exact element={ <Index /> } />         */}
           <Route path="/manager" element={ <Manager /> }>        
@@ -60,6 +65,10 @@ function App() {
             <Route path="movementtype" element={ <MovementType /> } />  
             <Route path="straptype" element={ <StrapType /> } />  
             <Route path="watch" element={ <Watch /> } />  
+            <Route path="orders" element={ <Orders isManagerMode={ true } /> } />
+            <Route path="orders/new" element={ <Orders statusses={ [1] } /> } />  
+            <Route path="orders/:id" element={ <OrderDetail isManagerMode={ true } /> } />
+            <Route path="waterresistance/:id" element={ <WaterResistanceDetail /> } />
           </Route>      
           <Route path="/admin" element={ <Admin /> }>
             <Route path="payment" element={ <Payment /> } />

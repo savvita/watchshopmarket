@@ -57,10 +57,11 @@ const Header = () => {
                             }
                         </Nav>
                     </Collapse>
-
-                    { location.pathname.startsWith('/manager') && <h2 className="text-white">Панель менеджера</h2> }
-                    { location.pathname.startsWith('/admin') && <h2 className="text-white">Панель адміністратора</h2> }
                 </Navbar>
+                
+                { location.pathname.startsWith('/manager') && <h5 className="text-white text-end">Панель менеджера</h5> }
+                { location.pathname.startsWith('/admin') && <h5 className="text-white text-end">Панель адміністратора</h5> }
+              
                 { user && user.isUser && user.isActive && !user.expired && 
                 <div className="d-flex justify-content-end pe-6">
                     <p className="text-white pe-4">{ user.userName !== '' && `${ user.userName }` }</p>

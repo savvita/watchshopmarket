@@ -1,7 +1,32 @@
 
 import Collapse from './Collapse/Collapse';
 
+import { useSelector, useDispatch } from 'react-redux';
+
+import { selectNewOrders, getNewAsync } from '../app/orderSlice';
+import { useEffect } from 'react';
+
 const ManagerSidebar = () => {
+    const values = useSelector(selectNewOrders);
+    const dispatch = useDispatch();
+
+    const orders = [
+        { 
+            heading: 'Нові замовлення',
+            link: 'orders/new',
+            badge: values ? values.length : null
+        },
+        { 
+            heading: 'Мої замовлення',
+            link: 'orders'
+        }
+    ];
+
+    useEffect(() => {
+        dispatch(getNewAsync());
+    }, []);
+
+
     const properties = [
         {
             heading: 'Водозахист',
@@ -76,6 +101,7 @@ const ManagerSidebar = () => {
         <div className='d-flex flex-column'>
             <Collapse heading='Характеристики' items={ properties } />
             <Collapse heading='Товари' items={ articles } />
+            <Collapse heading='Замовлення' items={ orders } />
         </div>
     );
 }

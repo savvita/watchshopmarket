@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Collapse as BCollapse, Button, NavLink, ButtonGroup } from 'reactstrap';
+import { Collapse as BCollapse, Button, NavLink, ButtonGroup, Badge } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
 
 import './Collapse.css';
@@ -15,9 +15,13 @@ const Collapse = ({ heading, items }) => {
             <BCollapse isOpen={ isOpen } style={{ width: '100%' }}>
                 <ButtonGroup vertical style={{ width: '100%' }} className="border-bottom border-light">
                     { items && items.map((item, idx) => 
-                    <Button key={ idx } color="dark" className='rounded-0 text-start ps-4'>
-                        <NavLink tag={RRNavLink} to={ item.link }>{ item.heading }</NavLink>
+                    <div key={ idx }>
+                    <Button color="dark" className='rounded-0 text-start ps-4 text-nowrap'>
+                        <NavLink tag={RRNavLink} to={ item.link }>{ item.heading } { item.badge && <Badge color="warning">{ item.badge }</Badge> }</NavLink>
+                        
                     </Button>
+                    
+                  </div>
                     ) }
                 </ButtonGroup>
             </BCollapse>

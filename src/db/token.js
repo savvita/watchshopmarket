@@ -34,7 +34,7 @@ const getUserInfo = () => {
 }
 
 const logOut = () => {
-    sessionStorage.removeItem(token_key);
+    localStorage.removeItem(token_key);
 
     return {
         username: '',

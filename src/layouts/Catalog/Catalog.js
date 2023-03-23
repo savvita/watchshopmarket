@@ -43,7 +43,7 @@ const Catalog = () => {
     }, [values]);
 
     useEffect(() => {
-        dispatch(getAsync({ ...filters, page: currentPage, perPage: perPage }));
+        dispatch(getAsync({ ...filters, page: currentPage, perPage: perPage, onSale: [ true ] }));
     }, [currentPage, perPage]);
 
     useEffect(() => {
@@ -51,7 +51,7 @@ const Catalog = () => {
             setCurrentPage(1);
         }
         else {
-            dispatch(getAsync({ ...filters, page: currentPage, perPage: perPage }));
+            dispatch(getAsync({ ...filters, page: currentPage, perPage: perPage, onSale: [ true ] }));
         }
     }, [filters]);
 
