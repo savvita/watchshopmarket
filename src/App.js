@@ -32,6 +32,22 @@ import NP from './layouts/NP';
 import Orders from './layouts/Orders';
 import OrderDetail from './layouts/OrderDetail';
 import WaterResistanceDetail from './layouts/WaterResistanceDetail';
+import StyleDetail from './layouts/StyleDetail';
+import GenderDetail from './layouts/GenderDetail';
+import GlassTypeDetail from './layouts/GlassTypeDetail';
+import CaseShapeDetail from './layouts/CaseShapeDetail';
+import BrandDetail from './layouts/BrandDetail';
+import ColorDetail from './layouts/ColorDetail';
+import CollectionDetail from './layouts/CollectionDetail';
+import StrapTypeDetail from './layouts/StrapTypeDetail';
+import MovementTypeDetail from './layouts/MovementTypeDetail';
+import MaterialDetail from './layouts/MaterialDetail';
+import IncrustationTypeDetail from './layouts/IncrustationTypeDetail';
+import FunctionDetail from './layouts/FunctionDetail';
+import DialTypeDetail from './layouts/DialTypeDetail';
+import CountryDetail from './layouts/CountryDetail';
+import WatchDetail from './layouts/WatchDetail';
+import ReviewTable from './components/ReviewTable/ReviewTable';
 
 function App() {
   return (
@@ -67,8 +83,24 @@ function App() {
             <Route path="watch" element={ <Watch /> } />  
             <Route path="orders" element={ <Orders isManagerMode={ true } /> } />
             <Route path="orders/new" element={ <Orders statusses={ [1] } /> } />  
+            <Route path="reviews/new" element={ <ReviewTable /> } />  
             <Route path="orders/:id" element={ <OrderDetail isManagerMode={ true } /> } />
             <Route path="waterresistance/:id" element={ <WaterResistanceDetail /> } />
+            <Route path="style/:id" element={ <StyleDetail /> } />
+            <Route path="straptype/:id" element={ <StrapTypeDetail /> } />
+            <Route path="movementtype/:id" element={ <MovementTypeDetail /> } />
+            <Route path="material/:id" element={ <MaterialDetail /> } />
+            <Route path="country/:id" element={ <CountryDetail /> } />
+            <Route path="incrustationtype/:id" element={ <IncrustationTypeDetail /> } />
+            <Route path="glasstype/:id" element={ <GlassTypeDetail /> } />
+            <Route path="watch/:id" element={ <WatchDetail /> } />
+            <Route path="gender/:id" element={ <GenderDetail /> } />
+            <Route path="function/:id" element={ <FunctionDetail /> } />
+            <Route path="dialtype/:id" element={ <DialTypeDetail /> } />
+            <Route path="color/:id" element={ <ColorDetail /> } />
+            <Route path="collection/:id" element={ <CollectionDetail /> } />
+            <Route path="caseshape/:id" element={ <CaseShapeDetail /> } />
+            <Route path="brand/:id" element={ <BrandDetail /> } />
           </Route>      
           <Route path="/admin" element={ <Admin /> }>
             <Route path="payment" element={ <Payment /> } />

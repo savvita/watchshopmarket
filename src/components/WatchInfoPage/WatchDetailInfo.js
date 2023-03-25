@@ -1,12 +1,54 @@
 
-import React, { useState } from 'react';
-import { Nav, NavItem, NavLink, TabContent, TabPane, Table } from 'reactstrap';
+import React, { useEffect, useState } from 'react';
+import { Nav, NavItem, NavLink, TabContent, TabPane, Table, Row, Col } from 'reactstrap';
+import Reviews from '../Reviews/Reviews';
+
+import { createAsync } from '../../app/reviewSlice';
+import { useDispatch } from 'react-redux';
+
+import { getByIdAsync } from '../../app/watchSlice';
+import InfoModal from '../InfoModal';
+import NewReview from '../Reviews/NewReview';
 
 
 const WatchDetailInfo = ({ item, className }) => {
     const [activeTab, setActiveTab] = useState('1');
 
+    const [value, setValue] = useState({});
+
+    const dispatch = useDispatch();
+
+    const [infoModal, setInfoModal] = useState(false);
+    const [infoHeader, setInfoHeader] = useState('');
+    const [infoText, setInfoText] = useState('');
+
+    useEffect(() => {
+        setValue({ ...item });
+    }, [item]);
+
     if(!item) return null;
+
+    const saveReview = async (text) => {
+        const review = {
+            text: text,
+            watchId: item.id
+        };
+
+        const res = await dispatch(createAsync(review));
+
+        if(!res || !res.payload || !res.payload.value) {
+            setInfoHeader('Помилка');
+            setInfoText('Щось пішло не так. Спробуйте пізніше');
+            setInfoModal(true);
+        }
+        else {
+            const res = await dispatch(getByIdAsync(value.id));
+
+            if(res && res.payload && res.payload.value) {
+                setValue(res.payload.value);
+            }
+        }
+    }
 
     return (
         <div className={ className }>
@@ -21,128 +63,144 @@ const WatchDetailInfo = ({ item, className }) => {
                         Додаткова інформація
                     </NavLink>
                 </NavItem>
+                <NavItem>
+                    <NavLink className={activeTab === '3' ? 'active' : 'watch-info_details-tabs'} onClick={() => setActiveTab('3')}>
+                        Відгуки
+                    </NavLink>
+                </NavItem>
             </Nav>
             <TabContent activeTab={activeTab}>
                 <TabPane tabId="1">
-                    { item.description && <p className="text-white mt-2">{ item.description }</p> }
+                    { value.description && <p className="text-white mt-2">{ value.description }</p> }
                 </TabPane>
                 <TabPane tabId="2">
                     <Table dark>
                         <tbody>
                             <tr>
                                 <td>Модель</td>
-                                <td>{ item.model }</td>
+                                <td>{ value.model }</td>
                             </tr>
-                            { item.brand && 
+                            { value.brand && 
                                 <tr>
                                     <td>Виробник</td>
-                                    <td>{ item.brand.value }</td>
+                                    <td>{ value.brand.value }</td>
                                 </tr>
                             }
-                            { item.collection && 
+                            { value.collection && 
                                 <tr>
                                     <td>Колекція</td>
-                                    <td>{ item.collection.value }</td>
+                                    <td>{ value.collection.value }</td>
                                 </tr>
                             }
-                            { item.gender && 
+                            { value.gender && 
                                 <tr>
                                     <td>Стать</td>
-                                    <td>{ item.gender.value }</td>
+                                    <td>{ value.gender.value }</td>
                                 </tr>
                             }
-                            { item.style && 
+                            { value.style && 
                                 <tr>
                                     <td>Стиль</td>
-                                    <td>{ item.style.value }</td>
+                                    <td>{ value.style.value }</td>
                                 </tr>
                             }
-                            { item.movementType && 
+                            { value.movementType && 
                                 <tr>
                                     <td>Тип механізму</td>
-                                    <td>{ item.movementType.value }</td>
+                                    <td>{ value.movementType.value }</td>
                                 </tr>
                             }
-                            { item.caseShape && 
+                            { value.caseShape && 
                                 <tr>
                                     <td>Форма корпусу</td>
-                                    <td>{ item.caseShape.value }</td>
+                                    <td>{ value.caseShape.value }</td>
                                 </tr>
                             }
-                            { item.caseMaterial && 
+                            { value.caseMaterial && 
                                 <tr>
                                     <td>Матеріал корпусу</td>
-                                    <td>{ item.caseMaterial.value }</td>
+                                    <td>{ value.caseMaterial.value }</td>
                                 </tr>
                             }
-                            { item.caseSize && 
+                            { value.caseSize && 
                                 <tr>
                                     <td>Розмір корпусу (мм)</td>
-                                    <td>{ item.caseSize }</td>
+                                    <td>{ value.caseSize }</td>
                                 </tr>
                             }
-                            { item.caseColor && 
+                            { value.caseColor && 
                                 <tr>
                                     <td>Колір корпусу</td>
-                                    <td>{ item.caseColor.value }</td>
+                                    <td>{ value.caseColor.value }</td>
                                 </tr>
                             }
-                            { item.glassType && 
+                            { value.glassType && 
                                 <tr>
                                     <td>Скло</td>
-                                    <td>{ item.glassType.value }</td>
+                                    <td>{ value.glassType.value }</td>
                                 </tr>
                             }
-                            { item.strapType && 
+                            { value.strapType && 
                                 <tr>
                                     <td>Браслет/ремінець</td>
-                                    <td>{ item.strapType.value }</td>
+                                    <td>{ value.strapType.value }</td>
                                 </tr>
                             }
-                            { item.strapColor && 
+                            { value.strapColor && 
                                 <tr>
                                     <td>Колір браслету/ремінця</td>
-                                    <td>{ item.strapColor.value }</td>
+                                    <td>{ value.strapColor.value }</td>
                                 </tr>
                             }
-                            { item.dialType && 
+                            { value.dialType && 
                                 <tr>
                                     <td>Вид циферблату</td>
-                                    <td>{ item.dialType.value }</td>
+                                    <td>{ value.dialType.value }</td>
                                 </tr>
                             }
-                            { item.dialColor && 
+                            { value.dialColor && 
                                 <tr>
                                     <td>Колір циферблату</td>
-                                    <td>{ item.dialColor.value }</td>
+                                    <td>{ value.dialColor.value }</td>
                                 </tr>
                             }
-                            { item.waterResistance && 
+                            { value.waterResistance && 
                                 <tr>
                                     <td>Водозахист</td>
-                                    <td>{ item.waterResistance.value }</td>
+                                    <td>{ value.waterResistance.value }</td>
                                 </tr>
                             }
-                            { item.incrustationType && 
+                            { value.incrustationType && 
                                 <tr>
                                     <td>Інкрустація</td>
-                                    <td>{ item.incrustationType.value }</td>
+                                    <td>{ value.incrustationType.value }</td>
                                 </tr>
                             }
-                            { item.weight && 
+                            { value.weight && 
                                 <tr>
                                     <td>Вага (г)</td>
-                                    <td>{ item.weight }</td>
+                                    <td>{ value.weight }</td>
                                 </tr>
                             }
-                            { item.functions && item.functions.length > 0 &&
+                            { value.functions && value.functions.length > 0 &&
                                 <tr>
                                     <td>Функції</td>
-                                    <td>{ item.functions.map(f => f.value).join(', ') }</td>
+                                    <td>{ value.functions.map(f => f.value).join(', ') }</td>
                                 </tr>
                             }
                         </tbody>
                     </Table>
+                </TabPane>
+                <TabPane tabId="3">
+                    <Row className="flex-row-reverse">
+                        <Col md="12" lg="6">
+                            <NewReview onAccept={ saveReview } />
+                        </Col>
+                        <Col md="12" lg="6">
+                            { value.reviews && <Reviews items={ value.reviews } /> }
+                        </Col>
+                    </Row>
+                    <InfoModal isOpen={ infoModal } onAccept={ () => setInfoModal(false) } title={ infoHeader } text={ infoText } />
                 </TabPane>
             </TabContent>
         </div>

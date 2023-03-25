@@ -4,10 +4,12 @@ import Collapse from './Collapse/Collapse';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectNewOrders, getNewAsync } from '../app/orderSlice';
+import { getAllAsync as getReviews, selectValues as selectReviews } from '../app/reviewSlice';
 import { useEffect } from 'react';
 
 const ManagerSidebar = () => {
     const values = useSelector(selectNewOrders);
+    const reviewValues = useSelector(selectReviews);
     const dispatch = useDispatch();
 
     const orders = [
@@ -22,8 +24,17 @@ const ManagerSidebar = () => {
         }
     ];
 
+    const reviews = [
+        { 
+            heading: 'Нові відгуки',
+            link: 'reviews/new',
+            badge: reviewValues && reviewValues.value ? reviewValues.value.length : null
+        }
+    ];
+
     useEffect(() => {
         dispatch(getNewAsync());
+        dispatch(getReviews(false));
     }, []);
 
 
@@ -102,6 +113,7 @@ const ManagerSidebar = () => {
             <Collapse heading='Характеристики' items={ properties } />
             <Collapse heading='Товари' items={ articles } />
             <Collapse heading='Замовлення' items={ orders } />
+            <Collapse heading='Відгуки' items={ reviews } />
         </div>
     );
 }
