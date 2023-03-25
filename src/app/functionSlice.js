@@ -10,6 +10,14 @@ export const getAsync = createAsyncThunk(
     }
   );
 
+  export const getByIdAsync = createAsyncThunk(
+    'function/getbyid',
+    async (id) => {
+      const response = await db.Functions.get(id);
+      return response;
+    }
+  );
+
   export const createAsync = createAsyncThunk(
     'function/create',
     async (entity) => {
@@ -38,6 +46,7 @@ export const functionSlice = createSlice({
         name: 'function',
         initialState: {
             values: [],
+            value: {},
             status: "idle"
         },
         reducers: {
@@ -54,6 +63,18 @@ export const functionSlice = createSlice({
                   }
                   else {
                       state.values = [];
+                  }
+              })
+              .addCase(getByIdAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(getByIdAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action && action.payload) {
+                    state.value = action.payload;
+                  }
+                  else {
+                      state.value = {};
                   }
               })
               .addCase(createAsync.pending, (state) => {
@@ -84,6 +105,7 @@ export const functionSlice = createSlice({
 // export const { } = categoriesSlice.actions
 
 export const selectValues = (state) => state.function.values;
+export const selectValue = (state) => state.function.value;
 export const selectStatus = (state) => state.function.status;
 
 export default functionSlice.reducer

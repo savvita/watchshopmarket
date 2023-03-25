@@ -10,6 +10,14 @@ export const getAsync = createAsyncThunk(
     }
   );
 
+  export const getByIdAsync = createAsyncThunk(
+    'collection/getbyid',
+    async (id) => {
+      const response = await db.Collections.get(id);
+      return response;
+    }
+  );
+
   export const createAsync = createAsyncThunk(
     'collection/create',
     async (entity) => {
@@ -38,6 +46,7 @@ export const collectionSlice = createSlice({
         name: 'collection',
         initialState: {
             values: [],
+            value: {},
             status: "idle"
         },
         reducers: {
@@ -54,6 +63,18 @@ export const collectionSlice = createSlice({
                   }
                   else {
                       state.values = [];
+                  }
+              })
+              .addCase(getByIdAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(getByIdAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action && action.payload) {
+                    state.value = action.payload;
+                  }
+                  else {
+                      state.value = {};
                   }
               })
               .addCase(createAsync.pending, (state) => {
@@ -84,6 +105,7 @@ export const collectionSlice = createSlice({
 // export const { } = categoriesSlice.actions
 
 export const selectValues = (state) => state.collection.values;
+export const selectValue = (state) => state.collection.value;
 export const selectStatus = (state) => state.collection.status;
 
 export default collectionSlice.reducer

@@ -4,7 +4,7 @@ import { selectValues, selectStatus, getAsync, deleteAsync, createAsync, updateA
 
 const Color = () => {
     return (
-        <PropertyTable title="Колір" selectValues={ selectValues } selectStatus={ selectStatus } get={ getAsync } update={ updateAsync } create={ createAsync} remove={ deleteAsync } />
+        <PropertyTable title="Колір" selectValues={ selectValues } selectStatus={ selectStatus } get={ getAsync } update={ updateAsync } create={ createAsync} remove={ deleteAsync } link="/manager/color" />
     );
 }
 

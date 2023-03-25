@@ -16,7 +16,7 @@ import { FaPlus } from "react-icons/fa";
 import PerPageSelect from '../PerPageSelect';
 
 
-const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, get, getValueById, setCurrent, update, create, remove, restore, saveFiles }) => {
+const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, get, getValueById, setCurrent, update, create, remove, restore, saveFiles, link }) => {
     const values = useSelector(selectValues);
     const current = useSelector(selectCurrent);
     const status = useSelector(selectStatus);
@@ -308,7 +308,7 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
                 </thead>
                 <tbody>
                     { values && values.value && values.value.map((item, i) => 
-                        item && <WatchPropertyTableRow key={ item.id } idx={ (currentPage - 1) * perPage + i + 1 } item={ item } onEdit={ editItem } onOnSaleChange={ onOnSaleChange } onIsTopChange={ onIsTopChange } />)
+                        item && <WatchPropertyTableRow key={ item.id } idx={ (currentPage - 1) * perPage + i + 1 } item={ item } onEdit={ editItem } onOnSaleChange={ onOnSaleChange } onIsTopChange={ onIsTopChange } link={ link } />)
                     }
                 </tbody>
                 <tfoot>

@@ -4,7 +4,7 @@ import { selectValues, selectStatus, getAsync, deleteAsync, createAsync, updateA
 
 const Style = () => {
     return (
-        <PropertyTable title="Стиль" selectValues={ selectValues } selectStatus={ selectStatus } get={ getAsync } update={ updateAsync } create={ createAsync} remove={ deleteAsync } />
+        <PropertyTable title="Стиль" selectValues={ selectValues } selectStatus={ selectStatus } get={ getAsync } update={ updateAsync } create={ createAsync} remove={ deleteAsync } link="/manager/style" />
     );
 }
 

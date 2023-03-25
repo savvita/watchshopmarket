@@ -10,6 +10,14 @@ export const getAsync = createAsyncThunk(
     }
   );
 
+  export const getByIdAsync = createAsyncThunk(
+    'movementtype/getbyid',
+    async (id) => {
+      const response = await db.MovementTypes.get(id);
+      return response;
+    }
+  );
+
   export const createAsync = createAsyncThunk(
     'movementtype/create',
     async (entity) => {
@@ -38,6 +46,7 @@ export const movementtypeSlice = createSlice({
         name: 'movementtype',
         initialState: {
             values: [],
+            value: {},
             status: "idle"
         },
         reducers: {
@@ -54,6 +63,18 @@ export const movementtypeSlice = createSlice({
                   }
                   else {
                       state.values = [];
+                  }
+              })
+              .addCase(getByIdAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(getByIdAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action && action.payload) {
+                    state.value = action.payload;
+                  }
+                  else {
+                      state.value = {};
                   }
               })
               .addCase(createAsync.pending, (state) => {
@@ -84,6 +105,7 @@ export const movementtypeSlice = createSlice({
 // export const { } = categoriesSlice.actions
 
 export const selectValues = (state) => state.movementtype.values;
+export const selectValue = (state) => state.movementtype.value;
 export const selectStatus = (state) => state.movementtype.status;
 
 export default movementtypeSlice.reducer

@@ -10,6 +10,18 @@ export const getAsync = createAsyncThunk(
     }
   );
 
+  export const getByIdAsync = createAsyncThunk(
+    'color/getbyid',
+    async (params) => {
+      if(!params) {
+        return undefined;
+      }
+
+      const response = await db.Colors.getByType(params.id, params.type);
+      return response;
+    }
+  );
+
   export const createAsync = createAsyncThunk(
     'color/create',
     async (entity) => {
@@ -38,6 +50,7 @@ export const colorSlice = createSlice({
         name: 'color',
         initialState: {
             values: [],
+            value: {},
             status: "idle"
         },
         reducers: {
@@ -54,6 +67,18 @@ export const colorSlice = createSlice({
                   }
                   else {
                       state.values = [];
+                  }
+              })
+              .addCase(getByIdAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(getByIdAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action && action.payload) {
+                    state.value = action.payload;
+                  }
+                  else {
+                      state.value = {};
                   }
               })
               .addCase(createAsync.pending, (state) => {
@@ -84,6 +109,7 @@ export const colorSlice = createSlice({
 // export const { } = categoriesSlice.actions
 
 export const selectValues = (state) => state.color.values;
+export const selectValue = (state) => state.color.value;
 export const selectStatus = (state) => state.color.status;
 
 export default colorSlice.reducer

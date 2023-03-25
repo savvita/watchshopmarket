@@ -10,6 +10,14 @@ export const getAsync = createAsyncThunk(
     }
   );
 
+  export const getByIdAsync = createAsyncThunk(
+    'straptypes/getbyid',
+    async (id) => {
+      const response = await db.StrapTypes.get(id);
+      return response;
+    }
+  );
+
   export const createAsync = createAsyncThunk(
     'straptypes/create',
     async (entity) => {
@@ -38,6 +46,7 @@ export const straptypeSlice = createSlice({
         name: 'straptypes',
         initialState: {
             values: [],
+            value: {},
             status: "idle"
         },
         reducers: {
@@ -54,6 +63,18 @@ export const straptypeSlice = createSlice({
                   }
                   else {
                       state.values = [];
+                  }
+              })
+              .addCase(getByIdAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(getByIdAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action && action.payload) {
+                    state.value = action.payload;
+                  }
+                  else {
+                      state.value = {};
                   }
               })
               .addCase(createAsync.pending, (state) => {
@@ -84,6 +105,7 @@ export const straptypeSlice = createSlice({
 // export const { } = categoriesSlice.actions
 
 export const selectValues = (state) => state.straptype.values;
+export const selectValue = (state) => state.straptype.value;
 export const selectStatus = (state) => state.straptype.status;
 
 export default straptypeSlice.reducer

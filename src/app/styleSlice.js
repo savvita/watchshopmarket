@@ -10,6 +10,14 @@ export const getAsync = createAsyncThunk(
     }
   );
 
+  export const getByIdAsync = createAsyncThunk(
+    'style/getbyid',
+    async (id) => {
+      const response = await db.Styles.get(id);
+      return response;
+    }
+  );
+
   export const createAsync = createAsyncThunk(
     'style/create',
     async (entity) => {
@@ -38,6 +46,7 @@ export const styleSlice = createSlice({
         name: 'style',
         initialState: {
             values: [],
+            value: {},
             status: "idle"
         },
         reducers: {
@@ -54,6 +63,18 @@ export const styleSlice = createSlice({
                   }
                   else {
                       state.values = [];
+                  }
+              })
+              .addCase(getByIdAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(getByIdAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action && action.payload) {
+                    state.value = action.payload;
+                  }
+                  else {
+                      state.value = {};
                   }
               })
               .addCase(createAsync.pending, (state) => {
@@ -84,6 +105,7 @@ export const styleSlice = createSlice({
 // export const { } = categoriesSlice.actions
 
 export const selectValues = (state) => state.style.values;
+export const selectValue = (state) => state.style.value;
 export const selectStatus = (state) => state.style.status;
 
 export default styleSlice.reducer

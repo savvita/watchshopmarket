@@ -4,7 +4,7 @@ import { selectValues, selectStatus, getAsync, deleteAsync, createAsync, updateA
 
 const Country = () => {
     return (
-        <PropertyTable title="Країна" selectValues={ selectValues } selectStatus={ selectStatus } get={ getAsync } update={ updateAsync } create={ createAsync} remove={ deleteAsync } />
+        <PropertyTable title="Країна" selectValues={ selectValues } selectStatus={ selectStatus } get={ getAsync } update={ updateAsync } create={ createAsync} remove={ deleteAsync } link="/manager/country" />
     );
 }
 

@@ -4,7 +4,7 @@ import { selectValues, selectStatus, getAsync, deleteAsync, createAsync, updateA
 
 const Brand = () => {
     return (
-        <BrandPropertyTable title="Виробник" selectValues={ selectValues } selectStatus={ selectStatus } get={ getAsync } update={ updateAsync } create={ createAsync} remove={ deleteAsync } />
+        <BrandPropertyTable title="Виробник" selectValues={ selectValues } selectStatus={ selectStatus } get={ getAsync } update={ updateAsync } create={ createAsync} remove={ deleteAsync } link="/manager/brand" />
     );
 }
 

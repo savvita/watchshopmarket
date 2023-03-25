@@ -16,7 +16,7 @@ import { FaPlus } from "react-icons/fa";
 import PerPageSelect from '../PerPageSelect';
 
 
-const BrandPropertyTable = ({ selectValues, selectStatus, title, get, update, create, remove }) => {
+const BrandPropertyTable = ({ selectValues, selectStatus, title, get, update, create, remove, link }) => {
     const values = useSelector(selectValues);
     const status = useSelector(selectStatus);
     const countries = useSelector(selectCountries);
@@ -198,7 +198,7 @@ const BrandPropertyTable = ({ selectValues, selectStatus, title, get, update, cr
                 <tbody>
                     <BrandPropertyTableRow countries={ countries } className={ addMode ? '' : 'd-none' } onCancel={ () => setAddMode(false) } onAccept={ saveItem } onError={ onError } />
                     { itemsPage && itemsPage.map((item, idx) => 
-                        item && <BrandPropertyTableRow key={ item.id } countries={ countries } idx={ (currentPage - 1) * perPage + idx + 1 } item={ item } onDelete={ (item) => showCofirmModal(item) } onAccept={ saveItem } onError={ onError } />)
+                        item && <BrandPropertyTableRow key={ item.id } countries={ countries } idx={ (currentPage - 1) * perPage + idx + 1 } item={ item } onDelete={ (item) => showCofirmModal(item) } onAccept={ saveItem } onError={ onError } link={ link } />)
                     }
                 </tbody>
                 <tfoot>

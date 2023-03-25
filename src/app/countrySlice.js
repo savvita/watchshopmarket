@@ -10,6 +10,14 @@ export const getAsync = createAsyncThunk(
     }
   );
 
+  export const getByIdAsync = createAsyncThunk(
+    'country/getbyid',
+    async (id) => {
+      const response = await db.Countries.get(id);
+      return response;
+    }
+  );
+
   export const createAsync = createAsyncThunk(
     'country/create',
     async (entity) => {
@@ -38,6 +46,7 @@ export const countrySlice = createSlice({
         name: 'country',
         initialState: {
             values: [],
+            value: {},
             status: "idle"
         },
         reducers: {
@@ -54,6 +63,18 @@ export const countrySlice = createSlice({
                   }
                   else {
                       state.values = [];
+                  }
+              })
+              .addCase(getByIdAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(getByIdAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action && action.payload) {
+                    state.value = action.payload;
+                  }
+                  else {
+                      state.value = {};
                   }
               })
               .addCase(createAsync.pending, (state) => {
@@ -84,6 +105,7 @@ export const countrySlice = createSlice({
 // export const { } = categoriesSlice.actions
 
 export const selectValues = (state) => state.country.values;
+export const selectValue = (state) => state.country.value;
 export const selectStatus = (state) => state.country.status;
 
 export default countrySlice.reducer

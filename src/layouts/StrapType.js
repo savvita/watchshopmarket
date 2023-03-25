@@ -4,7 +4,7 @@ import { selectValues, selectStatus, getAsync, deleteAsync, createAsync, updateA
 
 const StrapType = () => {
     return (
-        <PropertyTable title="Браслет/ремінець" selectValues={ selectValues } selectStatus={ selectStatus } get={ getAsync } update={ updateAsync } create={ createAsync} remove={ deleteAsync } />
+        <PropertyTable title="Браслет/ремінець" selectValues={ selectValues } selectStatus={ selectStatus } get={ getAsync } update={ updateAsync } create={ createAsync} remove={ deleteAsync } link="/manager/straptype" />
     );
 }
 

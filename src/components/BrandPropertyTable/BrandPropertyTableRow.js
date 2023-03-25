@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 
 import './BrandPropertyTable.css';
 
-const BrandPropertyTableRow = ({ idx, item, countries, className, onDelete, onCancel, onAccept, onError, onView }) => {
+const BrandPropertyTableRow = ({ idx, item, countries, className, onDelete, onCancel, onAccept, onError, link }) => {
 
     const [editMode, setEditMode] = useState(!item);
     const [value, setValue] = useState('');
@@ -100,7 +100,7 @@ const BrandPropertyTableRow = ({ idx, item, countries, className, onDelete, onCa
                 </div>
             </td>
             :
-            <CollapsedActions item={ item } editMode={ editMode } onDelete={ () => onDelete && onDelete(item) } onEdit={ () => setEditMode(true) } onView={ () => item && onView && onView(item.id) } /> }
+            <CollapsedActions item={ item } editMode={ editMode } onDelete={ () => onDelete && onDelete(item) } onEdit={ () => setEditMode(true) } link={ `${link}/${ item && item.id }` } /> }
         </tr>
     );
 }

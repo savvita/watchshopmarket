@@ -10,6 +10,14 @@ export const getAsync = createAsyncThunk(
     }
   );
 
+  export const getByIdAsync = createAsyncThunk(
+    'waterresistance/getbyid',
+    async (id) => {
+      const response = await db.WaterResistances.get(id);
+      return response;
+    }
+  );
+
   export const createAsync = createAsyncThunk(
     'waterresistance/create',
     async (entity) => {
@@ -38,6 +46,7 @@ export const waterresistanceSlice = createSlice({
         name: 'waterresistance',
         initialState: {
             values: [],
+            value: {},
             status: "idle"
         },
         reducers: {
@@ -54,6 +63,18 @@ export const waterresistanceSlice = createSlice({
                   }
                   else {
                       state.values = [];
+                  }
+              })
+              .addCase(getByIdAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(getByIdAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action && action.payload) {
+                    state.value = action.payload;
+                  }
+                  else {
+                      state.value = {};
                   }
               })
               .addCase(createAsync.pending, (state) => {
@@ -84,6 +105,7 @@ export const waterresistanceSlice = createSlice({
 // export const { } = categoriesSlice.actions
 
 export const selectValues = (state) => state.waterresistance.values;
+export const selectValue = (state) => state.waterresistance.value;
 export const selectStatus = (state) => state.waterresistance.status;
 
 export default waterresistanceSlice.reducer

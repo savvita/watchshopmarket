@@ -248,19 +248,21 @@ const Brands = new basic(`${api}/brands`);
 const Caseshapes = new basic(`${api}/caseshapes`);
 const Collections = new basic(`${api}/collections`);
 
-const Colors = new basic(`${api}/colors`);
-Colors.get = async function (id, type) {
-    if(!id && !type) {
-        return await db_get(this.url);
-    }
+const Colors = function() {
+    basic.call(this, `${api}/colors`);
 
-    if(!id || !type) {
-        return undefined;
+    this.getByType = async function(id, type) {
+        if(!id && !type) {
+            return await db_get(this.url);
+        }
+    
+        if(!id || !type) {
+            return undefined;
+        }
+    
+        return await db_get(`${this.url}/${type}/${id}`);
     }
-
-    return await db_get(`${this.url}/${type}/${id}`);
 }
-
 const Countries = new basic(`${api}/countries`);
 const DialTypes = new basic(`${api}/dialtypes`);
 const Functions = new basic(`${api}/functions`);
@@ -268,17 +270,20 @@ const Genders = new basic(`${api}/genders`);
 const GlassTypes = new basic(`${api}/glasstypes`);
 const IncrustationTypes = new basic(`${api}/incrustationtypes`);
 
-const Materials = new basic(`${api}/materials`);
-Materials.get = async function (id, type) {
-    if(!id && !type) {
-        return await db_get(this.url);
-    }
+const Materials = function() {
+    basic.call(this, `${api}/materials`);
 
-    if(!id || !type) {
-        return undefined;
+    this.getByType = async function(id, type) {
+        if(!id && !type) {
+            return await db_get(this.url);
+        }
+    
+        if(!id || !type) {
+            return undefined;
+        }
+    
+        return await db_get(`${this.url}/${type}/${id}`);
     }
-
-    return await db_get(`${this.url}/${type}/${id}`);
 }
 
 const MovementTypes = new basic(`${api}/movementtypes`);
@@ -311,7 +316,7 @@ const Orders = function() {
             return undefined;
         }
  
-        let request = `${this.url}?`;
+        let request = `${this.url}/sales?`;
 
         for(let prop in filters) {
             request += `&${prop}=${filters[prop]}`;
@@ -358,6 +363,23 @@ const Orders = function() {
 
 const StrapTypes = new basic(`${api}/straptypes`);
 const Styles = new basic(`${api}/styles`);
+
+const Reviews = function() {
+    basic.call(this, `${api}/reviews`);
+    this.getByWatchId = async function(watchId) {
+        return await db_get(`${api}/watch/${watchId}`);
+    }
+    this.create = async function(params) {
+        return await db_post(`${this.url}/${params.watchId}`, params.text);
+    }
+    this.getChecked = async function(check) {
+        if(check !== undefined) {
+            return await db_get(`${this.url}/all?check=${check}`);
+        }
+
+        return await db_get(`${this.url}/all`);
+    }
+}
 
 const Users = function() {
     basic.call(this, `${api}/users`);
@@ -486,11 +508,11 @@ const functions = {
     Styles: Styles,
     Orders: new Orders(),
     MovementTypes: MovementTypes,
-    Materials: Materials,
+    Materials: new Materials(),
     Brands: Brands,
     Caseshapes: Caseshapes,
     Collections: Collections,
-    Colors: Colors,
+    Colors: new Colors(),
     Countries: Countries,
     DialTypes: DialTypes,
     Functions: Functions,
@@ -499,6 +521,7 @@ const functions = {
     IncrustationTypes: IncrustationTypes,
     Files: new Files(),
     Cities: new Cities(),
+    Reviews: new Reviews(),
     Warehouses: new Warehouses()
 };
 

@@ -10,6 +10,15 @@ export const getAsync = createAsyncThunk(
     }
   );
 
+  
+  export const getByIdAsync = createAsyncThunk(
+    'glasstype/getbyid',
+    async (id) => {
+      const response = await db.GlassTypes.get(id);
+      return response;
+    }
+  );
+
   export const createAsync = createAsyncThunk(
     'glasstype/create',
     async (entity) => {
@@ -38,6 +47,7 @@ export const glasstypeSlice = createSlice({
         name: 'glasstype',
         initialState: {
             values: [],
+            value: {},
             status: "idle"
         },
         reducers: {
@@ -54,6 +64,18 @@ export const glasstypeSlice = createSlice({
                   }
                   else {
                       state.values = [];
+                  }
+              })
+              .addCase(getByIdAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(getByIdAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action && action.payload) {
+                    state.value = action.payload;
+                  }
+                  else {
+                      state.value = {};
                   }
               })
               .addCase(createAsync.pending, (state) => {
@@ -84,6 +106,7 @@ export const glasstypeSlice = createSlice({
 // export const { } = categoriesSlice.actions
 
 export const selectValues = (state) => state.glasstype.values;
+export const selectValue = (state) => state.glasstype.value;
 export const selectStatus = (state) => state.glasstype.status;
 
 export default glasstypeSlice.reducer

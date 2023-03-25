@@ -10,6 +10,14 @@ export const getAsync = createAsyncThunk(
     }
   );
 
+  export const getByIdAsync = createAsyncThunk(
+    'caseshape/getbyid',
+    async (id) => {
+      const response = await db.Caseshapes.get(id);
+      return response;
+    }
+  );
+
   export const createAsync = createAsyncThunk(
     'caseshape/create',
     async (entity) => {
@@ -38,6 +46,7 @@ export const caseshapeSlice = createSlice({
         name: 'caseshape',
         initialState: {
             values: [],
+            value: {},
             status: "idle"
         },
         reducers: {
@@ -54,6 +63,18 @@ export const caseshapeSlice = createSlice({
                   }
                   else {
                       state.values = [];
+                  }
+              })
+              .addCase(getByIdAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(getByIdAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action && action.payload) {
+                    state.value = action.payload;
+                  }
+                  else {
+                      state.value = {};
                   }
               })
               .addCase(createAsync.pending, (state) => {
@@ -84,6 +105,7 @@ export const caseshapeSlice = createSlice({
 // export const { } = categoriesSlice.actions
 
 export const selectValues = (state) => state.caseshape.values;
+export const selectValue = (state) => state.caseshape.value;
 export const selectStatus = (state) => state.caseshape.status;
 
 export default caseshapeSlice.reducer

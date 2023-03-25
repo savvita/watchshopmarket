@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 
 import './WatchPropertyTable.css';
 
-const WatchPropertyTableRow = ({ idx, item, className, onEdit, onView, onOnSaleChange, onIsTopChange }) => {
+const WatchPropertyTableRow = ({ idx, item, className, onEdit, link, onOnSaleChange, onIsTopChange }) => {
     const [onSale, setOnSale] = useState(item && item.onSale);
     const [isTop, setIsTop] = useState(item && item.isTop);
 
@@ -54,7 +54,7 @@ const WatchPropertyTableRow = ({ idx, item, className, onEdit, onView, onOnSaleC
                     <Input type="switch" checked={ isTop } onChange={ isTopChange } />
                 </FormGroup>
             </td>
-            <CollapsedActions item={ item } editMode={ false } onView={ () => item && onView && onView(item.id) } onEdit={ () => item && onEdit && onEdit(item.id)} />
+            <CollapsedActions item={ item } editMode={ false } link={ `${link}/${ item && item.id }` } onEdit={ () => item && onEdit && onEdit(item.id)} />
         </tr>
     );
 }

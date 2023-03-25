@@ -10,6 +10,14 @@ export const getAsync = createAsyncThunk(
     }
   );
 
+  export const getByIdAsync = createAsyncThunk(
+    'dialtype/getbyid',
+    async (id) => {
+      const response = await db.DialTypes.get(id);
+      return response;
+    }
+  );
+
   export const createAsync = createAsyncThunk(
     'dialtype/create',
     async (entity) => {
@@ -38,6 +46,7 @@ export const dialtypeSlice = createSlice({
         name: 'dialtype',
         initialState: {
             values: [],
+            value: {},
             status: "idle"
         },
         reducers: {
@@ -54,6 +63,18 @@ export const dialtypeSlice = createSlice({
                   }
                   else {
                       state.values = [];
+                  }
+              })
+              .addCase(getByIdAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(getByIdAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action && action.payload) {
+                    state.value = action.payload;
+                  }
+                  else {
+                      state.value = {};
                   }
               })
               .addCase(createAsync.pending, (state) => {
@@ -84,6 +105,7 @@ export const dialtypeSlice = createSlice({
 // export const { } = categoriesSlice.actions
 
 export const selectValues = (state) => state.dialtype.values;
+export const selectValue = (state) => state.dialtype.value;
 export const selectStatus = (state) => state.dialtype.status;
 
 export default dialtypeSlice.reducer
