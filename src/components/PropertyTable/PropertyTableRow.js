@@ -78,5 +78,3 @@ const PropertyTableRow = ({ idx, item, className, onDelete, onCancel, onAccept, 
 }
 
 export default PropertyTableRow;
-
-//React.Children.map((child, idx) => <td key={ idx }>{ child }</td>)

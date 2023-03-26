@@ -33,6 +33,14 @@ export const signInAsync = createAsyncThunk(
     }
   );
 
+  export const updateAsync = createAsyncThunk(
+    'auth/update',
+    async (entity) => {
+      const response = await db.Users.update(entity);
+      return response;
+    }
+  );
+
   export const deleteAsync = createAsyncThunk(
     'auth/delete',
     async (entity) => {
@@ -102,6 +110,19 @@ export const authSlice = createSlice({
                 else {
                   state.currentValue = null;
                 }
+                return state;
+              })
+              .addCase(updateAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(updateAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action && action.payload && action.payload.value) {
+                    state.currentValue = token.getUserInfo()
+                  }
+                  else {
+                    state.currentValue = null;
+                  }
                 return state;
               })
               .addCase(deleteAsync.pending, (state) => {

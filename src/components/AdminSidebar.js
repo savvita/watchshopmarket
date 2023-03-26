@@ -23,10 +23,18 @@ const AdminSidebar = () => {
         }
     ]
 
+    const users = [
+        {
+            heading: 'Користувачі',
+            link: 'users'
+        }
+    ]
+
     return (
         <div className='d-flex flex-column'>
             <Collapse heading='Продаж' items={ articles } />
             <Collapse heading='Нова пошта' items={ np } />
+            <Collapse heading='Користувачі' items={ users } />
         </div>
     );
 }

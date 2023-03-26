@@ -173,7 +173,7 @@ const PropertyTable = ({ selectValues, selectStatus, title, get, update, create,
                         </Col>
                         <Col sm="6" xs="12">
                             <FormGroup  className="position-relative">
-                                <Input name="search" placeholder="Search" type="search" value={ searchTxt } onInput={ (e) => setSearchTxt(e.target.value.toLowerCase()) } invalid={ items.length === 0 }  />
+                                <Input name="search" placeholder="Шукати" type="search" value={ searchTxt } onInput={ (e) => setSearchTxt(e.target.value.toLowerCase()) } invalid={ items.length === 0 }  />
                                 <FormFeedback tooltip className="text-white">{ 'Не знайдено :(' }</FormFeedback>
                             </FormGroup>
                         </Col>

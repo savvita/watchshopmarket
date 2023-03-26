@@ -48,6 +48,7 @@ import DialTypeDetail from './layouts/DialTypeDetail';
 import CountryDetail from './layouts/CountryDetail';
 import WatchDetail from './layouts/WatchDetail';
 import ReviewTable from './components/ReviewTable/ReviewTable';
+import Users from './layouts/Users';
 
 function App() {
   return (
@@ -106,6 +107,7 @@ function App() {
             <Route path="payment" element={ <Payment /> } />
             <Route path="delivery" element={ <Delivery /> } />
             <Route path="np" element={ <NP /> } />
+            <Route path="users" element={ <Users /> } />
           </Route>
         </Routes>
       </Router>
