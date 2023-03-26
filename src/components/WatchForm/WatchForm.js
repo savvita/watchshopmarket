@@ -93,7 +93,8 @@ const WatchForm = ({ isOpen, item, setItem, onAccept, onCancel }) => {
             return;
         }
 
-        onAccept && onAccept(item, imgs.filter(img => img.file).map(img => img.file));
+        setItem({ ...item, images: [...imgs] });
+        onAccept && onAccept({ ...item, images: [...imgs] }, imgs.filter(img => img.file).map(img => img.file));
     }
 
     const showError = (title) => {
@@ -101,7 +102,6 @@ const WatchForm = ({ isOpen, item, setItem, onAccept, onCancel }) => {
         setInfoModal(true);
     }
 
-    
     return (
         <>
             <Modal isOpen={ isOpen } size="xl">

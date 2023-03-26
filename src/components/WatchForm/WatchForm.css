@@ -35,3 +35,7 @@
     box-shadow: 4px 4px 8px rgb(153, 153, 153);
     cursor: pointer;
 }
+
+.property-table__icon__dark:hover {
+    color: #f00;
+}

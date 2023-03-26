@@ -11,7 +11,7 @@ const Manager = () => {
     return (
         <div>
             <Header />
-            { user && user.isManager && user.isActive ? 
+            { user && user.isManager && user.isActive && !user.expired ? 
                 <div className="d-flex">
                     <div className="p-3"><ManagerSidebar /></div>
                     <div className="flex-grow-1 ps-4 pe-4" style={{ maxWidth: '1320px' }}><Outlet /></div>

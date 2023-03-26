@@ -19,7 +19,7 @@ const WatchImageView = ({ item }) => {
     return (
         <div className="d-flex flex-column align-items-center bg-light rounded-3 overflow-hidden">
             <div className="watch-image-view__img rounded-3">
-                { current && <img src={ current.value } alt={ item.title } /> }
+                { current ? <img src={ current.value } alt={ item.title } /> : <img src="/images/No_image_available.png" alt={ item.title } />}
             </div>
             { item && item.images && <div className="d-flex flex-row justify-content-center flex-grow-1">
                 { item.images.map((img) => 

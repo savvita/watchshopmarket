@@ -2,7 +2,6 @@ import tbl from '../../modules/sort';
 
 import WatchPropertyTableRow from './WatchPropertyTableRow';
 import Pagination from '../Pagination';
-import ConfirmDeletingModal from '../ConfirmDeletingModal';
 import InfoModal from '../InfoModal';
 import WatchForm from '../WatchForm/WatchForm';
 
@@ -22,7 +21,6 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
     const status = useSelector(selectStatus);
     const dispatch = useDispatch();
 
-    const [modal, setModal] = useState(false);
     const [watchModal, setWatchModal] = useState(false);
 
     const [infoModal, setInfoModal] = useState(false);
@@ -70,29 +68,6 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
     //         setCurrentPage(1);
     //     }
     // }, [searchTxt]);
-
-     const deleteItem = async () => {
-    //     setModal(false);
-
-    //     if(!item || !remove) {
-    //         showError();
-    //         return;
-    //     }
-    //     const res = await dispatch(remove(item.id));
-    //     if(!res.payload) {
-    //         showError();
-    //         return;
-    //     }
-
-    //     if(res.payload.value === false) {
-    //         showError(undefined, 'Рядок не знайдено у базі даних. Можливо її було видалено іншим користувачем');
-    //         return;
-    //     }
-
-    //     if(get) {
-    //         await dispatch(get());
-    //     }
-     }
 
      const createItem = async (item, files) => {
         if(!create) {
@@ -143,7 +118,8 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
                 else {
                     watch.images = [];
                 }
-                watch.images = filesRes.value.map(item => { return { value: item } });
+                const images = filesRes.value.map(item => { return { value: item } });
+                watch.images = [...watch.images, ...images];
             }
         }
 
@@ -187,7 +163,7 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
 
         setWatchModal(false);
         await dispatch(get({ page: currentPage, perPage: perPage }));
-        dispatch(setCurrent(null));
+        await dispatch(setCurrent(null));
      }
 
     const onOnSaleChange = async (id, value) => {
@@ -320,7 +296,6 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
                     </tr>
                 </tfoot>
             </Table>
-            <ConfirmDeletingModal isOpen={ modal } onCancel={ () => setModal(false) } onAccept={ () => deleteItem() } item={ current } />
             <InfoModal isOpen={ infoModal } onAccept={ () => setInfoModal(false) }  text={ infoText } title={ infoHeader } />
             <WatchForm isOpen={ watchModal } item={ current } onCancel={ onCancel } onAccept={ saveItem } setItem={ setCurrent } />
         </>

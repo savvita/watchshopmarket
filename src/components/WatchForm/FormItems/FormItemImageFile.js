@@ -13,7 +13,7 @@ const FormItemImageFile = ({ initialValues, onChange }) => {
     }, [initialValues]);
 
     const deleteImage = (img) => {
-        setImgs(imgs.filter(item => item.file !== img.file));
+        setImgs(imgs.filter(item => item.file !== img.file || item.src !== img.src));
     }
     
     const handleFiles = (e) => {
@@ -44,7 +44,7 @@ const FormItemImageFile = ({ initialValues, onChange }) => {
 
         }
         Promise.all(p).then((values) => {
-            setImgs([...values]);
+            setImgs([...imgs, ...values]);
         });
     }
 

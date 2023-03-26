@@ -1,9 +1,8 @@
 import CollapsedActions from '../CollapsedActions/CollapsedActions';
 
-import { Input, FormFeedback, FormGroup } from 'reactstrap';
-import { FaCheck, FaBan } from "react-icons/fa";
+import { Input, FormGroup } from 'reactstrap';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import './WatchPropertyTable.css';
 
@@ -29,9 +28,10 @@ const WatchPropertyTableRow = ({ idx, item, className, onEdit, link, onOnSaleCha
         }
 
         const res = await onIsTopChange(item.id, e.target.checked);
+        console.log(res)
 
         if(res === true) {
-            setIsTop(!onSale);
+            setIsTop(!isTop);
         }
     }
 

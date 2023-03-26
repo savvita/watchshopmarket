@@ -11,7 +11,7 @@ const Admin = () => {
     return (
         <div>
             <Header />
-            { user && user.isAdmin && user.isActive ? 
+            { user && user.isAdmin && user.isActive && !user.expired ? 
                 <div className="d-flex">
                     <div className="p-3"><AdminSidebar /></div>
                     <div className="flex-grow-1 ps-4 pe-4" style={{ maxWidth: '1320px' }}><Outlet /></div>
