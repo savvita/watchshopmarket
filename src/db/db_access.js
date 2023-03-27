@@ -209,6 +209,36 @@ const db_uploadFiles = async (url, files) => {
     return results;
 }
 
+const db_removeFiles = async (url, files) => {
+    if(!files) {
+        return undefined;
+    }
+
+    let results = {};
+    await fetch(url, {
+        method: 'delete',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + token.getToken()
+        },
+        body: JSON.stringify(files),
+    })
+    .then(response => response.json())
+    .then(response => {
+        if(response.token) {
+            token.setToken(response.token);
+        }
+        
+        results = response;
+    })
+    .catch(() => {
+        results = undefined;
+    });
+
+    return results;
+}
+
 const basic = function (url) {
     this.url = url;
     this.get = async function (id) {
@@ -235,6 +265,18 @@ const basic = function (url) {
 const Files = function() {
     this.upload = async function (files) {
         return await db_uploadFiles(`${api}/files`, files);
+    }
+
+    this.get = async function(file) {
+        if(file) {
+            return await db_get(`${api}/files/file?file=${file}`);
+        }
+
+        return await db_get(`${api}/files`);
+    }
+
+    this.remove = async function (files) {
+        return await db_removeFiles(`${api}/files`, files);
     }
 }
 
