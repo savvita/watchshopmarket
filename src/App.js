@@ -57,6 +57,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={ <Main /> }>
+            <Route path="/" exact element={ <Index /> } />        
             <Route path="signin" element={ <Authorization signIn /> } />  
             <Route path="signup" element={ <Authorization signUp /> } />  
             <Route path="catalog" element={ <Catalog /> } />
@@ -65,7 +66,6 @@ function App() {
             <Route path="watches/:id" element={ <WatchInfoPage /> } />
             <Route path="orders/:id" element={ <OrderDetail isManagerMode={ false } /> } />
           </Route>
-          {/* <Route path="/" exact element={ <Index /> } />         */}
           <Route path="/manager" element={ <Manager /> }>        
             <Route path="waterresistance" element={ <WaterResistance /> } />  
             <Route path="style" element={ <Style /> } />  
