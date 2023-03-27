@@ -5,12 +5,14 @@ import Header from "../components/Header/Header";
 
 import { selectCurrent as selectUser } from '../app/authSlice';
 import { useSelector } from "react-redux";
+import Footer from "../components/Footer/Footer";
 
 const Manager = () => {
     const user = useSelector(selectUser);
     return (
-        <div>
+        <div className="d-flex flex-column" style={{ minHeight: '100vh' }}>
             <Header />
+            <div className="flex-grow-1">
             { user && user.isManager && user.isActive && !user.expired ? 
                 <div className="d-flex">
                     <div className="p-3"><ManagerSidebar /></div>
@@ -19,6 +21,8 @@ const Manager = () => {
                 :
                 <p className="text-white text-center mt-3">У вас немає прав для перегляду даної сторінки</p>
             }
+            </div>
+            <Footer />
         </div>
     );
 }

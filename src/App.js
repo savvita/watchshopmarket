@@ -50,6 +50,9 @@ import WatchDetail from './layouts/WatchDetail';
 import ReviewTable from './components/ReviewTable/ReviewTable';
 import Users from './layouts/Users';
 import Files from './layouts/Files';
+import About from './layouts/About';
+import DeliveryPayment from './layouts/DeliveryPayment';
+import Returning from './layouts/Returning';
 
 function App() {
   return (
@@ -58,6 +61,9 @@ function App() {
         <Routes>
           <Route path="/" element={ <Main /> }>
             <Route path="/" exact element={ <Index /> } />        
+            <Route path="about" element={ <About /> } />        
+            <Route path="payment" element={ <DeliveryPayment /> } />        
+            <Route path="return" element={ <Returning /> } />        
             <Route path="signin" element={ <Authorization signIn /> } />  
             <Route path="signup" element={ <Authorization signUp /> } />  
             <Route path="catalog" element={ <Catalog /> } />
