@@ -530,8 +530,16 @@ const signIn = async (login, password) => {
     return await db_post(`${api}/auth`, { userName: login, password: password });
 }
 
-const signUp = async (login, email, password) => {
-    return await db_post(`${api}/auth/user`, { userName: login, email: email, password: password });
+const signUp = async (auth) => {
+    return await db_post(`${api}/auth/user`, { 
+        userName: auth.login, 
+        email: auth.email, 
+        password: auth.password, 
+        firstName: auth.firstName, 
+        secondName: auth.secondName, 
+        lastName: auth.lastName,
+        phoneNumber: auth.phone
+     });
 }
 //============================================
 

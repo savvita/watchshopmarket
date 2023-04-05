@@ -49,7 +49,7 @@ const SignInForm = ({ onSignIn, onError }) => {
             <FormGroup className="position-relative mt-2">
                 <Row>
                     <Col sm="12" md="2">
-                        <Label for="signin__login" className="text-white">Логін</Label>
+                        <Label for="signin__login" className="text-white required">Логін</Label>
                     </Col>
                     <Col sm="12" md="10">
                         <Input id="signin__login" name="login" placeholder="Логін" type="text" value={ login.value } onInput={ handleInput } invalid={ !login.isValid } />
@@ -60,7 +60,7 @@ const SignInForm = ({ onSignIn, onError }) => {
             <FormGroup className="position-relative mt-4">
                 <Row>
                     <Col sm="12" md="2">
-                        <Label for="signin__password" className="text-white">Пароль</Label>
+                        <Label for="signin__password" className="text-white required">Пароль</Label>
                     </Col>
                     <Col sm="12" md="10">
                         <Input id="signin__password" name="password" placeholder="Пароль" type="password" value={ password.value } onInput={ handleInput } invalid={ !password.isValid } />

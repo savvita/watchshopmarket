@@ -32,7 +32,7 @@ const Authorization = ({ signIn, signUp }) => {
             showError();
         }
 
-        const res = await dispatch(signUpAsync({ login: auth.login, email: auth.email, password: auth.password }));
+        const res = await dispatch(signUpAsync(auth));
         hadnleAuthorizationResult(res);
     }
 
@@ -71,9 +71,19 @@ const Authorization = ({ signIn, signUp }) => {
     }
 
     return (
-        <div>
-           { signIn && <SignInForm onSignIn={ onSignIn } onError={ showError } /> }
-           { signUp && <SignUpForm onSignUp={ onSignUp } onError={ showError } /> }
+        <div className='pb-3 pt-3'>
+           { signIn && 
+           <div>
+            <h3 className='text-white text-center pb-3'>Авторизація</h3>
+            <SignInForm onSignIn={ onSignIn } onError={ showError } />
+           </div>
+            }
+           { signUp && 
+           <div>
+            <h3 className='text-white text-center pb-3'>Реєстрація</h3>
+                <SignUpForm onSignUp={ onSignUp } onError={ showError } />
+            </div> 
+            }
             <InfoModal isOpen={ infoModal } onAccept={ () => setInfoModal(false) }  text={ infoText } title={ infoHeader } />
         </div>
     );
