@@ -142,6 +142,7 @@ export const authSlice = createSlice({
               .addCase(updateAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
                 if(action && action.payload && action.payload.value) {
+                    state.profile = action.payload.value;
                     state.currentValue = token.getUserInfo()
                   }
                   else {

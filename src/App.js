@@ -53,6 +53,7 @@ import Files from './layouts/Files';
 import About from './layouts/About';
 import DeliveryPayment from './layouts/DeliveryPayment';
 import Returning from './layouts/Returning';
+import UserProfile from './layouts/UserProfile';
 
 function App() {
   return (
@@ -68,6 +69,7 @@ function App() {
             <Route path="signup" element={ <Authorization signUp /> } />  
             <Route path="catalog" element={ <Catalog /> } />
             <Route path="basket" element={ <Basket /> } />
+            <Route path="profile" element={ <UserProfile /> } />
             <Route path="myorders" element={ <Orders isUserMode={ true } /> } />
             <Route path="watches/:id" element={ <WatchInfoPage /> } />
             <Route path="orders/:id" element={ <OrderDetail isManagerMode={ false } /> } />
