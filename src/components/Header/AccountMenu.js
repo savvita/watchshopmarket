@@ -21,8 +21,7 @@ const AccountMenu = () => {
                             <NavLink tag={RRNavLink} to="/signup"><DropdownItem>Зареєструватися</DropdownItem></NavLink>
                         </> : 
                         <>
-                            { user && user.isUser && <NavLink tag={RRNavLink} to="/profile" className="pt-1 pb-1"><DropdownItem>Мій профіль</DropdownItem></NavLink> }
-                            { user && user.isUser && <NavLink tag={RRNavLink} to="/myorders" className="pt-1 pb-1"><DropdownItem>Мої закази</DropdownItem></NavLink> }
+                            { user && user.isUser && <NavLink tag={RRNavLink} to="/user/profile" className="pt-1 pb-1"><DropdownItem>Мій профіль</DropdownItem></NavLink> }
                             { user && user.isAdmin && <NavLink tag={RRNavLink} to="/admin" className="pt-1"><DropdownItem>Панель адміна</DropdownItem></NavLink> }
                             { user && user.isManager && <NavLink tag={RRNavLink} to="/manager" className="pt-1 pb-1"><DropdownItem>Панель менеджера</DropdownItem></NavLink> }
                             <DropdownItem divider className="p-0" />

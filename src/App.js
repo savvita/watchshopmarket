@@ -54,6 +54,7 @@ import About from './layouts/About';
 import DeliveryPayment from './layouts/DeliveryPayment';
 import Returning from './layouts/Returning';
 import UserProfile from './layouts/UserProfile';
+import User from './layouts/User';
 
 function App() {
   return (
@@ -69,10 +70,13 @@ function App() {
             <Route path="signup" element={ <Authorization signUp /> } />  
             <Route path="catalog" element={ <Catalog /> } />
             <Route path="basket" element={ <Basket /> } />
-            <Route path="profile" element={ <UserProfile /> } />
-            <Route path="myorders" element={ <Orders isUserMode={ true } /> } />
             <Route path="watches/:id" element={ <WatchInfoPage /> } />
             <Route path="orders/:id" element={ <OrderDetail isManagerMode={ false } /> } />
+          </Route>
+          <Route path="/user" element={ <User /> }>
+            <Route path="profile" element={ <UserProfile /> } />
+            <Route path="myorders" element={ <Orders isUserMode={ true } /> } />
+            <Route path="reviews" element={ <ReviewTable /> } /> 
           </Route>
           <Route path="/manager" element={ <Manager /> }>        
             <Route path="waterresistance" element={ <WaterResistance /> } />  
@@ -93,7 +97,7 @@ function App() {
             <Route path="watch" element={ <Watch /> } />  
             <Route path="orders" element={ <Orders isManagerMode={ true } /> } />
             <Route path="orders/new" element={ <Orders statusses={ [1] } /> } />  
-            <Route path="reviews/new" element={ <ReviewTable /> } />  
+            <Route path="reviews/new" element={ <ReviewTable isManagerMode={ true } /> } />  
             <Route path="orders/:id" element={ <OrderDetail isManagerMode={ true } /> } />
             <Route path="waterresistance/:id" element={ <WaterResistanceDetail /> } />
             <Route path="style/:id" element={ <StyleDetail /> } />

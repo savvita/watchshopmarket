@@ -411,6 +411,12 @@ const Reviews = function() {
     this.getByWatchId = async function(watchId) {
         return await db_get(`${api}/watch/${watchId}`);
     }
+    this.getByUser = async function(userId) {
+        if(userId) {
+            return await db_get(`${this.url}/user?id=${userId}`);
+        }
+        return await db_get(`${this.url}/user`);
+    }
     this.create = async function(params) {
         return await db_post(`${this.url}/${params.watchId}`, params.text);
     }

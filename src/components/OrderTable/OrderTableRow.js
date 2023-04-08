@@ -38,10 +38,10 @@ const OrderTableRow = ({ item, idx, isManagerMode, isUserMode, statusses, onCanc
             <th className="align-middle text-center" scope="row">{ item.id }</th>
             <td className="align-middle text-nowrap">{ (new Date(item.date)).toLocaleString() }</td>
             { isManagerMode ? <td className="align-middle">{ item.userId }</td> : <td className="m-0 p-0"></td> }
-            <td className="align-middle">{ item.status.value }</td>
+            <td className="align-middle">{ item.status && item.status.value }</td>
             <td className="align-middle text-nowrap">{ total } &#8372;</td>
             <td className="align-middle text-center">
-                <Link to={ `${item.id}` }>
+                <Link to={ `/orders/${item.id}` }>
                     <div id={ `order-table__order${ item.id }` } className="d-inline-block overflow-hidden p-1">
                         <FaRegEye className="property-table__icon" />
                     </div>
@@ -50,7 +50,7 @@ const OrderTableRow = ({ item, idx, isManagerMode, isUserMode, statusses, onCanc
                     </UncontrolledTooltip>
                 </Link>
             </td>
-            { isUserMode && (item.status.id === 1 || item.status.id === 2) ? <td><Button value="Cancel" onClick={ cancelOrder } className="btn-small">Скасувати</Button></td> : <td className="m-0 p-0"></td> }
+            { isUserMode && item.status && (item.status.id === 1 || item.status.id === 2) ? <td><Button value="Cancel" onClick={ cancelOrder } className="btn-small">Скасувати</Button></td> : <td className="m-0 p-0"></td> }
             { !isManagerMode && !isUserMode && statusses && statusses.includes(1) && <td><Button className="btn-small" onClick={ accept }>Прийняти</Button></td>}
         </tr>
     );

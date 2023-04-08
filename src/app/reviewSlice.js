@@ -10,6 +10,14 @@ export const getAsync = createAsyncThunk(
     }
   );
 
+  export const getByUserAsync = createAsyncThunk(
+    'review/getbyuser',
+    async (userId) => {
+      const response = await db.Reviews.getByUser(userId);
+      return response;
+    }
+  );
+
   export const getAllAsync = createAsyncThunk(
     'review/getnew',
     async (check) => {
@@ -65,6 +73,18 @@ export const reviewSlice = createSlice({
                 state.status = 'loading';
               })
               .addCase(getAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action.payload) {
+                    state.values = action.payload;
+                  }
+                  else {
+                      state.values = [];
+                  }
+              })
+              .addCase(getByUserAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(getByUserAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
                 if(action.payload) {
                     state.values = action.payload;

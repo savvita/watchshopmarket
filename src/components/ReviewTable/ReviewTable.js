@@ -2,17 +2,18 @@ import { Col, Row, Spinner, Table } from "reactstrap";
 import Pagination from "../Pagination";
 import ReviewTableRow from "./ReviewTableRow";
 
-import { getAllAsync, selectValues, selectStatus, updateAsync, deleteAsync } from '../../app/reviewSlice';
+import { getAllAsync, selectValues, selectStatus, updateAsync, deleteAsync, getByUserAsync } from '../../app/reviewSlice';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import InfoModal from "../InfoModal";
 
 import tbl from '../../modules/sort';
 import PerPageSelect from "../PerPageSelect";
+import ConfirmDeletingModal from "./ConfirmDeletingModal";
 
 
 
-const ReviewTable = () => {
+const ReviewTable = ({ isManagerMode }) => {
 
     const items = useSelector(selectValues);
     const status = useSelector(selectStatus);
@@ -30,6 +31,9 @@ const ReviewTable = () => {
 
     const [hits, setHits] = useState(0);
 
+    const [modal, setModal] = useState(false);
+    const [item, setItem] = useState({});
+
     useEffect(() => {
         pages.splice(0, pages.length);
         pages.push(10);
@@ -37,8 +41,13 @@ const ReviewTable = () => {
         pages.push(50);
         setPages(pages);
 
-        dispatch(getAllAsync(false));
-    }, []);
+        if(isManagerMode === true) {
+            dispatch(getAllAsync(false));
+        }
+        else {
+            dispatch(getByUserAsync());
+        }
+    }, [isManagerMode]);
 
     useEffect(() => {
         if(items && items.value) {
@@ -70,7 +79,17 @@ const ReviewTable = () => {
         }
     }
 
+    const showCofirmModal = (item) => {
+        if(!item) {
+            return;
+        }
+
+        setItem(item);
+        setModal(true);
+    }
+
     const remove = async (item) => {
+        setModal(false);
         if(!item) {
             return;
         }
@@ -82,7 +101,30 @@ const ReviewTable = () => {
             setInfoModal(true);
         }
         else {
-            dispatch(getAllAsync(false));
+            if(isManagerMode === true) {
+                dispatch(getAllAsync(false));
+            }
+            else {
+                dispatch(getByUserAsync());
+            }
+        }
+    }
+
+    const update = async(item) => {
+
+        if(!item) {
+            return;
+        }
+
+        const res = await dispatch(updateAsync(item));
+
+        if(!res || !res.payload || !res.payload.value) {
+            setInfoHeader('Помилка');
+            setInfoText('Щось пішло не так. Спробуйте пізніше');
+            setInfoModal(true);
+        }
+        else {
+            dispatch(getByUserAsync());
         }
     }
 
@@ -99,16 +141,17 @@ const ReviewTable = () => {
                 <thead>
                     <tr>
                         <th className='text-center sortable' onClick={ tbl.sort }>№</th>
-                        <th className="sortable" onClick={ tbl.sort }>Username</th>
+                        { isManagerMode === true && <th className="sortable" onClick={ tbl.sort }>Username</th> }
                         <th className="sortable" onClick={ tbl.sort }>Дата</th>
-                        <th className="sortable">Текст</th>
+                        <th className="sortable" onClick={ tbl.sort }>Текст</th>
                         <th>Товар</th>
+                        { isManagerMode !== true && <th className="sortable" onClick={ tbl.sort }>Статус</th>}
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     { values && values.map((item, i) => 
-                        item && <ReviewTableRow key={ item.id } idx={ (currentPage - 1) * perPage + i + 1 } item={ item } onCheck={ accept } onDelete={ remove } />)
+                        item && <ReviewTableRow key={ item.id } idx={ (currentPage - 1) * perPage + i + 1 } item={ item } onCheck={ accept } onDelete={ showCofirmModal } isManagerMode={ isManagerMode } onUpdate={ update } />)
                     }
                 </tbody>
                 <tfoot>
@@ -121,6 +164,7 @@ const ReviewTable = () => {
                 </tfoot>
             </Table>
             <InfoModal isOpen={ infoModal } onAccept={ () => setInfoModal(false) }  text={ infoText } title={ infoHeader } />
+            <ConfirmDeletingModal isOpen={ modal } onCancel={ () => setModal(false) } onAccept={ () => remove(item) } />
         </>
     );
 }
