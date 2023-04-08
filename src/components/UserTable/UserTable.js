@@ -2,11 +2,14 @@ import UserTableRow from "./UserTableRow";
 
 import { selectValues, selectStatus, getAsync, updateAsync, deleteAsync, restoreAsync } from '../../app/authSlice';
 import { useDispatch, useSelector } from "react-redux";
-import { Col, FormFeedback, FormGroup, Input, Row, Spinner, Table } from "reactstrap";
+import { Col, Collapse, FormFeedback, FormGroup, Input, Navbar, NavbarToggler, Row, Spinner, Table } from "reactstrap";
 import PerPageSelect from "../PerPageSelect";
 import { useEffect, useState } from "react";
 import InfoModal from "../InfoModal";
 import Pagination from "../Pagination";
+import Filters from "./Filters";
+
+import tbl from '../../modules/sort'; 
 
 
 
@@ -27,6 +30,11 @@ const UserTable = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(10);
     const [pages, setPages] = useState([]);
+
+    const [filters, setFilters] = useState({ user: '', roles: [], bans: [] });
+    const [collapsed, setCollapsed] = useState(true);
+
+    const toggleNavbar = () => setCollapsed(!collapsed);
 
     useEffect(() => {
         dispatch(getAsync());
@@ -51,10 +59,48 @@ const UserTable = () => {
 
     useEffect(() => {
         if(values && values.value) {
-            setItems(values.value.filter(i => i.userName && i.userName.toLowerCase().includes(searchTxt)));
+            setFilters({ ...filters, user: searchTxt });
             setCurrentPage(1);
         }
     }, [searchTxt]);
+
+    useEffect(() => {
+        if(!values || !values.value) {
+            return;
+        }
+
+        let w = values.value;
+        if(filters.user) {
+            w = w.filter( x => 
+                x.userName && x.userName.toLowerCase().includes(filters.user.toLowerCase()));
+        }
+
+        if(filters.roles.length > 0) {
+            if(filters.roles.includes(1)) {
+                w = w.filter(x => x.isAdmin);
+            }
+            if(filters.roles.includes(2)) {
+                w = w.filter(x => x.isManager);
+            }
+        }
+
+        if(filters.bans.length > 0) {
+            if(filters.bans.includes(true)) {
+                w = w.filter(x => x.isActive === false);
+            }
+            if(filters.bans.includes(false)) {
+                w = w.filter(x => x.isActive === true);
+            }
+        }
+
+        setItems(w);
+    }, [filters]);
+
+    useEffect(() => {
+        if(items.length > 0) {
+            setCurrentPage(1);
+        }
+    }, [items]);
 
     const update = async(item) => {
         if(!item) {
@@ -112,33 +158,42 @@ const UserTable = () => {
 
     return (
         <>
+            <Row>
+                <Col sm="12" md="6">
+                    <h2 className='property-table__caption ps-2 fs-3 text-white mt-3'>Користувачі</h2>
+                </Col>
+                <Col sm="12" md="6">
+                    <FormGroup  className="position-relative mt-3">
+                        <Input name="search" placeholder="Шукати" type="search" value={ searchTxt } onInput={ (e) => setSearchTxt(e.target.value.toLowerCase()) } invalid={ items.length === 0 }  />
+                        <FormFeedback tooltip className="text-white">{ 'Не знайдено :(' }</FormFeedback>
+                    </FormGroup>
+                </Col>
+                <Col sm="12">
+                    <Navbar color="faded" light className="mt-3">
+                    <NavbarToggler onClick={ toggleNavbar } className="me-2 fs-6" style={{ backgroundColor: '#fff', padding: '5px 20px' }}>Фільтри</NavbarToggler>
+                    <Collapse isOpen={ !collapsed } navbar >
+                        <Filters onChange={ (items) => setFilters({...items, user: searchTxt }) } />
+                    </Collapse>
+                </Navbar>
+                </Col>
+            </Row>
+
             <Table dark hover className="property-table__table table_sort">
                 <caption className='property-table__caption ps-2 fs-3'>
-                    <Row>
-                        <Col>
-                            Користувачі
-                        </Col>
-                    </Row>
                     <Row className="pe-2">
                         <Col sm="6" xs="12">
                             <PerPageSelect values={ pages } onChange={ (idx) => setPerPage(pages[idx]) } />
-                        </Col>
-                        <Col sm="6" xs="12">
-                            <FormGroup  className="position-relative">
-                                <Input name="search" placeholder="Шукати" type="search" value={ searchTxt } onInput={ (e) => setSearchTxt(e.target.value.toLowerCase()) } invalid={ items.length === 0 }  />
-                                <FormFeedback tooltip className="text-white">{ 'Не знайдено :(' }</FormFeedback>
-                            </FormGroup>
                         </Col>
                     </Row>
                 </caption>
                 <thead>
                     <tr className="text-center fs-6">
-                        <th scope="col">№</th>
-                        <th scope="col">Логін</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Менеджер</th>
-                        <th scope="col">Адмін</th>
-                        <th scope="col">Заблоковано</th>
+                        <th scope="col" className='sortable' onClick={ tbl.sort }>№</th>
+                        <th scope="col" className='sortable' onClick={ tbl.sort }>Логін</th>
+                        <th scope="col" className='sortable' onClick={ tbl.sort }>Email</th>
+                        <th scope="col" className='sortable' onClick={ tbl.sort }>Менеджер</th>
+                        <th scope="col" className='sortable' onClick={ tbl.sort }>Адмін</th>
+                        <th scope="col" className='sortable' onClick={ tbl.sort }>Заблоковано</th>
                     </tr>
                 </thead>
                 <tbody>

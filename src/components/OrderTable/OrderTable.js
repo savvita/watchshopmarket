@@ -35,7 +35,7 @@ const OrderTable = ({ isManagerMode, isUserMode, statusses }) => {
 
     const [items, setItems] = useState([]);
 
-    const[errorTxt, setErrorTxt] = useState([]);
+    const [errorTxt, setErrorTxt] = useState([]);
     const [collapsed, setCollapsed] = useState(true);
 
     const [filters, setFilters] = useState({ user: '', statusses: [], startDate: '', endDate: '' });
@@ -150,22 +150,22 @@ const OrderTable = ({ isManagerMode, isUserMode, statusses }) => {
         }
     }
 
-    const closeOrder = async (id) => {
-        if(!id) {
-            return;
-        }
+    // const closeOrder = async (id) => {
+    //     if(!id) {
+    //         return;
+    //     }
 
-        const res = await dispatch(setStatusAsync({ id: id, statusId: 3 }));
+    //     const res = await dispatch(setStatusAsync({ id: id, statusId: 3 }));
 
-        if(!res || !res.payload || !res.payload.value) {
-            setInfoHeader('Помилка');
-            setInfoText('Щось пішло не так. Спробуйте пізніше');
-            setInfoModal(true);
-        }
-        else {
-            await load();
-        }
-    }
+    //     if(!res || !res.payload || !res.payload.value) {
+    //         setInfoHeader('Помилка');
+    //         setInfoText('Щось пішло не так. Спробуйте пізніше');
+    //         setInfoModal(true);
+    //     }
+    //     else {
+    //         await load();
+    //     }
+    // }
 
     return (
         <div className="text-white">
