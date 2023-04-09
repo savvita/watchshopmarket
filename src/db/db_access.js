@@ -353,6 +353,14 @@ const Orders = function() {
         return await db_get(request);
     }
 
+    this.getByUser = async function(id) {
+        if(!id) {
+            return undefined;
+        } 
+
+        return await db_get(`${ this.url }/user/${ id }`);
+    }
+
     this.getByFilters = async function(filters) {
         if(!filters) {
             return undefined;

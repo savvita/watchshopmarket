@@ -55,6 +55,7 @@ import DeliveryPayment from './layouts/DeliveryPayment';
 import Returning from './layouts/Returning';
 import UserProfile from './layouts/UserProfile';
 import User from './layouts/User';
+import UserInfo from './components/UserInfo/UserInfo';
 
 function App() {
   return (
@@ -121,6 +122,7 @@ function App() {
             <Route path="delivery" element={ <Delivery /> } />
             <Route path="np" element={ <NP /> } />
             <Route path="users" element={ <Users /> } />
+            <Route path="users/:username" element={ <UserInfo /> } />
             <Route path="files" element={ <Files /> } />
           </Route>
         </Routes>

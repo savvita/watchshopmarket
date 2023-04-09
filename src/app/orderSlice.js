@@ -19,6 +19,14 @@ export const getAsync = createAsyncThunk(
   }
 );
 
+export const getByUserAsync = createAsyncThunk(
+  'order/getbyuser',
+  async (id) => {
+    const response = await db.Orders.getByUser(id);
+    return response;
+  }
+);
+
 export const getByFiltersAsync = createAsyncThunk(
   'order/getbyfilters',
   async (filters) => {
@@ -94,6 +102,20 @@ export const orderSlice = createSlice({
                 state.status = 'loading';
               })
               .addCase(getAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if(action && action.payload && action.payload.value) {
+                  state.values = action.payload.value;
+                  state.hits = action.payload.hits;
+                }
+                else {
+                  state.values = [];
+                }
+                return state;
+              })
+              .addCase(getByUserAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(getByUserAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
                 if(action && action.payload && action.payload.value) {
                   state.values = action.payload.value;
