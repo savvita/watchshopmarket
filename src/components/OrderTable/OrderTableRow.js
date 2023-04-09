@@ -41,7 +41,7 @@ const OrderTableRow = ({ item, idx, isManagerMode, isUserMode, statusses, onCanc
             <td className="align-middle">{ item.status && item.status.value }</td>
             <td className="align-middle text-nowrap">{ total } &#8372;</td>
             <td className="align-middle text-center">
-                <Link to={ `/orders/${item.id}` }>
+                <Link to={ isManagerMode ? `${item.id}` : `/orders/${item.id}` }>
                     <div id={ `order-table__order${ item.id }` } className="d-inline-block overflow-hidden p-1">
                         <FaRegEye className="property-table__icon" />
                     </div>

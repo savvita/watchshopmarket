@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectValues as selectDeliveries, getAsync as getDeliveries } from '../../app/deliverySlice';
 import { selectValues as selectPayments, getAsync as getPayments } from '../../app/paymentSlice';
+import { selectProfile as selectUser, selectCurrent, getProfileAsync as getUser, getProfileAsync } from '../../app/authSlice';
 import { useEffect, useState } from "react";
 import NPFormGroup from './NPFormGroup';
 
@@ -18,6 +19,8 @@ import InfoModal from '../InfoModal';
 const MakeOrderForm = ({ onAccept, onCancel }) => {
     const payments = useSelector(selectPayments);
     const deliveries = useSelector(selectDeliveries);
+    const profile = useSelector(selectUser);
+    const user = useSelector(selectCurrent);
     const dispatch = useDispatch();
 
     const [order, setOrder] = useState({});
@@ -30,8 +33,21 @@ const MakeOrderForm = ({ onAccept, onCancel }) => {
     useEffect(() => {
         dispatch(getDeliveries());
         dispatch(getPayments());
+        if(user && user.userName) {
+            dispatch(getUser(user.userName));
+        }
     }, []);
 
+    useEffect(() => {
+        if(profile) {
+            setOrder(
+            { 
+                ...order, 
+                fullName: `${ profile.lastName ?? "" } ${ profile.firstName ?? "" } ${ profile.secondName ?? "" }`,
+                phoneNumber: profile.phoneNumber ?? ""
+            });
+        }
+    }, [profile]);
 
     const setPayment = (id) => {
         setOrder({ ...order, paymentId: id });
@@ -108,7 +124,7 @@ const MakeOrderForm = ({ onAccept, onCancel }) => {
             <fieldset className="fs-6 border border-light rounded-1 p-3 pt-1 mb-3">
                 <legend>Контактна інформація</legend>
                 <InputFormGroup name='fullname' initialValue={ order.fullName } title='Прізвище, ім’я, по-батькові' validationRule={ validation.notEmptyValidationRule } validationErrorText='Обов’язкове поле' onChange={ setName } />
-                <InputFormGroup name='phone' initialValue={ order.phone } title='Номер телефону' validationRule={ validation.digitsOnlyValidationRule } validationErrorText='Формат: 0123456789' onChange={ setPhone } />
+                <InputFormGroup name='phone' initialValue={ order.phoneNumber } title='Номер телефону' validationRule={ validation.digitsOnlyValidationRule } validationErrorText='Формат: 0123456789' onChange={ setPhone } />
             </fieldset>
             
             { deliveries && deliveries.value && 

@@ -1,27 +1,33 @@
 
 
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import { Button, Table } from 'reactstrap';
 import OrderDetailTableRow from './OrderDetailTableRow';
 
-import { selectCurrent as selectUser } from '../../app/authSlice';
-import { cancelAsync, getByIdAsync, setStatusAsync } from '../../app/orderSlice';
+import { cancelAsync, getByIdAsync, setStatusAsync, setENAsync } from '../../app/orderSlice';
 import { useEffect, useState } from 'react';
 import InfoModal from '../InfoModal';
 import OrderStatusSelect from './OrderStatusSelect';
+import ENInput from './ENInput';
+
+import validation from '../../modules/validation';
+import { FaCopy } from 'react-icons/fa';
 
 
-const OrderDetailTable = ({ item, isManagerMode, onClose, onCancel }) => {
+const OrderDetailTable = ({ item, isManagerMode }) => {
     const [total, setTotal] = useState(0);
     const [infoModal, setInfoModal] = useState(false);
     const [infoHeader, setInfoHeader] = useState('');
     const [infoText, setInfoText] = useState('');
 
-    const user = useSelector(selectUser);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const [enErrorText, setENErrorText] = useState("");
+    const [enVisible, setEnVisible] = useState(false);
+
 
     useEffect(() => {
         if(!item || !item.details) {
@@ -91,6 +97,51 @@ const OrderDetailTable = ({ item, isManagerMode, onClose, onCancel }) => {
         }
     }
 
+    const setEN = async (en) => {
+        if(!item || !en) {
+            return;
+        }
+
+        const res = await dispatch(setENAsync({ id: item.id, en: en }));
+
+        if(!res || !res.payload || !res.payload.value) {
+            setInfoHeader('Помилка');
+            setInfoText('Щось пішло не так. Спробуйте пізніше');
+            setInfoModal(true);
+        }
+        else {
+            dispatch(getByIdAsync(item.id));
+        }
+    }
+
+    const validateEN = (value) => {
+        if(!value) {
+            setENErrorText("Обов’язкове поле");
+            return false;
+        }
+
+        if(value.length === 0) {
+            setENErrorText("Обов’язкове поле");
+            return false;
+        }
+
+        if(!validation.digitsOnlyValidationRule(value)) {
+            setENErrorText("Тільки цифри");
+            return false;
+        }
+
+        setENErrorText("");
+            return true;
+    }
+
+    const copy = () => {
+        if(!item || !item.en) {
+            return;
+        }
+
+        navigator.clipboard.writeText(item.en);
+    }
+
     return (
         <div>
             <Button onClick={() => navigate(-1)}>Назад</Button>
@@ -98,11 +149,26 @@ const OrderDetailTable = ({ item, isManagerMode, onClose, onCancel }) => {
                 <div className="flex-grow-1">
                     <h3 className="text-white">Номер замовлення: { item.id }</h3>
                     <p className="text-white mb-1 mt-1">Дата: { (new Date(item.date)).toLocaleString() }</p>
-                    { item.status && <OrderStatusSelect item={ item } isSelectable={ isManagerMode && item.status.id !== 3 && item.status.id !== 4 } onChange={ setStatus } /> }
+                    { item.status && <OrderStatusSelect item={ item } isSelectable={ isManagerMode && item.status.id !== 3 && item.status.id !== 4 && item.status.id !== 7 } onChange={ setStatus } /> }
                     <p className="text-white mb-1 mt-1">Отримувач: { item.fullName }, { item.phoneNumber }</p>
                     { item.payment && <p className="text-white mb-1 mt-1">Оплата: { item.payment.value }</p> }
                     { item.delivery && <p className="text-white mb-1 mt-1">Доставка: { item.delivery.value }{ item.delivery.id === 2 && ` (${ item.city && item.city.description }, ${ item.warehouse && item.warehouse.description })`}</p> }
-                    { item.delivery && item.delivery.id === 2 && item.en && <p className="text-white mb-1 mt-1">Номер накладної: { item.en }</p>}
+                    { item.delivery && item.delivery.id === 2 && item.en && 
+                        <div>
+                            <div className='d-flex align-items-center'>
+                                <p className="text-white mb-1 mt-1">Номер накладної: { item.en }</p>
+                                <div className="d-inline-block overflow-hidden p-2">
+                                    <FaCopy className="property-table__icon" onClick={ copy } />
+                                </div>
+                            </div>
+                            <Link to="https://tracking.novaposhta.ua/#/uk/" className="text-white text-decoration-none" target="_blank">Відстежити</Link>
+                        </div>
+                    }
+                    
+                    { item.delivery && item.delivery.id === 2 && !item.en && <div className="d-flex">
+                        <Button className="me-2" onClick={ () => setEnVisible(true) }>Додати номер ЕН</Button>
+                        <ENInput visible={ enVisible } validationRule={ validateEN } validationErrorText={ enErrorText } onCancel={ () => setEnVisible(false) } onAccept={ setEN } />
+                    </div> }
                 </div>
                 <div className="d-flex flex-column">
                     { isManagerMode && item.status && (item.status.id === 1 || item.status.id === 2) && <Button color="danger" className="m-1" onClick={ closeOrder }>Закрити</Button> }

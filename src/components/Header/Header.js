@@ -65,7 +65,7 @@ const Header = () => {
                 { user && user.isUser && user.isActive && !user.expired && 
                 <div className="d-flex justify-content-end pe-6">
                     <p className="text-white pe-4">{ user.userName !== '' && `${ user.userName }` }</p>
-                    <Link to="basket"><FaShoppingBasket className="header__basket-icon"/></Link>
+                    <Link to="/basket"><FaShoppingBasket className="header__basket-icon"/></Link>
                 </div> }
         </header>
     );

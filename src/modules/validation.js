@@ -11,10 +11,6 @@ const digitsOnlyValidationRule = (value) => {
         return;
     }
 
-    if(value.length !== 10) {
-        return false;
-    }
-
     if(value.split('').some(i => i < '0' || i > '9')) {
         return false;
     }

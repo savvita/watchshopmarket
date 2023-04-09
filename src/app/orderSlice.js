@@ -78,6 +78,17 @@ export const setStatusAsync = createAsyncThunk(
   }
 );
 
+export const setENAsync = createAsyncThunk(
+  'order/seten',
+  async (params) => {
+    if(!params || !params.id || !params.en) {
+      return null;
+    }
+    const response = await db.Orders.update(params.id, { en: params.en });
+    return response;
+  }
+);
+
 export const orderSlice = createSlice({
         name: 'order',
         initialState: {
@@ -177,6 +188,13 @@ export const orderSlice = createSlice({
                 state.status = 'loading';
               })
               .addCase(setStatusAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                return state;
+              })
+              .addCase(setENAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(setENAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
                 return state;
               });
