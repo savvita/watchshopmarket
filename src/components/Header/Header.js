@@ -33,6 +33,12 @@ const Header = () => {
         dispatch(set({ ...filters, model: searchTxt }));
     }
 
+    useEffect(() => {
+        if(! filters.model || filters.model === "") {
+            setSearchTxt("");
+        }
+    }, [filters]);
+
     return (
         <header className="border-bottom border-light pt-2 pb-5">
             <Navbar dark expand={"lg"} className="p-3">

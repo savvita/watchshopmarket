@@ -150,6 +150,7 @@ const getUrl = (filters) => {
     url = addArrayToQuery(url, filters.incrustationTypes, 'incrustationTypeIds');
     url = addArrayToQuery(url, filters.dialTypes, 'dialTypeIds');
     url = addArrayToQuery(url, filters.genders, 'genderIds');
+    url = addArrayToQuery(url, filters.functions, 'functionIds');
 
     if(filters.minPrice) {
         url += `&minPrice=${filters.minPrice}`;
