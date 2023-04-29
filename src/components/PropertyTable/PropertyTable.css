@@ -1,5 +1,6 @@
 .property-table__table {
     min-width: 600px;
+    width: 100%;
 }
 
 .property-table__caption {

@@ -35,7 +35,7 @@ const CollapsedActions = ({ item, editMode, onEdit, onRestore, onDelete, classNa
                                 <div id={ item ? `table_row_dropdown_${ item.id }_restore` : `table_row_dropdown_restore` } className={ editMode ? 'd-none' : "d-inline-block overflow-hidden p-1" }>
                                     <FaTrashRestore className="property-table__icon" onClick={ onRestore } />
                                 </div>
-                                <UncontrolledTooltip placement="right" target={ item ? `table_row_dropdown_${ item.id }_restore` : `table_row_dropdown_view` } >
+                                <UncontrolledTooltip placement="right" target={ item ? `table_row_dropdown_${ item.id }_restore` : `table_row_dropdown_restore` } >
                                     Відновити
                                 </UncontrolledTooltip>
                             </DropdownItem>

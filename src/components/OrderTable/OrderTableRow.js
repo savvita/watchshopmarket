@@ -3,11 +3,13 @@
 
 import { FaRegEye } from "react-icons/fa";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button, UncontrolledTooltip } from "reactstrap";
 
 
 const OrderTableRow = ({ item, idx, isManagerMode, isUserMode, statusses, onCancel, onAccept }) => {
+
+    const location = useLocation();
 
     if(!item) {
         return null;
@@ -41,7 +43,7 @@ const OrderTableRow = ({ item, idx, isManagerMode, isUserMode, statusses, onCanc
             <td className="align-middle">{ item.status && item.status.value }</td>
             <td className="align-middle text-nowrap">{ total } &#8372;</td>
             <td className="align-middle text-center">
-                <Link to={ isManagerMode ? `${item.id}` : `/orders/${item.id}` }>
+                <Link to={ isManagerMode ? `${item.id}` : (location.pathname.includes('new') ? `${item.id}` : `/orders/${item.id}`) }>
                     <div id={ `order-table__order${ item.id }` } className="d-inline-block overflow-hidden p-1">
                         <FaRegEye className="property-table__icon" />
                     </div>

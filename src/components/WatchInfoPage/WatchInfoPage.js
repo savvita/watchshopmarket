@@ -8,16 +8,23 @@ import { selectCurrent as selectUser } from '../../app/authSlice';
 import { useSelector, useDispatch } from 'react-redux';
 
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { Row, Col, Spinner, Badge, Button} from 'reactstrap';
+import { Row, Col, Spinner, Badge, Button, FormFeedback, Input, FormGroup} from 'reactstrap';
 import { FaCheck, FaShoppingBasket } from 'react-icons/fa';
 
 import './WatchInfoPage.css';
 import WatchDetailInfo from './WatchDetailInfo';
 
+import validation from '../../modules/validation';
+
 const WatchInfoPage = () => {
+    const [count, setCount] = useState(1);
+    const [isValid, setIsValid] = useState(true);
+
+    const [buyDisabled, setBuyDisabled] = useState(false);
+
     const params = useParams();
 
     const item = useSelector(selectCurrent);
@@ -32,6 +39,14 @@ const WatchInfoPage = () => {
         dispatch(getByIdAsync(params.id));
     }, []);
 
+    useEffect(() => {
+        if(!item) {
+            return;
+        }
+
+        setBuyDisabled(item.available === 0 || item.onSale !== true);
+    }, [item]);
+
 
     const addToBasket = () => {
         if(!item) {
@@ -40,7 +55,19 @@ const WatchInfoPage = () => {
         if(!user || !user.isActive || !user.isActive) {
             navigate("/signin");
         }
-        dispatch(updateBasket({ ...basket, details: [...basket.details, { watchId: item.id, count: 1 }] }));
+        dispatch(updateBasket({ ...basket, details: [...basket.details, { watchId: item.id, count: count }] }));
+    }
+
+    const handleCountInput = (e) => {
+        const valid = validateCount(e.target.value);
+        setIsValid(valid);
+        if(valid) {
+            setCount(e.target.value);
+        }
+    }
+
+    const validateCount = (value) => {    
+        return validation.positiveIntValidationRule(value);
     }
 
 
@@ -76,9 +103,17 @@ const WatchInfoPage = () => {
                                         </div> }
                                         <p className="text-white fs-2 mb-0">{ item.price - item.price * (item.discount ?? 0) / 100 }&nbsp;&#8372;</p>
                                         { item.available > 0 ? <p className="text-white fs-6"><span className="text-warning"><FaCheck /></span> Є в наявності</p> : <p className="text-white fs-6">Немає в наявності</p> }
-                                        <div className="position-relative">
-                                            <FaShoppingBasket className="position-absolute start-0 top-50 translate-middle-y ms-2" />
-                                            <Button color="warning" className="ps-5 pe-5" onClick={ addToBasket }>Купити</Button>
+                                        <div className="d-flex">
+                                            <FormGroup className='position-relative' style={{ width: '5rem' }}>
+                                                <Input type="number" min={ 1 } max={ item && item.available } value={ count } onInput ={ handleCountInput } invalid={ !isValid } />
+                                                <FormFeedback tooltip>Некоректне значення</FormFeedback>
+                                            </FormGroup>
+                                            <div className="ms-2">
+                                                <div className="position-relative">
+                                                    <FaShoppingBasket className="position-absolute start-0 top-50 translate-middle-y ms-2" />
+                                                    <Button color="warning" className="ps-5 pe-5" onClick={ addToBasket } disabled={ buyDisabled }>Купити</Button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </Col>
                                 </Row>

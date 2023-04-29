@@ -1,7 +1,7 @@
 
 import AccountMenu from './AccountMenu';
 
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, Input, NavLink, Button, Row, Col } from 'reactstrap';
+import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, Input, NavLink, Button, Row, Col, Badge } from 'reactstrap';
 
 import { FaShoppingBasket } from 'react-icons/fa';
 
@@ -10,6 +10,7 @@ import { NavLink as RRNavLink, useLocation, Link } from 'react-router-dom';
 
 import { selectValue, set } from '../../app/filterSlice';
 import { selectCurrent as selectUser } from '../../app/authSlice';
+import { getAsync as getBasket, selectCount } from '../../app/basketSlice';
 
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -21,6 +22,7 @@ const Header = () => {
 
     const filters = useSelector(selectValue);
     const user = useSelector(selectUser);
+    const count = useSelector(selectCount);
 
     const dispatch = useDispatch();
 
@@ -32,6 +34,12 @@ const Header = () => {
     const search = () => {
         dispatch(set({ ...filters, model: searchTxt }));
     }
+
+    useEffect(() => {
+        if(user) {
+            dispatch(getBasket());
+        }
+    }, [user]);
 
     useEffect(() => {
         if(! filters.model || filters.model === "") {
@@ -70,8 +78,15 @@ const Header = () => {
               
                 { user && user.isUser && user.isActive && !user.expired && 
                 <div className="d-flex justify-content-end pe-6">
-                    <p className="text-white pe-4">{ user.userName !== '' && `${ user.userName }` }</p>
-                    <Link to="/basket"><FaShoppingBasket className="header__basket-icon"/></Link>
+                    { user && user.userName !== '' && <NavLink tag={RRNavLink} to="/user/profile" className="pt-1 pb-1 text-white pe-4">{ user.userName }</NavLink> }
+                    <div className="position-relative">
+                        <Link to="/basket"><FaShoppingBasket className="header__basket-icon"/></Link>
+                        { count > 0 &&
+                            <Badge color="danger" className="position-absolute top-0 end-0 translate-middle-y p-1 ps-2 pe-2">
+                                { count }
+                            </Badge>
+                        }
+                    </div>
                 </div> }
         </header>
     );

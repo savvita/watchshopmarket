@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import React from 'react';
 
-import { Table, Spinner, UncontrolledTooltip, Input, Row, Col, FormFeedback, FormGroup } from 'reactstrap';
+import { Table, Spinner, UncontrolledTooltip, Input, Row, Col, FormFeedback, FormGroup, Label } from 'reactstrap';
 import { FaPlus } from "react-icons/fa";
 import PerPageSelect from '../PerPageSelect';
 
@@ -36,6 +36,8 @@ const AdminPropertyTable = ({ selectValues, selectStatus, title, get, update, cr
     const [perPage, setPerPage] = useState(10);
     const [pages, setPages] = useState([]);
 
+    const [activeOnly, setActiveOnly] = useState(false);
+
     useEffect(() => {
         if(!get) {
             return;
@@ -51,7 +53,8 @@ const AdminPropertyTable = ({ selectValues, selectStatus, title, get, update, cr
 
     useEffect(() => {
         if(values && values.value) {
-            setItems([...values.value]);
+            const items = activeOnly === true ? values.value.filter(item => item.isActive === true) : [...values.value];
+            setItems(items);
             setCurrentPage(1);
         }
     }, [values]);
@@ -63,10 +66,11 @@ const AdminPropertyTable = ({ selectValues, selectStatus, title, get, update, cr
 
     useEffect(() => {
         if(values && values.value) {
-            setItems(values.value.filter(i => i.value.toLowerCase().includes(searchTxt)));
+            const items = activeOnly === true ? values.value.filter(item => item.isActive === true) : [...values.value];
+            setItems(items.filter(i => i.value.toLowerCase().includes(searchTxt)));
             setCurrentPage(1);
         }
-    }, [searchTxt]);
+    }, [searchTxt, activeOnly]);
 
     const deleteItem = async (id) => {
 
@@ -181,8 +185,16 @@ const AdminPropertyTable = ({ selectValues, selectStatus, title, get, update, cr
                         </Col>
                         <Col sm="6" xs="12">
                             <FormGroup  className="position-relative">
-                                <Input name="search" placeholder="Search" type="search" value={ searchTxt } onInput={ (e) => setSearchTxt(e.target.value.toLowerCase()) } invalid={ items.length === 0 }  />
+                                <Input name="search" placeholder="Шукати" type="search" value={ searchTxt } onInput={ (e) => setSearchTxt(e.target.value.toLowerCase()) } invalid={ items.length === 0 }  />
                                 <FormFeedback tooltip className="text-white">{ 'Не знайдено :(' }</FormFeedback>
+                            </FormGroup>
+                        </Col>
+                    </Row>
+                    <Row className='fs-6'>
+                        <Col>
+                            <FormGroup switch>
+                                <Input id="activeOnly" type="switch" checked={ activeOnly } onChange={() => { setActiveOnly(!activeOnly); }} />
+                                <Label for="activeOnly" check>Тільки актуальні</Label>
                             </FormGroup>
                         </Col>
                     </Row>

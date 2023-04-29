@@ -10,9 +10,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import React from 'react';
 
-import { Table, Spinner, UncontrolledTooltip, Input, Row, Col, FormFeedback, FormGroup } from 'reactstrap';
+import { Table, Spinner, UncontrolledTooltip, Input, Row, Col, FormFeedback, FormGroup, Collapse, NavbarToggler, Navbar } from 'reactstrap';
 import { FaPlus } from "react-icons/fa";
 import PerPageSelect from '../PerPageSelect';
+import Filters from './Filters';
 
 
 const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, get, getValueById, setCurrent, update, create, remove, restore, saveFiles, link }) => {
@@ -34,6 +35,11 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
     const [pages, setPages] = useState([]);
 
     const [hits, setHits] = useState(0);
+
+    const [errorTxt, setErrorTxt] = useState([]);
+    const [collapsed, setCollapsed] = useState(true);
+
+    const toggleNavbar = () => setCollapsed(!collapsed);
 
     useEffect(() => {
         if(!get) {
@@ -68,6 +74,19 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
     //         setCurrentPage(1);
     //     }
     // }, [searchTxt]);
+
+    const filter = async (filters) => {
+        if(!get) {
+            return;
+        }
+
+        if(currentPage !== 1) {
+            setCurrentPage(1);
+        }
+        else {
+            dispatch(get({ ...filters, page: currentPage, perPage: perPage }));
+        }
+    }
 
      const createItem = async (item, files) => {
         if(!create) {
@@ -254,16 +273,30 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
                             <UncontrolledTooltip placement="right" target="property-table__caption__add">Додати нове значення</UncontrolledTooltip>
                         </Col>
                     </Row>
+                    <Row>
+                        <Col>
+                            <Navbar color="faded" light>
+                                <NavbarToggler onClick={ toggleNavbar } className="me-2 fs-6" style={{ backgroundColor: '#fff', padding: '5px 20px' }}>Фільтри</NavbarToggler>
+                                <Collapse isOpen={ !collapsed } navbar >
+                                    <Filters onAccept={ filter } />
+                                </Collapse>
+                            </Navbar>
+
+                            <div className="text-white">
+                                <p>{ errorTxt }</p>
+                            </div>
+                        </Col>
+                    </Row>
                     <Row className="pe-2">
                         <Col sm="6" xs="12">
                             <PerPageSelect values={ pages } onChange={ (idx) => setPerPage(pages[idx]) } />
                         </Col>
-                        <Col sm="6" xs="12">
+                        {/* <Col sm="6" xs="12">
                             <FormGroup  className="position-relative">
                                 <Input name="search" placeholder="Search" type="search" value={ searchTxt } onInput={ (e) => setSearchTxt(e.target.value.toLowerCase()) } invalid={ hits === 0 }  />
                                 <FormFeedback tooltip className="text-white">{ 'Не знайдено :(' }</FormFeedback>
                             </FormGroup>
-                        </Col>
+                        </Col> */}
                     </Row>
                 </caption>
                 <thead>

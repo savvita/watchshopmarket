@@ -80,7 +80,7 @@ const Basket = () => {
 
     return (
         <div>
-            { basket && basket.details && basket.details.length === 0 ? <p className="text-white">Кошик порожній</p>
+            { basket && basket.details && basket.details.length === 0 ? <p className="text-white mt-5 text-center">Кошик порожній</p>
             :
             <div>
                 <BasketTable basket={ basket } onChange={ changeBasket } onDelete={ removeFromBasket } />

@@ -150,25 +150,8 @@ const OrderTable = ({ isManagerMode, isUserMode, statusses }) => {
         }
     }
 
-    // const closeOrder = async (id) => {
-    //     if(!id) {
-    //         return;
-    //     }
-
-    //     const res = await dispatch(setStatusAsync({ id: id, statusId: 3 }));
-
-    //     if(!res || !res.payload || !res.payload.value) {
-    //         setInfoHeader('Помилка');
-    //         setInfoText('Щось пішло не так. Спробуйте пізніше');
-    //         setInfoModal(true);
-    //     }
-    //     else {
-    //         await load();
-    //     }
-    // }
-
     return (
-        <div className="text-white">
+        <div className="text-white flex-grow-1">
             <h2 className="text-center mt-4">Замовлення</h2>
             <Navbar color="faded" light>
                 <NavbarToggler onClick={ toggleNavbar } className="me-2 fs-6" style={{ backgroundColor: '#fff', padding: '5px 20px' }}>Фільтри</NavbarToggler>
@@ -182,7 +165,7 @@ const OrderTable = ({ isManagerMode, isUserMode, statusses }) => {
             </div>
 
             <PerPageSelect values={ pages } onChange={ (idx) => setPerPage(pages[idx]) } />
-            <Table dark className='mt-4 table_sort'>
+            <Table dark className='mt-4 table_sort'  style={{ width: '100%' }}>
                 <thead>
                     <tr className="text-center">
                         <th scope="col" className='sortable' onClick={ tbl.sort }>№</th>

@@ -16,7 +16,7 @@ import validation from '../../modules/validation';
 import { FaCopy } from 'react-icons/fa';
 
 
-const OrderDetailTable = ({ item, isManagerMode }) => {
+const OrderDetailTable = ({ item, isManagerMode, viewOnly }) => {
     const [total, setTotal] = useState(0);
     const [infoModal, setInfoModal] = useState(false);
     const [infoHeader, setInfoHeader] = useState('');
@@ -142,14 +142,15 @@ const OrderDetailTable = ({ item, isManagerMode }) => {
         navigator.clipboard.writeText(item.en);
     }
 
+
     return (
-        <div>
+        <div className="mb-5">
             <Button onClick={() => navigate(-1)}>Назад</Button>
             <div className="d-flex justify-content-between">
                 <div className="flex-grow-1">
                     <h3 className="text-white">Номер замовлення: { item.id }</h3>
                     <p className="text-white mb-1 mt-1">Дата: { (new Date(item.date)).toLocaleString() }</p>
-                    { item.status && <OrderStatusSelect item={ item } isSelectable={ isManagerMode && item.status.id !== 3 && item.status.id !== 4 && item.status.id !== 7 } onChange={ setStatus } /> }
+                    { item.status && <OrderStatusSelect item={ item } isSelectable={ viewOnly !== true && isManagerMode && item.status.id !== 3 && item.status.id !== 4 && item.status.id !== 7 } onChange={ setStatus } /> }
                     <p className="text-white mb-1 mt-1">Отримувач: { item.fullName }, { item.phoneNumber }</p>
                     { item.payment && <p className="text-white mb-1 mt-1">Оплата: { item.payment.value }</p> }
                     { item.delivery && <p className="text-white mb-1 mt-1">Доставка: { item.delivery.value }{ item.delivery.id === 2 && ` (${ item.city && item.city.description }, ${ item.warehouse && item.warehouse.description })`}</p> }
@@ -165,15 +166,16 @@ const OrderDetailTable = ({ item, isManagerMode }) => {
                         </div>
                     }
                     
-                    { item.delivery && item.delivery.id === 2 && !item.en && <div className="d-flex">
+                    { viewOnly !== true && item.delivery && item.delivery.id === 2 && !item.en && <div className="d-flex">
                         <Button className="me-2" onClick={ () => setEnVisible(true) }>Додати номер ЕН</Button>
                         <ENInput visible={ enVisible } validationRule={ validateEN } validationErrorText={ enErrorText } onCancel={ () => setEnVisible(false) } onAccept={ setEN } />
                     </div> }
                 </div>
+                { viewOnly !== true &&
                 <div className="d-flex flex-column">
                     { isManagerMode && item.status && (item.status.id === 1 || item.status.id === 2) && <Button color="danger" className="m-1" onClick={ closeOrder }>Закрити</Button> }
                     { item.status && (item.status.id === 1 || item.status.id === 2) && <Button color="danger" className="m-1" onClick={ cancelOrder }>Скасувати</Button> }
-                </div>
+                </div> }
             </div>
 
 

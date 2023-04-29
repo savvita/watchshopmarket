@@ -1,10 +1,11 @@
 import ImagePreview from './ImagePreview';
 
 import { useEffect, useState } from 'react';
-import { Input } from 'reactstrap';
+import { FormText, Input } from 'reactstrap';
 
 const FormItemImageFile = ({ initialValues, onChange }) => {
     const [imgs, setImgs] = useState([]);
+    const [errors, setErrors] = useState([]);
 
     useEffect(() => {
         if(initialValues) {
@@ -17,6 +18,7 @@ const FormItemImageFile = ({ initialValues, onChange }) => {
     }
     
     const handleFiles = (e) => {
+        const err = [];
         if(!e.target.files || e.target.files.length === 0) {
             return;
         }
@@ -29,6 +31,13 @@ const FormItemImageFile = ({ initialValues, onChange }) => {
             const file = files[i];
         
             if (!file.type.startsWith('image/')){ 
+                err.push("Недопустимий формат файлу");
+                continue;
+            }
+
+            if (file.size > 1024 * 1024){ 
+                const error = "Файл " + file.name + " занадто великий";
+                err.push(error);
                 continue;
             }
 
@@ -43,6 +52,8 @@ const FormItemImageFile = ({ initialValues, onChange }) => {
             }));
 
         }
+
+        setErrors([...err]);
         Promise.all(p).then((values) => {
             setImgs([...imgs, ...values]);
         });
@@ -55,7 +66,9 @@ const FormItemImageFile = ({ initialValues, onChange }) => {
 
     return (
         <div className='pt-2'>
-            <Input name="file" type="file" onChange={ handleFiles } multiple />
+            <Input name="file" type="file" onChange={ handleFiles } multiple size={ 1024 * 1024 } />
+            <FormText>*&nbsp;Максимальний розмір 1&nbsp;Мб</FormText>
+            { errors.map((item, idx) => <p key={ idx } className='text-danger'>{ item }</p>) }
             { imgs && imgs.map((item, idx) => <ImagePreview key={ idx } img={ item } onDelete={ deleteImage } />) } 
         </div>
     );

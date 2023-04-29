@@ -2,9 +2,10 @@
 import { FormGroup, Input, FormFeedback, UncontrolledTooltip } from 'reactstrap';
 
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { getByIdAsync } from '../../app/watchSlice';
+import { setValid, selectValid } from "../../app/basketSlice";
 
 import validation from '../../modules/validation';
 
@@ -12,8 +13,11 @@ const BasketTableRow = ({ item, idx, onChange, onDelete }) => {
     const [watch, setWatch] = useState(null);
     
     const [isValid, setIsValid] = useState(false);
+    const [errorTxt, setErrorTxt] = useState("");
     
     const dispatch = useDispatch();
+
+    const validBasket = useSelector(selectValid);
 
     useEffect(() => {
         if(!item) {
@@ -27,6 +31,14 @@ const BasketTableRow = ({ item, idx, onChange, onDelete }) => {
 
             if(res && res.payload && res.payload.value) {
                 setWatch(res.payload.value);
+                if(res.payload.value.available < item.count) {
+                    setErrorTxt("Немає в наявності");
+                    setIsValid(false);
+                    setValidBasket(false);
+                }
+                else {
+                    setValidBasket(true);
+                }
             }
         }
 
@@ -34,13 +46,45 @@ const BasketTableRow = ({ item, idx, onChange, onDelete }) => {
 
     }, [item]);
 
-    const handleInput = (e) => {
-        setIsValid(validateCount(e.target.value));
-
-        onChange && onChange(e.target.value);
+    const setValidBasket = (value) => {
+        const values = validBasket.map(i => {
+            if(i.id !== item.id) {
+                return i;
+            }
+            else {
+                return {
+                    ...i,
+                    valid: value
+                }
+            }
+        });
+        dispatch(setValid([...values]));
     }
 
-    const validateCount = (value) => {    
+    const handleInput = (e) => {
+        const valid = validateCount(e.target.value);
+        
+        if(watch.available < e.target.value){
+            setIsValid(false);
+            setErrorTxt("Немає в наявності");
+            setValidBasket(false);
+        }
+        else {
+            setIsValid(valid);
+            
+            if(valid === false) {
+                setErrorTxt("Некоректне значення");
+                setValidBasket(false);
+            }
+            else {
+                setErrorTxt("");
+                setValidBasket(true);
+                onChange && onChange(e.target.value);
+            }
+        }
+    }
+
+    const validateCount = (value) => {   
         return validation.positiveIntValidationRule(value);
     }
 
@@ -59,8 +103,8 @@ const BasketTableRow = ({ item, idx, onChange, onDelete }) => {
             <td className="text-center">{ item && item.unitPrice }&nbsp;&#8372;</td>
             <td className="text-center">
                 <FormGroup className='position-relative' style={{ width: '5rem' }}>
-                    <Input type="number" min={ 0 } max={ watch && watch.available } value={ item.count } onInput ={ handleInput } invalid={ !isValid } />
-                    <FormFeedback tooltip>Некоректне значення</FormFeedback>
+                    <Input type="number" min={ 1 } max={ watch && watch.available } value={ item.count } onInput ={ handleInput } invalid={ !isValid } />
+                    <FormFeedback tooltip>{ errorTxt }</FormFeedback>
                 </FormGroup>
             </td>
             <td className="text-center pe-5">{ item && item.count && item.unitPrice && item.unitPrice * item.count }&nbsp;&#8372;</td>

@@ -6,10 +6,13 @@ import { selectCurrent as selectUser } from '../../app/authSlice';
 import { useSelector } from 'react-redux';
 
 import './WatchContainer.css';
+import { useEffect, useState } from 'react';
 
 const WatchCard = ({ item, onBuyClick }) => {
     
     const user = useSelector(selectUser);
+
+    const [buyDisabled, setBuyDisabled] = useState(false);
 
     const navigate = useNavigate();
 
@@ -23,6 +26,14 @@ const WatchCard = ({ item, onBuyClick }) => {
             onBuyClick && onBuyClick(item);
         }
     }
+
+    useEffect(() => {
+        if(!item) {
+            return;
+        }
+
+        setBuyDisabled(item.available === 0 || item.onSale !== true);
+    }, [item]);
 
     if(!item) {
         return null;
@@ -44,7 +55,7 @@ const WatchCard = ({ item, onBuyClick }) => {
                         <CardSubtitle className={ item && item.discount ? "mb-2 me-4 text-decoration-line-through text-muted" : "mb-2 text-muted" } tag="h5">{ item.price }&nbsp;&#8372;</CardSubtitle>
                         { item && item.discount && <CardSubtitle className="mb-2 text-muted" tag="h5">{ item.price - item.price * item.discount / 100 }&nbsp;&#8372;</CardSubtitle> }
                     </div>
-                    <Button className="watch-container__card-btn" onClick={ buyClick }>Купити</Button>
+                    <Button className="watch-container__card-btn" onClick={ buyClick } disabled={ buyDisabled }>Купити</Button>
                     <div className="position-relative">
                         <CardText className="watch-container__card-description">{ item.description }</CardText>
                     </div>

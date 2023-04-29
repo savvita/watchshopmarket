@@ -14,7 +14,7 @@ const User = () => {
     const [collapsed, setCollapsed] = useState(false);
 
     return (
-        <div className="d-flex flex-column" style={{ minHeight: '100vh' }}>
+        <div className="d-flex flex-column flex-grow-1">
             <Header />
             <div className="flex-grow-1 d-flex">
                 { user && user.isActive && !user.expired ? 

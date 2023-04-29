@@ -14,16 +14,14 @@ const FormItemSelectInto = ({ name, title, items, initialValues, onChange, onAdd
         if(initialValues) {
             setSelectedItems(initialValues);
             if(items && items.value) {
-                setNotSelectedItems(items.value.filter(i => !initialValues.includes(i)));
+                const values = items.value.filter(i => initialValues.find(item => item.id === i.id) === undefined);
+                setNotSelectedItems(values);
+                setNotSelectedItem(values.length > 0 ? values[0].id : -1);
             }
+            setSelectedItem(initialValues.length > 0 ? initialValues[0].id : -1);
         }
-    }, [initialValues]);
 
-    useEffect(() => {
-        if(items && items.value) {
-            setNotSelectedItems(items.value);
-        }
-    }, [items]);
+    }, []);
 
     const addToSelected = () => {
         if(!notSelectedItem || notSelectedItem <= 0) {
@@ -81,6 +79,7 @@ const FormItemSelectInto = ({ name, title, items, initialValues, onChange, onAdd
         setIsValid(false);
         setAddMode(false);
     }
+
 
     return (
         <fieldset className="border border-secondary rounded-2 p-2">

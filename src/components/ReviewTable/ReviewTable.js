@@ -1,4 +1,4 @@
-import { Col, Row, Spinner, Table } from "reactstrap";
+import { Col, Collapse, Navbar, NavbarToggler, Row, Spinner, Table } from "reactstrap";
 import Pagination from "../Pagination";
 import ReviewTableRow from "./ReviewTableRow";
 
@@ -10,6 +10,7 @@ import InfoModal from "../InfoModal";
 import tbl from '../../modules/sort';
 import PerPageSelect from "../PerPageSelect";
 import ConfirmDeletingModal from "./ConfirmDeletingModal";
+import Filters from "./Filters";
 
 
 
@@ -20,6 +21,7 @@ const ReviewTable = ({ isManagerMode }) => {
     const dispatch = useDispatch();
 
     const [values, setValues] = useState([]);
+    const [itemsPage, setItemsPage] = useState([]);
 
     const [infoModal, setInfoModal] = useState(false);
     const [infoHeader, setInfoHeader] = useState('');
@@ -33,6 +35,24 @@ const ReviewTable = ({ isManagerMode }) => {
 
     const [modal, setModal] = useState(false);
     const [item, setItem] = useState({});
+
+    const reviewStatusses = [
+        {
+            id: 1,
+            value: 'Очікує розгляду'
+        },
+        {
+            id: 2,
+            value: 'Розглянуто'
+        }
+    ];
+
+    const [errorTxt, setErrorTxt] = useState([]);
+    const [collapsed, setCollapsed] = useState(true);
+
+    const [filters, setFilters] = useState({ text: '', statusses: [], startDate: '', endDate: '' });
+
+    const toggleNavbar = () => setCollapsed(!collapsed);
 
     useEffect(() => {
         pages.splice(0, pages.length);
@@ -51,16 +71,27 @@ const ReviewTable = ({ isManagerMode }) => {
 
     useEffect(() => {
         if(items && items.value) {
+            setCurrentPage(1);
             setHits(items.hits);
-            setValues(items.value.slice((currentPage - 1) * perPage, currentPage * perPage));
+            // setValues(items.value.slice((currentPage - 1) * perPage, currentPage * perPage));
+            setValues(items.value);
         }
     }, [items]);
 
+    // useEffect(() => {
+    //     if(items && items.value) {
+    //         setValues(items.value.slice((currentPage - 1) * perPage, currentPage * perPage));
+    //     }
+    // }, [currentPage, perPage]);
     useEffect(() => {
-        if(items && items.value) {
-            setValues(items.value.slice((currentPage - 1) * perPage, currentPage * perPage));
+        if(values.length > 0) {
+            setItemsPage(values.slice((currentPage - 1) * perPage, currentPage * perPage));
+            setErrorTxt("");
+        } else {
+            setItemsPage([]);
+            setErrorTxt("Нічого не знайдено :(");
         }
-    }, [currentPage, perPage]);
+    }, [currentPage, perPage, values]);
 
     const accept = async(item) => {
         if(!item) {
@@ -128,8 +159,60 @@ const ReviewTable = ({ isManagerMode }) => {
         }
     }
 
+    
+    useEffect(() => {
+        if(!items || !items.value) {
+            return;
+        } 
+        let w = items.value;
+        
+        if(filters.text) {
+            w = w.filter( x => 
+                x.text.includes(filters.text));
+        }
+
+        if(filters.startDate) {
+            w = w.filter( x => x.date >= filters.startDate);
+        }
+
+
+        if(filters.endDate) {
+            w = w.filter( x => x.date <= filters.endDate);
+        }
+
+        if(filters.statusses.length > 0) {
+            const isWaiting = filters.statusses.includes(1);
+            const isChecked = filters.statusses.includes(2);
+
+            w = w.filter(x => {
+                let res;
+                if(isWaiting ^ isChecked) {
+                    res = x.checked === isChecked;
+                } else {
+                    res = true;
+                }
+
+                return res;
+            });
+            // w = w.filter(x => x.checked === isWaiting || x.checked === isChecked || x.deleted === isDeleted);
+        }
+
+        setValues(w);
+    }, [filters]);
+
     return (
         <>
+            <h2 className="text-center mt-4 text-white">Відгуки</h2>
+            <Navbar color="faded" light>
+                <NavbarToggler onClick={ toggleNavbar } className="me-2 fs-6" style={{ backgroundColor: '#fff', padding: '5px 20px' }}>Фільтри</NavbarToggler>
+                <Collapse isOpen={ !collapsed } navbar >
+                    <Filters isManagerMode={ isManagerMode } statusses={ reviewStatusses } onChange={ (items) => setFilters({...items }) } />
+                </Collapse>
+            </Navbar>
+
+            <div className="text-white">
+                <p>{ errorTxt }</p>
+            </div>
             <Table dark hover className="property-table__table table_sort watch-table__table">
                 <caption className='property-table__caption ps-2 fs-3'>
                     <Row className="pe-2">
@@ -150,7 +233,7 @@ const ReviewTable = ({ isManagerMode }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    { values && values.map((item, i) => 
+                    {itemsPage &&itemsPage.map((item, i) => 
                         item && <ReviewTableRow key={ item.id } idx={ (currentPage - 1) * perPage + i + 1 } item={ item } onCheck={ accept } onDelete={ showCofirmModal } isManagerMode={ isManagerMode } onUpdate={ update } />)
                     }
                 </tbody>

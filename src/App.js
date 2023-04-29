@@ -59,7 +59,7 @@ import UserInfo from './components/UserInfo/UserInfo';
 
 function App() {
   return (
-    <div className="container-fluid p-0 m-0">
+    <div className="container-fluid m-0 d-flex flex-column" style={{ minHeight: '100vh' }}>
       <Router>
         <Routes>
           <Route path="/" element={ <Main /> }>
@@ -100,6 +100,7 @@ function App() {
             <Route path="orders/new" element={ <Orders statusses={ [1] } /> } />  
             <Route path="reviews/new" element={ <ReviewTable isManagerMode={ true } /> } />  
             <Route path="orders/:id" element={ <OrderDetail isManagerMode={ true } /> } />
+            <Route path="orders/new/:id" element={ <OrderDetail isManagerMode={ true } viewOnly={ true } /> } />
             <Route path="waterresistance/:id" element={ <WaterResistanceDetail /> } />
             <Route path="style/:id" element={ <StyleDetail /> } />
             <Route path="straptype/:id" element={ <StrapTypeDetail /> } />

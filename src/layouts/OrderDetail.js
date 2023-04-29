@@ -11,7 +11,7 @@ import { Spinner } from "reactstrap";
 import { useEffect } from "react";
 
 
-const OrderDetail = ({ isManagerMode }) => {
+const OrderDetail = ({ isManagerMode, viewOnly }) => {
     const params = useParams();
 
     const item = useSelector(selectCurrent);
@@ -34,7 +34,7 @@ const OrderDetail = ({ isManagerMode }) => {
             <div className={ status === 'loading' ? 'd-flex justify-content-center mt-3' : 'd-none' }><Spinner color="light">Loading...</Spinner></div>
             { item &&
                 <div className={ status !== 'idle' ? 'd-none' : 'mt-4' }>
-                    <OrderDetailTable item={ item } isManagerMode={ isManagerMode } />
+                    <OrderDetailTable item={ item } isManagerMode={ isManagerMode } viewOnly={ viewOnly } />
                 </div>
             }
         </div>

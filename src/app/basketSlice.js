@@ -32,19 +32,31 @@ export const basketSlice = createSlice({
             values: {
                 details: []
             },
-            status: "idle"
+            status: "idle",
+            valid: [],
+            count: 0
         },
         reducers: {
           set: (state, action) => {
             if(action && action.payload) {
               state.values = action.payload;
+              state.count = action.payload.details.length;
             }
             else {
               state.values = {
-                details: []
+                details: [],
               };
+              state.count = 0;
             }
           }, 
+          setValid: (state, action) => {
+            if(action && action.payload) {
+              state.valid = action.payload;
+            }
+            else {
+              state.valid = [];
+            }
+          }
         },
         extraReducers: (builder) => {
             builder
@@ -55,19 +67,31 @@ export const basketSlice = createSlice({
                 state.status = 'idle';
                 if(action.payload && action.payload.value) {
                     state.values = action.payload.value;
+                    state.count = action.payload.value.details.length;
                 }
                   else {
                       state.values = {
                         details: []
                       };
+                      state.count = 0;
                 }
                 return state;
               })
-              .addCase(updateAsync.pending, (state) => {
+              .addCase(updateAsync.pending, (state, action) => {
                 state.status = 'loading';
               })
-              .addCase(updateAsync.fulfilled, (state) => {
+              .addCase(updateAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
+                if (action.payload && action.payload.value) {
+                  state.values = action.payload.value;
+                  state.count = action.payload.value.details.length;
+                }
+                else {
+                  state.values = {
+                    details: []
+                  };
+                  state.count = 0;
+                }
                 return state;
               })
               .addCase(deleteAsync.pending, (state) => {
@@ -81,9 +105,11 @@ export const basketSlice = createSlice({
     }
 );
 
-export const { set } = basketSlice.actions
+export const { set, setValid } = basketSlice.actions
 
 export const selectValues = (state) => state.basket.values;
 export const selectStatus = (state) => state.basket.status;
+export const selectValid = (state) => state.basket.valid;
+export const selectCount = (state) => state.basket.count;
 
 export default basketSlice.reducer

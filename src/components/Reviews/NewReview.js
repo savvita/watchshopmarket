@@ -34,8 +34,8 @@ const NewReview = ({ onAccept }) => {
                     <Label className="pt-3 pb-0" style={{ fontSize: '0.8rem' }}>* Коментар буде відображено після перевірки модератором</Label>
                 </CardBody>
                 <CardFooter>
-                    <Button className="me-3" onClick={ save }>Зберегти</Button>
-                    <Button onClick={ cancel }>Скасувати</Button>
+                    <Button className="me-3" onClick={ save } disabled={ !isValid }>Зберегти</Button>
+                    <Button onClick={ cancel } disabled={ value.length === 0 }>Скасувати</Button>
                 </CardFooter>
             </Card>
         </div>

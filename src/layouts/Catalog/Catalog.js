@@ -14,6 +14,7 @@ import { useState, useEffect } from 'react';
 
 import './Catalog.css';
 import { FaRegWindowClose } from 'react-icons/fa';
+import GoTop from '../../components/GoTop';
 
 const Catalog = () => {
     const values = useSelector(selectValues);
@@ -118,6 +119,7 @@ const Catalog = () => {
                     }
                 </Col>
             </Row>
+                <GoTop />
         </div>
     );
 }

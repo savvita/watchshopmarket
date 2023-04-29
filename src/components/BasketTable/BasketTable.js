@@ -5,12 +5,17 @@ import BasketTableRow from "./BasketTableRow";
 import { Table } from 'reactstrap';
 import { useEffect, useState } from "react";
 
+import { setValid } from "../../app/basketSlice";
+
 import './BasketTable.css';
+import { useDispatch } from "react-redux";
 
 
 const BasketTable = ({ basket, onChange, onDelete }) => {
 
     const [total, setTotal] = useState(0);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         let sum = 0;
@@ -18,7 +23,10 @@ const BasketTable = ({ basket, onChange, onDelete }) => {
             basket.details.forEach(item => sum += item.unitPrice * item.count);
 
             setTotal(sum);
+
+            dispatch(setValid(basket.details.map(item => { return { id: item.id, valid: true } })));
         }
+
 
     }, [basket]);
 
