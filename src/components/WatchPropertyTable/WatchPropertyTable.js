@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import React from 'react';
 
-import { Table, Spinner, UncontrolledTooltip, Input, Row, Col, FormFeedback, FormGroup, Collapse, NavbarToggler, Navbar } from 'reactstrap';
+import { Table, Spinner, UncontrolledTooltip, Row, Col, Collapse, NavbarToggler, Navbar } from 'reactstrap';
 import { FaPlus } from "react-icons/fa";
 import PerPageSelect from '../PerPageSelect';
 import Filters from './Filters';
@@ -65,15 +65,6 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
 
         dispatch(get({ page: currentPage, perPage: perPage }));
     }, [currentPage, perPage]);
-
-
-
-    // useEffect(() => {
-    //     if(values && values.value) {
-    //         setItems(values.value.filter(i => i.value.toLowerCase().includes(searchTxt)));
-    //         setCurrentPage(1);
-    //     }
-    // }, [searchTxt]);
 
     const filter = async (filters) => {
         if(!get) {
@@ -291,12 +282,6 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
                         <Col sm="6" xs="12">
                             <PerPageSelect values={ pages } onChange={ (idx) => setPerPage(pages[idx]) } />
                         </Col>
-                        {/* <Col sm="6" xs="12">
-                            <FormGroup  className="position-relative">
-                                <Input name="search" placeholder="Search" type="search" value={ searchTxt } onInput={ (e) => setSearchTxt(e.target.value.toLowerCase()) } invalid={ hits === 0 }  />
-                                <FormFeedback tooltip className="text-white">{ 'Не знайдено :(' }</FormFeedback>
-                            </FormGroup>
-                        </Col> */}
                     </Row>
                 </caption>
                 <thead>

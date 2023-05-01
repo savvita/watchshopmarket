@@ -26,10 +26,19 @@ const Chart = ({ title, data }) => {
         ]
     };
 
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    };
+
     return (
         <div>
             <h5 className="text-white">{ title }</h5>
-            <Bar type="bar" width={ 130 } height={ 50 } style={{ backgroundColor: '#ffffffde' }} data={ barData } />
+            <Bar type="bar" width={ 130 } height={ 50 } style={{ backgroundColor: '#ffffffde' }} data={ barData } options={ options } />
         </div>
     );
 }

@@ -540,6 +540,128 @@ const Basket = function() {
     }
 }
 
+const Sales = function() {
+    this.waterResistance = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/waterresistances/sales`);
+    }
+
+    this.strapType = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/straptypes/sales`);
+    }
+
+    this.glassType = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/glasstypes/sales`);
+    }
+
+    this.incrustationtType = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/incrustationtypes/sales`);
+    }
+
+    this.dialType = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/dialtypes/sales`);
+    }
+
+    this.gender = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/genders/sales`);
+    }
+
+    this.caseShape = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/caseshapes/sales`);
+    }
+
+    this.collection = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/collections/sales`);
+    }
+    
+    this.style = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/styles/sales`);
+    }
+
+    this.brand = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/brands/sales`);
+    }
+
+    this.movementType = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/movementtypes/sales`);
+    }
+
+    this.function = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/functions/sales`);
+    }
+
+    this.country = async function() {
+        if(!token.getToken()) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/countries/sales`);
+    }
+
+    this.color = async function(type) {
+        if(!token.getToken() || !type) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/colors/sales/${type}`);
+    }
+
+    this.material = async function(type) {
+        if(!token.getToken() || !type) {
+            return undefined;
+        }
+    
+        return await db_get(`${api}/materials/sales/${type}`);
+    }
+}
+
 //========= Authorization ====================
 const signIn = async (login, password) => {
     return await db_post(`${api}/auth`, { userName: login, password: password });
@@ -587,7 +709,8 @@ const functions = {
     Files: new Files(),
     Cities: new Cities(),
     Reviews: new Reviews(),
-    Warehouses: new Warehouses()
+    Warehouses: new Warehouses(),
+    Sales: new Sales()
 };
 
 export default functions;

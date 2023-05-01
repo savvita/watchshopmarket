@@ -72,4 +72,15 @@ th.sorted[data-order="1"]::after {
     .sidebar__btn {
         display: inline-block !important;
     }
+
+}
+
+@media screen and (max-width: 720px) {
+    .charts-container {
+        flex-direction: column;
+    }
+
+    .charts-container > div {
+        width: 100%;
+    }
 }

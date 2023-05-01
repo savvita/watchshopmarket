@@ -27,6 +27,7 @@ import orderReducer from './orderSlice';
 import orderstatusReducer from './orderstatusSlice';
 import reviewReducer from './reviewSlice';
 import fileReducer from './fileSlice';
+import salesReducer from './salesSlice';
 
 export const store = configureStore( {
     reducer: {
@@ -56,6 +57,7 @@ export const store = configureStore( {
         order: orderReducer,
         orderstatus: orderstatusReducer,
         review: reviewReducer,
-        file: fileReducer
+        file: fileReducer,
+        sales: salesReducer
     }
 });
