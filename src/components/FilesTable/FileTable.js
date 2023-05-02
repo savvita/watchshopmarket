@@ -127,7 +127,7 @@ const FileTable = () => {
                 </caption>
                 <thead>
                     <tr>
-                        <th className='text-center sortable' onClick={ tbl.sort }>№</th>
+                        <th className='text-center'>№</th>
                         <th className="sortable" onClick={ tbl.sort }>Файл</th>
                         <th>Завантажити</th>
                         <th>Видалити</th>

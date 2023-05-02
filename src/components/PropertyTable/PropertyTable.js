@@ -1,5 +1,3 @@
-import tbl from '../../modules/sort'; 
-
 import PropertyTableRow from './PropertyTableRow';
 import Pagination from '../Pagination';
 import ConfirmDeletingModal from '../ConfirmDeletingModal';
@@ -156,6 +154,32 @@ const PropertyTable = ({ selectValues, selectStatus, title, get, update, create,
         setInfoModal(true);
     }
 
+    const sort = (e, prop) => {
+        if(!prop) {
+            return;
+        }
+
+        const order = (e.target.dataset.order = -(e.target.dataset.order || -1));
+
+        const comparator = (a, b) => {
+            if (a[prop] < b[prop] ){
+                return -1 * order;
+            }
+            if (a[prop] > b[prop] ){
+                return 1 * order;
+            }
+            return 0;
+        }
+
+        items.sort(comparator);
+
+        setItems([...items]);
+
+        for(const cell of e.target.parentNode.cells) {
+            cell.classList.toggle('sorted', cell === e.target);
+        }
+    }
+
     return (
         <>
             <Table dark hover className="property-table__table table_sort">
@@ -181,9 +205,9 @@ const PropertyTable = ({ selectValues, selectStatus, title, get, update, create,
                 </caption>
                 <thead>
                     <tr>
-                        <th className='text-center sortable' onClick={ tbl.sort }>№</th>
-                        <th className="sortable" onClick={ tbl.sort }>Id</th>
-                        <th className="sortable" onClick={ tbl.sort }>Значення</th>
+                        <th className='text-center'>№</th>
+                        <th className="sortable" onClick={ (e) => sort(e, 'id') }>Id</th>
+                        <th className="sortable" onClick={ (e) => sort(e, 'value') }>Значення</th>
                         <th colSpan="3" className="text-center property-table__collapse__collapsed">Дії</th>
                         <th className='property-table__collapse__expanded'>Переглянути</th>
                         <th className='property-table__collapse__expanded'>Редагувати</th>

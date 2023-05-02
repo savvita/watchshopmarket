@@ -28,8 +28,6 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
     const [infoHeader, setInfoHeader] = useState('');
     const [infoText, setInfoText] = useState('');
 
-    const [searchTxt, setSearchTxt] = useState('');
-
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(10);
     const [pages, setPages] = useState([]);
@@ -55,6 +53,13 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
     useEffect(() => {
         if(values) {
             setHits(values.hits);
+
+            if(!values.hits || values.hits === 0) {
+                setErrorTxt("Не знайдено :(");
+            }
+            else {
+                setErrorTxt("");
+            }
         }
     }, [values]);
 

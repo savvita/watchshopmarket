@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import InfoModal from "../InfoModal";
 
-import tbl from '../../modules/sort';
 import PerPageSelect from "../PerPageSelect";
 import ConfirmDeletingModal from "./ConfirmDeletingModal";
 import Filters from "./Filters";
@@ -73,16 +72,10 @@ const ReviewTable = ({ isManagerMode }) => {
         if(items && items.value) {
             setCurrentPage(1);
             setHits(items.hits);
-            // setValues(items.value.slice((currentPage - 1) * perPage, currentPage * perPage));
-            setValues(items.value);
+            setValues([...items.value]);
         }
     }, [items]);
 
-    // useEffect(() => {
-    //     if(items && items.value) {
-    //         setValues(items.value.slice((currentPage - 1) * perPage, currentPage * perPage));
-    //     }
-    // }, [currentPage, perPage]);
     useEffect(() => {
         if(values.length > 0) {
             setItemsPage(values.slice((currentPage - 1) * perPage, currentPage * perPage));
@@ -194,11 +187,36 @@ const ReviewTable = ({ isManagerMode }) => {
 
                 return res;
             });
-            // w = w.filter(x => x.checked === isWaiting || x.checked === isChecked || x.deleted === isDeleted);
         }
 
         setValues(w);
     }, [filters]);
+
+    const sort = (e, prop) => {
+        if(!prop) {
+            return;
+        }
+
+        const order = (e.target.dataset.order = -(e.target.dataset.order || -1));
+
+        const comparator = (a, b) => {
+            if (a[prop] < b[prop] ){
+                return -1 * order;
+            }
+            if (a[prop] > b[prop] ){
+                return 1 * order;
+            }
+            return 0;
+        }
+
+        values.sort(comparator);
+
+        setValues([...values]);
+
+        for(const cell of e.target.parentNode.cells) {
+            cell.classList.toggle('sorted', cell === e.target);
+        }
+    }
 
     return (
         <>
@@ -223,12 +241,12 @@ const ReviewTable = ({ isManagerMode }) => {
                 </caption>
                 <thead>
                     <tr>
-                        <th className='text-center sortable' onClick={ tbl.sort }>№</th>
-                        { isManagerMode === true && <th className="sortable" onClick={ tbl.sort }>Username</th> }
-                        <th className="sortable" onClick={ tbl.sort }>Дата</th>
-                        <th className="sortable" onClick={ tbl.sort }>Текст</th>
+                        <th className='text-center'>№</th>
+                        { isManagerMode === true && <th className="sortable" onClick={ (e) => sort(e, 'userName') }>Username</th> }
+                        <th className="sortable" onClick={ (e) => sort(e, 'date') }>Дата</th>
+                        <th className="sortable" onClick={ (e) => sort(e, 'text') }>Текст</th>
                         <th>Товар</th>
-                        { isManagerMode !== true && <th className="sortable" onClick={ tbl.sort }>Статус</th>}
+                        { isManagerMode !== true && <th>Статус</th>}
                         <th></th>
                     </tr>
                 </thead>

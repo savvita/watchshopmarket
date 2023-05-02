@@ -1,14 +1,11 @@
 
 
-import tbl from '../../modules/sort'; 
-
-
 import { Collapse, Navbar, NavbarToggler, Spinner, Table } from 'reactstrap';
 import OrderTableRow from './OrderTableRow';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectValues, selectStatus, getAsync, cancelAsync, acceptAsync, getNewAsync, setStatusAsync } from '../../app/orderSlice';
+import { selectValues, selectStatus, getAsync, cancelAsync, acceptAsync, getNewAsync } from '../../app/orderSlice';
 import { selectValues as selectStatusses, getAsync as getStatusses } from '../../app/orderstatusSlice';
 
 import { useEffect, useState } from 'react';
@@ -23,7 +20,7 @@ const OrderTable = ({ isManagerMode, isUserMode, statusses }) => {
     const [infoText, setInfoText] = useState('');
 
     
-    const orders = useSelector(selectValues);
+    const values = useSelector(selectValues);
     const status = useSelector(selectStatus);
 
     const orderStatusses = useSelector(selectStatusses);
@@ -34,6 +31,7 @@ const OrderTable = ({ isManagerMode, isUserMode, statusses }) => {
     const [pages, setPages] = useState([]);
 
     const [items, setItems] = useState([]);
+    const [itemsPage, setItemsPage] = useState([]);
 
     const [errorTxt, setErrorTxt] = useState([]);
     const [collapsed, setCollapsed] = useState(true);
@@ -58,7 +56,6 @@ const OrderTable = ({ isManagerMode, isUserMode, statusses }) => {
         await dispatch(getAsync(request));
     }
 
-
     useEffect(() => {
         pages.splice(0, pages.length);
         pages.push(10);
@@ -70,19 +67,26 @@ const OrderTable = ({ isManagerMode, isUserMode, statusses }) => {
     }, []);
 
     useEffect(() => {
-        if(!orders) {
+        if(values) {
+            setItems([...values]);
+            setCurrentPage(1);
+        }
+    }, [values]);
+
+    useEffect(() => {
+        if(!items) {
             return;
         }
-
-        setItems(orders.slice((currentPage - 1) * perPage, (currentPage - 1) * perPage + perPage));
-    }, [currentPage, orders, perPage]);
+        
+        setItemsPage(items.slice((currentPage - 1) * perPage, (currentPage - 1) * perPage + perPage));
+    }, [currentPage, items, perPage]);
 
     useEffect(() => {
         load();
     }, [isManagerMode, isUserMode, statusses]);
 
     useEffect(() => {
-        let w = orders;
+        let w = values;
         
         if(filters.user) {
             w = w.filter( x => 
@@ -150,6 +154,48 @@ const OrderTable = ({ isManagerMode, isUserMode, statusses }) => {
         }
     }
 
+    const sort = (e, prop) => {
+        if(!prop) {
+            return;
+        }
+
+        const order = (e.target.dataset.order = -(e.target.dataset.order || -1));
+
+        const comparator = (a, b) => {
+            if (a[prop] < b[prop] ){
+                return -1 * order;
+            }
+            if (a[prop] > b[prop] ){
+                return 1 * order;
+            }
+            return 0;
+        }
+
+        const statusComparator = (a, b) => {
+            if(a.status === null) {
+                return 1 * order;
+            }
+            if(b.status === null) {
+                return -1 * order;
+            }
+            if (a.status.value < b.status.value ){
+                return -1 * order;
+            }
+            if (a.status.value > b.status.value ){
+                return 1 * order;
+            }
+            return 0;
+        }
+
+        items.sort(prop !== 'status' ? comparator : statusComparator);
+
+        setItems([...items]);
+
+        for(const cell of e.target.parentNode.cells) {
+            cell.classList.toggle('sorted', cell === e.target);
+        }
+    }
+
     return (
         <div className="text-white flex-grow-1">
             <h2 className="text-center mt-4">Замовлення</h2>
@@ -168,12 +214,12 @@ const OrderTable = ({ isManagerMode, isUserMode, statusses }) => {
             <Table dark className='mt-4 table_sort'  style={{ width: '100%' }}>
                 <thead>
                     <tr className="text-center">
-                        <th scope="col" className='sortable' onClick={ tbl.sort }>№</th>
-                        <th scope="col" className='sortable' onClick={ tbl.sort }>Id</th>
-                        <th scope="col" className='sortable' onClick={ tbl.sort }>Дата створення</th>
-                        { isManagerMode ? <th scope="col" className='sortable' onClick={ tbl.sort }>Користувач</th> : <th className="m-0 p-0"></th> }
-                        <th scope="col" className='sortable' onClick={ tbl.sort }>Статус</th>
-                        <th scope="col" className='sortable' onClick={ tbl.sort }>Сума</th>
+                        <th scope="col">№</th>
+                        <th scope="col" className='sortable' onClick={ (e) => sort(e, 'id') }>Id</th>
+                        <th scope="col" className='sortable' onClick={ (e) => sort(e, 'date') }>Дата створення</th>
+                        { isManagerMode ? <th scope="col" className='sortable' onClick={ (e) => sort(e, 'userId') }>Користувач</th> : <th className="m-0 p-0"></th> }
+                        <th scope="col" className='sortable' onClick={ (e) => sort(e, 'status') }>Статус</th>
+                        <th scope="col">Сума</th>
                         <th scope="col">Переглянути</th>
                         
                         { isUserMode ? <th scope="col">Скасувати</th> : <th className="m-0 p-0"></th> }
@@ -181,12 +227,12 @@ const OrderTable = ({ isManagerMode, isUserMode, statusses }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    { items && items.map((x, i) => <OrderTableRow key={ x.id } idx={ i + 1 } item={ x } isUserMode={ isUserMode } isManagerMode={ isManagerMode } statusses={ statusses } onCancel={ cancelOrder } onAccept={ acceptOrder } />) }
+                    { itemsPage && itemsPage.map((x, i) => <OrderTableRow key={ x.id } idx={ i + 1 } item={ x } isUserMode={ isUserMode } isManagerMode={ isManagerMode } statusses={ statusses } onCancel={ cancelOrder } onAccept={ acceptOrder } />) }
                 </tbody>
             </Table>
             <InfoModal isOpen={ infoModal } onAccept={ () => setInfoModal(false) } title={ infoHeader } text={ infoText } />
                 <div className={ status === 'loading' ? 'd-flex justify-content-center' : 'd-none' }><Spinner color="light">Loading...</Spinner></div>
-                { orders && <Pagination currentPage={ currentPage } hits={ orders.length } perPage={ perPage } className={ status !== 'idle' && 'd-none' } onPageChanged={ (page) => setCurrentPage(page) } /> }
+                { items && <Pagination currentPage={ currentPage } hits={ items.length } perPage={ perPage } className={ status !== 'idle' && 'd-none' } onPageChanged={ (page) => setCurrentPage(page) } /> }
         </div>
     );
 }

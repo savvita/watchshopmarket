@@ -85,11 +85,13 @@ const UserTable = () => {
         }
 
         if(filters.bans.length > 0) {
-            if(filters.bans.includes(true)) {
-                w = w.filter(x => x.isActive === false);
-            }
-            if(filters.bans.includes(false)) {
-                w = w.filter(x => x.isActive === true);
+            if(!(filters.bans.includes(true) && filters.bans.includes(false))) {
+                if(filters.bans.includes(true)) {
+                    w = w.filter(x => x.isActive === false);
+                }
+                if(filters.bans.includes(false)) {
+                    w = w.filter(x => x.isActive === true);
+                }
             }
         }
 
@@ -156,6 +158,32 @@ const UserTable = () => {
         }
     }
 
+    const sort = (e, prop) => {
+        if(!prop) {
+            return;
+        }
+
+        const order = (e.target.dataset.order = -(e.target.dataset.order || -1));
+
+        const comparator = (a, b) => {
+            if (a[prop] < b[prop] ){
+                return -1 * order;
+            }
+            if (a[prop] > b[prop] ){
+                return 1 * order;
+            }
+            return 0;
+        }
+
+        items.sort(comparator);
+
+        setItems([...items]);
+
+        for(const cell of e.target.parentNode.cells) {
+            cell.classList.toggle('sorted', cell === e.target);
+        }
+    }
+
     return (
         <>
             <Row>
@@ -188,12 +216,12 @@ const UserTable = () => {
                 </caption>
                 <thead>
                     <tr className="text-center fs-6">
-                        <th scope="col" className='sortable' onClick={ tbl.sort }>№</th>
-                        <th scope="col" className='sortable' onClick={ tbl.sort }>Логін</th>
-                        <th scope="col" className='sortable' onClick={ tbl.sort }>Email</th>
-                        <th scope="col" className='sortable' onClick={ tbl.sort }>Менеджер</th>
-                        <th scope="col" className='sortable' onClick={ tbl.sort }>Адмін</th>
-                        <th scope="col" className='sortable' onClick={ tbl.sort }>Заблоковано</th>
+                        <th scope="col">№</th>
+                        <th scope="col" className='sortable' onClick={ (e) => sort(e, 'userName') }>Логін</th>
+                        <th scope="col" className='sortable' onClick={ (e) => sort(e, 'email') }>Email</th>
+                        <th scope="col" className='sortable' onClick={ (e) => sort(e, 'isManager') }>Менеджер</th>
+                        <th scope="col" className='sortable' onClick={ (e) => sort(e, 'isAdmin') }>Адмін</th>
+                        <th scope="col" className='sortable' onClick={ (e) => sort(e, 'isActive') }>Заблоковано</th>
                     </tr>
                 </thead>
                 <tbody>
