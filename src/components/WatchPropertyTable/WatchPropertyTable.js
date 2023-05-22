@@ -104,7 +104,8 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
         }
 
         const res = await dispatch(create(watch));
-        if(!res.payload || res.payload.status) {
+
+        if(!res.payload || !res.payload.value || res.payload.status) {
             showError();
             return;
         }
@@ -140,7 +141,7 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
 
         const res = await dispatch(update(watch));
 
-        if(!res.payload || !res.payload) {
+        if(!res.payload) {
             showError();
             return;
         }
@@ -160,6 +161,9 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
                 showError("Помилка", "Запис було змінено іншим користувачем");
                 return;
             }
+        }
+        else {
+            showError();
         }
      }
 
@@ -252,7 +256,8 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
         setWatchModal(true);
      }
 
-     const onCancel = () => {
+     const onCancel = (e) => {
+        e.preventDefault();
         dispatch(setCurrent(null));
         setWatchModal(false);
      }

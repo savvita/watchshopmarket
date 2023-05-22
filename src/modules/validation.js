@@ -55,6 +55,18 @@ const positiveIntValidationRule = (value) => {
     return parseInt(value).toString() === value && parseInt(value) >= 0;
 }
 
+const intValidationRule = (value) => {
+    if(!value) {
+        return false;
+    }
+
+    if(typeof value === 'number') {
+        return true;
+    }
+
+    return parseInt(value).toString() === value;
+}
+
 const discountValidation = (value) => {
     if(!value) {
         return true;
@@ -100,7 +112,8 @@ const functions = {
     nullOrPositiveFloatValidationRule: nullOrPositiveFloatValidationRule,
     discountValidation: discountValidation,
     validateWatch: validateWatch,
-    digitsOnlyValidationRule: digitsOnlyValidationRule
+    digitsOnlyValidationRule: digitsOnlyValidationRule,
+    intValidationRule: intValidationRule
 };
 
 export default functions;

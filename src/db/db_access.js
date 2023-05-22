@@ -662,6 +662,20 @@ const Sales = function() {
     }
 }
 
+const Slides = function() {
+    basic.call(this, `${api}/slides`);
+    this.getAll = async function() {
+        return await db_get(`${this.url}/all`);
+    }
+}
+
+const Promotions = function() {
+    basic.call(this, `${api}/promotions`);
+    this.getAll = async function() {
+        return await db_get(`${this.url}/all`);
+    }
+}
+
 //========= Authorization ====================
 const signIn = async (login, password) => {
     return await db_post(`${api}/auth`, { userName: login, password: password });
@@ -710,7 +724,9 @@ const functions = {
     Cities: new Cities(),
     Reviews: new Reviews(),
     Warehouses: new Warehouses(),
-    Sales: new Sales()
+    Sales: new Sales(),
+    Slides: new Slides(),
+    Promotions: new Promotions()
 };
 
 export default functions;

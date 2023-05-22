@@ -2,6 +2,10 @@ body {
   box-sizing: border-box;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 thead th, td {
     padding-left: 30px !important;
     padding-right: 30px !important;

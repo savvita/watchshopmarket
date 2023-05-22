@@ -108,12 +108,24 @@ const ManagerSidebar = () => {
         }
     ];
 
+    const slides = [
+        { 
+            heading: 'Слайди',
+            link: 'slide' 
+        }, 
+        { 
+            heading: 'Акції',
+            link: 'promotion' 
+        }, 
+    ];
+
     return (
         <div className='d-flex flex-column'>
             <Collapse heading='Характеристики' items={ properties } />
             <Collapse heading='Товари' items={ articles } />
             <Collapse heading='Замовлення' items={ orders } />
             <Collapse heading='Відгуки' items={ reviews } />
+            <Collapse heading='Слайди та акції' items={ slides } />
         </div>
     );
 }

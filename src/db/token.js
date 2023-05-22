@@ -26,7 +26,7 @@ const getUserInfo = () => {
     return {
         userName: parsedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],
         expired: Date.now() - parsedToken["exp"] * 1000 > 0,
-        isActive: parsedToken["IsActive"].toLowerCase() === 'true',
+        isActive: parsedToken["IsActive"] ? parsedToken["IsActive"].toLowerCase() === 'true' : false,
         isUser: parsedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('User'),
         isManager: parsedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Manager'),
         isAdmin: parsedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Admin')

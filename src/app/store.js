@@ -28,6 +28,8 @@ import orderstatusReducer from './orderstatusSlice';
 import reviewReducer from './reviewSlice';
 import fileReducer from './fileSlice';
 import salesReducer from './salesSlice';
+import slideReducer from './slideSlice';
+import promotionReducer from './promotionSlice';
 
 export const store = configureStore( {
     reducer: {
@@ -58,6 +60,8 @@ export const store = configureStore( {
         orderstatus: orderstatusReducer,
         review: reviewReducer,
         file: fileReducer,
-        sales: salesReducer
+        sales: salesReducer,
+        slide: slideReducer,
+        promotion: promotionReducer
     }
 });

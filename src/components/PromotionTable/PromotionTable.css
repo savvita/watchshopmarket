@@ -1,0 +1,8 @@
+
+.tooltip-inner{
+    max-width: 40rem !important;
+}
+
+.tooltip-inner li{
+    text-align: left;
+}

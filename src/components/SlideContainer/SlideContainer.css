@@ -1,0 +1,7 @@
+.slide-form__img-container {
+    height: 50vh;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+}

@@ -84,7 +84,8 @@ const WatchForm = ({ isOpen, item, setItem, onAccept, onCancel }) => {
     }, [isOpen]);
 
 
-    const accept = () => { 
+    const accept = (e) => { 
+        e.preventDefault();
         const errors = validation.validateWatch(item);
        
         if(errors.length > 0) {

@@ -33,7 +33,6 @@ const FileTable = () => {
     const [perPage, setPerPage] = useState(10);
     const [pages, setPages] = useState([]);
 
-    const [remove, setRemove] = useState(null);
 
     const [selected, setSelected] = useState([]);
 
@@ -49,6 +48,10 @@ const FileTable = () => {
     useEffect(() => {
         if(values && values.value) {
             setItems([...values.value]);
+            setCurrentPage(1);
+        }
+        else {
+            setItems([]);
             setCurrentPage(1);
         }
     }, [values]);
@@ -72,11 +75,13 @@ const FileTable = () => {
             }
 
             setInfoHeader(`Видалення файлів`);
+            setInfoText("Ви впевнені, що хочете видалити всі файли?");
             setSelected([...values.value]);
         }
         else {
             setSelected([item]);
             setInfoHeader(`Видалення файлу ${ item }`);
+            setInfoText("Ви впевнені, що хочете видалити цей файл?");
         }
 
         setModal(true);
@@ -95,7 +100,29 @@ const FileTable = () => {
             setInfoModal(true);
         }
         else {
-            dispatch(getAsync());
+            await dispatch(getAsync());
+        }
+    }
+
+    const sort = (e) => {
+        const order = (e.target.dataset.order = -(e.target.dataset.order || -1));
+
+        const comparator = (a, b) => {
+            if (a < b ){
+                return -1 * order;
+            }
+            if (a > b ){
+                return 1 * order;
+            }
+            return 0;
+        }
+
+        items.sort(comparator);
+
+        setItems([...items]);
+
+        for(const cell of e.target.parentNode.cells) {
+            cell.classList.toggle('sorted', cell === e.target);
         }
     }
 
@@ -128,7 +155,7 @@ const FileTable = () => {
                 <thead>
                     <tr>
                         <th className='text-center'>№</th>
-                        <th className="sortable" onClick={ tbl.sort }>Файл</th>
+                        <th className="sortable" onClick={ (e) => sort(e) }>Файл</th>
                         <th>Завантажити</th>
                         <th>Видалити</th>
                     </tr>
@@ -147,8 +174,8 @@ const FileTable = () => {
                     </tr>
                 </tfoot>
             </Table>
-            <ConfirmDeletingModal isOpen={ modal } onCancel={ () => setModal(false) } onAccept={ deleteItem } header={ infoHeader } />
-            <InfoModal isOpen={ infoModal } onAccept={ () => setInfoModal(false) }  text={ infoText } title={ infoHeader } />
+            <ConfirmDeletingModal isOpen={ modal } onCancel={ () => setModal(false) } onAccept={ deleteItem } header={ infoHeader }  text={ infoText } />
+            <InfoModal isOpen={ infoModal } onAccept={ () => setInfoModal(false) } text={ infoText } title={ infoHeader } />
         </>
     );
 }

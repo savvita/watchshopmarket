@@ -56,6 +56,9 @@ import Returning from './layouts/Returning';
 import UserProfile from './layouts/UserProfile';
 import User from './layouts/User';
 import UserInfo from './components/UserInfo/UserInfo';
+import Promotion from './layouts/Promotion';
+import PromotionDetail from './layouts/PromotionDetail';
+import Slide from './layouts/Slide';
 
 function App() {
   return (
@@ -73,6 +76,7 @@ function App() {
             <Route path="basket" element={ <Basket /> } />
             <Route path="watches/:id" element={ <WatchInfoPage /> } />
             <Route path="orders/:id" element={ <OrderDetail isManagerMode={ false } /> } />
+            <Route path="promotion/:id" element={ <PromotionDetail isManagerMode={ false } /> } />
           </Route>
           <Route path="/user" element={ <User /> }>
             <Route path="profile" element={ <UserProfile /> } />
@@ -96,6 +100,8 @@ function App() {
             <Route path="movementtype" element={ <MovementType /> } />  
             <Route path="straptype" element={ <StrapType /> } />  
             <Route path="watch" element={ <Watch /> } />  
+            <Route path="promotion" element={ <Promotion /> } />  
+            <Route path="slide" element={ <Slide /> } />  
             <Route path="orders" element={ <Orders isManagerMode={ true } /> } />
             <Route path="orders/new" element={ <Orders statusses={ [1] } /> } />  
             <Route path="reviews/new" element={ <ReviewTable isManagerMode={ true } /> } />  
@@ -117,6 +123,7 @@ function App() {
             <Route path="collection/:id" element={ <CollectionDetail /> } />
             <Route path="caseshape/:id" element={ <CaseShapeDetail /> } />
             <Route path="brand/:id" element={ <BrandDetail /> } />
+            <Route path="promotion/:id" element={ <PromotionDetail isManagerMode={ true } /> } />
           </Route>      
           <Route path="/admin" element={ <Admin /> }>
             <Route path="payment" element={ <Payment /> } />
