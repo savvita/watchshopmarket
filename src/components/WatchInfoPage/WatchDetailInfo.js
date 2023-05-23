@@ -28,9 +28,10 @@ const WatchDetailInfo = ({ item, className }) => {
 
     if(!item) return null;
 
-    const saveReview = async (text) => {
+    const saveReview = async (val) => {
         const review = {
-            text: text,
+            text: val.value,
+            rate: val.rate,
             watchId: item.id
         };
 

@@ -3,11 +3,15 @@ import { FaBan, FaCheck } from "react-icons/fa";
 import { FormFeedback, Input, UncontrolledTooltip } from "reactstrap";
 
 
-
+import Rater from 'react-rater';
+import 'react-rater/lib/react-rater.css';
 
 
 const EditableCell = ({ item, editMode, onAccept, onCancel, validationRule, validationErrorText }) => {
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState({
+        text: '',
+        rate: null
+    });
     const [isValid, setIsValid] = useState(false);
 
     useEffect(() => {
@@ -15,7 +19,10 @@ const EditableCell = ({ item, editMode, onAccept, onCancel, validationRule, vali
             return;
         }
 
-        setValue(item.text ?? "");
+        setValue({
+            text: item.text ?? "",
+            rate: item.rate
+        });
         if(validationRule) {
             setIsValid(validationRule(item.text));
         }
@@ -26,7 +33,10 @@ const EditableCell = ({ item, editMode, onAccept, onCancel, validationRule, vali
 
     const handleInput = (e) => {
         const isValid = validationRule ? validationRule(e.target.value) : true;
-        setValue(e.target.value);
+        setValue({
+            ...value,
+            text: e.target.value
+        });
         setIsValid(isValid);
     }
 
@@ -38,18 +48,29 @@ const EditableCell = ({ item, editMode, onAccept, onCancel, validationRule, vali
 
     const cancel = () => {
         if(item) {
-            setValue(item.text);
+            setValue({
+                text: item.text,
+                rate: item.rate
+            });
             setIsValid(true);
         }
         onCancel && onCancel();
+    }
+
+    const setRate = (e) => {
+        setValue({
+            ...value,
+            rate: e.rating
+        })
     }
 
     return (
         <>
             { editMode ?
                 <div>
+                    <Rater total={5} rating={value.rate ?? 0} style={{ fontSize: '2rem' }} onRate={ setRate } />
                     <div className="position-relative">
-                        <Input type="textarea" value={ value } onInput={ handleInput } invalid={ !isValid } style={{ minHeight: '20rem' }} maxLength="500" />
+                        <Input type="textarea" value={ value.text } onInput={ handleInput } invalid={ !isValid } style={{ minHeight: '20rem' }} maxLength="500" />
                         <FormFeedback tooltip>{ validationErrorText }</FormFeedback>
                     </div>
                     <div className="text-nowrap">
@@ -68,7 +89,7 @@ const EditableCell = ({ item, editMode, onAccept, onCancel, validationRule, vali
                     </div>
                 </div>
                 :
-                value
+                value.text
             }
         </>
     );

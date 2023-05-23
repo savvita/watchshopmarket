@@ -27,18 +27,18 @@ const ReviewTableRow = ({ item, idx, onCheck, onUpdate, onDelete, isManagerMode 
         setEditMode(false);
     }
 
-    const save = (text) => {
-        if(!text || !item) {
+    const save = (val) => {
+        if(!val || !item) {
             return;
         }
 
-        if(!validation(item.text)) {
+        if(!validation(val.text)) {
             return;
         }
 
         setEditMode(false);
 
-        const value ={ ...item, text: text, checked: false };
+        const value ={ ...item, text: val.text, rate: val.rate, checked: false };
         onUpdate && onUpdate(value);
     }
 

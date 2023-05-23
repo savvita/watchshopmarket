@@ -19,6 +19,9 @@ import WatchDetailInfo from './WatchDetailInfo';
 
 import validation from '../../modules/validation';
 
+import Rater from 'react-rater';
+import 'react-rater/lib/react-rater.css';
+
 const WatchInfoPage = () => {
     const [count, setCount] = useState(1);
     const [isValid, setIsValid] = useState(true);
@@ -73,7 +76,7 @@ const WatchInfoPage = () => {
 
     return (
         <div>
-            <div className={ status === 'loading' ? 'd-flex justify-content-center' : 'd-none' }><Spinner color="light">Loading...</Spinner></div>
+            <div className={ status === 'loading' ? 'd-flex justify-content-center mt-3' : 'd-none' }><Spinner color="light">Loading...</Spinner></div>
             { item &&
                 <div className="mt-4">
                     <div className={ status !== 'idle' ? 'd-none' : '' }>
@@ -85,6 +88,7 @@ const WatchInfoPage = () => {
                                 <Row>
                                     <Col sm="12">
                                         <h2 className="text-white mb-4">{ item.title }</h2>
+                                        { item.votes > 0 && <Rater total={ 5 } rating={ item.rate } interactive={ false } style={{ fontSize: '2rem' }} /> }
                                     </Col>
                                 </Row>
                                 <Row>

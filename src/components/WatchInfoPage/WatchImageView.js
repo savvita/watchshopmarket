@@ -14,7 +14,7 @@ const WatchImageView = ({ item }) => {
         
         setCurrent(item.images[0]);
 
-    }, []);
+    }, [item]);
 
     return (
         <div className="d-flex flex-column align-items-center bg-light rounded-3 overflow-hidden">

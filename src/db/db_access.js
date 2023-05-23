@@ -435,7 +435,7 @@ const Reviews = function() {
         return await db_get(`${this.url}/user`);
     }
     this.create = async function(params) {
-        return await db_post(`${this.url}/${params.watchId}`, params.text);
+        return await db_post(`${this.url}/${params.watchId}`, params);
     }
     this.getChecked = async function(check) {
         if(check !== undefined) {

@@ -88,3 +88,7 @@ th.sorted[data-order="1"]::after {
         width: 100%;
     }
 }
+
+.react-rater-star.is-active {
+    color: rgb(196, 127, 37) !important;
+}

@@ -6,6 +6,8 @@ import { Badge, Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Col, 
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
+import Rater from 'react-rater';
+import 'react-rater/lib/react-rater.css';
 
 
 const WatchCard = ({ item, onBuyClick }) => {
@@ -47,6 +49,12 @@ const WatchCard = ({ item, onBuyClick }) => {
                     <Col md="8" sm="12">
                         <CardBody className="top-watch-container__card-body">
                             <CardTitle tag="h5">{ item.title }</CardTitle>
+                            { item.votes > 0 && 
+                                <div>
+                                    <Rater total={ 5 } rating={ item.rate } interactive={ false } style={{ fontSize: '1.2rem' }} />
+                                    <span>({ item.votes })</span>
+                                </div>  
+                            }
                             <div className="d-flex top-watch-container__card-text">
                                 <CardSubtitle className={ item && item.discount ? "mb-2 me-4 text-decoration-line-through text-muted" : "mb-2 text-muted" } tag="h5">{ item.price }&nbsp;&#8372;</CardSubtitle>
                                 { item && item.discount && <CardSubtitle className="mb-2 text-muted" tag="h5">{ item.price - item.price * item.discount / 100 }&nbsp;&#8372;</CardSubtitle> }

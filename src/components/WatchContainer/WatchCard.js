@@ -8,6 +8,9 @@ import { useSelector } from 'react-redux';
 import './WatchContainer.css';
 import { useEffect, useState } from 'react';
 
+import Rater from 'react-rater';
+import 'react-rater/lib/react-rater.css';
+
 const WatchCard = ({ item, onBuyClick }) => {
     
     const user = useSelector(selectUser);
@@ -50,8 +53,15 @@ const WatchCard = ({ item, onBuyClick }) => {
                 </div>
 
                 <CardBody style={{ height: '10rem' }}>
-                    <CardTitle tag="h5">{ item.title }</CardTitle>
-                    <div className="d-flex">
+                    <CardTitle tag="h5" className='mb-0'>{ item.title }</CardTitle>
+                        { item.votes > 0 && 
+                            <div>
+                                <Rater total={ 5 } rating={ item.rate } interactive={ false } style={{ fontSize: '1.2rem' }} />
+                                <span>({ item.votes })</span>
+                            </div>  
+                        }
+                        <div className="d-flex mt-2">
+                        
                         <CardSubtitle className={ item && item.discount ? "mb-2 me-4 text-decoration-line-through text-muted" : "mb-2 text-muted" } tag="h5">{ item.price }&nbsp;&#8372;</CardSubtitle>
                         { item && item.discount && <CardSubtitle className="mb-2 text-muted" tag="h5">{ item.price - item.price * item.discount / 100 }&nbsp;&#8372;</CardSubtitle> }
                     </div>

@@ -51,6 +51,11 @@ const Catalog = () => {
             title: 'Від дорогих до дешевих',
             value: 2,
             select: () => dispatch(set({ ...filters, sorting: 'price',  sortingOrder: null }))
+        },
+        {
+            title: 'По рейтингу',
+            value: 3,
+            select: () => dispatch(set({ ...filters, sorting: 'rate',  sortingOrder: null }))
         }
     ];
 
@@ -139,7 +144,7 @@ const Catalog = () => {
                         <SortingSelect items={ sortingItems } onChange={ setSorting } />
                     </div>
                     <WatchContainer items={ values.value } />
-                    <div className={ status === 'loading' ? 'd-flex justify-content-center' : 'd-none' }><Spinner color="light">Loading...</Spinner></div>
+                    <div className={ status === 'loading' ? 'd-flex justify-content-center mt-3' : 'd-none' }><Spinner color="light">Loading...</Spinner></div>
                     { values.hits > 0 ? 
                         <Pagination currentPage={ currentPage } hits={ hits } perPage={ perPage } className={ status !== 'idle' && 'd-none' } onPageChanged={ (page) => setCurrentPage(page) } /> 
                         :
