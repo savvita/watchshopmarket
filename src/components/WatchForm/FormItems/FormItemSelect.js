@@ -10,6 +10,8 @@ const FormItemSelect = ({ name, title, items, initialIndex, onChange, onAdd }) =
     const [value, setValue] = useState('');
     const [isValid, setIsValid] = useState(false);
 
+    const [values, setValues] = useState([]);
+
     const [idx, setIdx] = useState(0);
 
     useEffect(() => {
@@ -17,6 +19,31 @@ const FormItemSelect = ({ name, title, items, initialIndex, onChange, onAdd }) =
             setIdx(initialIndex);
         }
     }, [initialIndex]);
+
+    useEffect(() => {
+        if(!items || !items.value) {
+            return;
+        }
+
+        let tmp = [...items.value];
+        tmp.sort(comparator);
+
+
+        setValues([...tmp]);
+    }, [items]);
+
+
+    const comparator = (a, b) => {
+        if(a.value < b.value) {
+            return -1;
+        }
+
+        if(a.value > b.value) {
+            return 1;
+        }
+
+        return 0;
+    }
 
     const handleInput = (e) => {
         setValue(e.target.value);
@@ -65,7 +92,7 @@ const FormItemSelect = ({ name, title, items, initialIndex, onChange, onAdd }) =
             </div>
             <Input name={ name } placeholder={ title } value={ idx ?? 0 } type="select" onChange={ (e) => onChange && onChange(e.target.value) }>
                 <option value={ 0 }>Виберіть...</option>
-                { items && items.value && items.value.map(item => <option key={ item.id } value={ item.id }>{ item.value }</option>)}
+                { values && values.map(item => <option key={ item.id } value={ item.id }>{ item.value }</option>)}
             </Input>
         </FormGroup>
     );

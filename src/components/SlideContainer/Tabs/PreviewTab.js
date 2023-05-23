@@ -99,7 +99,7 @@ const PreviewTab = ({ tabId, item, onChange }) => {
         <TabPane tabId={ tabId }>
             <FormGroup>
                 <Label>Завантажити зображення</Label>
-                <Input type="file" name="img" onChange={ handleFiles } size={ 1024 * 1024 } />
+                <Input type="file" name="img" onChange={ handleFiles } size={ 1024 * 1024 } accept="image/jpeg" />
                 { errors.map((item, idx) => <p key={ idx } className='text-danger'>{ item }</p>) }
             </FormGroup>
             <Row>

@@ -23,6 +23,39 @@ const FormItemSelectInto = ({ name, title, items, initialValues, onChange, onAdd
 
     }, []);
 
+    const comparator = (a, b) => {
+        if(a.value < b.value) {
+            return -1;
+        }
+
+        if(a.value > b.value) {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    useEffect(() => {
+        if(!items || !items.value) {
+            return;
+        }
+
+        let tmp = [...items.value];
+        tmp.sort(comparator);
+
+        if(initialValues) {
+            setSelectedItems(initialValues);
+            const values = tmp.filter(i => initialValues.find(item => item.id === i.id) === undefined);
+            setNotSelectedItems(values);
+            setNotSelectedItem(values.length > 0 ? values[0].id : -1);
+
+            setSelectedItem(initialValues.length > 0 ? initialValues[0].id : -1);
+        }
+        else {
+            setNotSelectedItems([...tmp]);
+        }
+    }, [items, initialValues]);
+
     const addToSelected = () => {
         if(!notSelectedItem || notSelectedItem <= 0) {
             return;

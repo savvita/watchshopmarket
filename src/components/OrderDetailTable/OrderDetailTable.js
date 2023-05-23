@@ -197,6 +197,12 @@ const OrderDetailTable = ({ item, isManagerMode, viewOnly }) => {
                 </tbody>
             </Table>
             <h3 className='text-white text-end text-nowrap'>Разом: { total } &#8372;</h3>
+            { item.comments && 
+                <div className="text-white">
+                    <h4>Коментар</h4>
+                    <p>{ item.comments }</p> 
+                </div>
+            }
             <InfoModal isOpen={ infoModal } onAccept={ () => setInfoModal(false) } title={ infoHeader } text={ infoText } />
         </div>
     );

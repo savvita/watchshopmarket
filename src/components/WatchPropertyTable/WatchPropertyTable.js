@@ -39,6 +39,9 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
 
     const toggleNavbar = () => setCollapsed(!collapsed);
 
+    const [sorting, setSorting] = useState({});
+    const [filters, setFilters] = useState({});
+
     useEffect(() => {
         if(!get) {
             return;
@@ -71,7 +74,7 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
         dispatch(get({ page: currentPage, perPage: perPage }));
     }, [currentPage, perPage]);
 
-    const filter = async (filters) => {
+    useEffect(() => {
         if(!get) {
             return;
         }
@@ -80,9 +83,24 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
             setCurrentPage(1);
         }
         else {
-            dispatch(get({ ...filters, page: currentPage, perPage: perPage }));
+            dispatch(get({ ...filters, page: currentPage, perPage: perPage, sorting: sorting.sorting, sortingOrder: sorting.sortingOrder }));
         }
+    }, [filters]);
+
+    const filter = async (filters) => {
+        setFilters({ ...filters, page: currentPage, perPage: perPage, sorting: sorting.sorting, sortingOrder: sorting.sortingOrder });
+        // if(!get) {
+        //     return;
+        // }
+
+        // if(currentPage !== 1) {
+        //     setCurrentPage(1);
+        // }
+        // else {
+        //     dispatch(get({ ...filters, page: currentPage, perPage: perPage, sorting: sorting.sorting, sortingOrder: sorting.sortingOrder }));
+        // }
     }
+
 
      const createItem = async (item, files) => {
         if(!create) {
@@ -262,6 +280,21 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
         setWatchModal(false);
      }
 
+     const sort = (e, prop) => {
+        if(!prop) {
+            return;
+        }
+
+        const order = (e.target.dataset.order = -(e.target.dataset.order || -1));
+
+        setSorting({ sorting: prop, sortingOrder: order > 0 ? 'asc' : 'null' });
+        setFilters({ ...filters, page: currentPage, perPage: perPage, sorting: prop, sortingOrder: order < 0 ? 'asc' : 'null' });
+
+        for(const cell of e.target.parentNode.cells) {
+            cell.classList.toggle('sorted', cell === e.target);
+        }
+    }
+
 
     return (
         <>
@@ -296,12 +329,12 @@ const WatchPropertyTable = ({ selectValues, selectCurrent, selectStatus, title, 
                 </caption>
                 <thead>
                     <tr>
-                        <th className='text-center sortable' onClick={ tbl.sort }>№</th>
-                        <th className="sortable" onClick={ tbl.sort }>Id</th>
-                        <th className="sortable" onClick={ tbl.sort }>Назва</th>
-                        <th className="sortable" onClick={ tbl.sort }>Модель</th>
-                        <th className="sortable" onClick={ tbl.sort }>Ціна</th>
-                        <th className="sortable" onClick={ tbl.sort }>Знижка(%)</th>
+                        <th className='text-center'>№</th>
+                        <th className="sortable" onClick={ (e) => sort(e, 'date') }>Id</th>
+                        <th className="sortable" onClick={ (e) => sort(e, 'title') }>Назва</th>
+                        <th className="sortable" onClick={ (e) => sort(e, 'model') }>Модель</th>
+                        <th className="sortable" onClick={ (e) => sort(e, 'price') }>Ціна</th>
+                        <th>Знижка(%)</th>
                         <th>В&nbsp;наявності</th>
                         <th>В&nbsp;продажі</th>
                         <th>TOP</th>

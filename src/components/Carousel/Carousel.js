@@ -41,12 +41,10 @@ const Carousel = (args) => {
         tmp.sort(comparator);
 
         if(tmp.length < 6) {
-            const idx = tmp[tmp.length - 1].index;
-
             let i = 0;
 
             while(tmp.length < 6 && i < emptySlides.length) {
-                tmp.push({ ...emptySlides[i]})
+                tmp.push({ ...emptySlides[i], index: 'index' + i })
                 i++;
             }
         }

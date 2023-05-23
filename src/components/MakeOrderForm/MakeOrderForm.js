@@ -3,7 +3,7 @@ import RadioFormGroup from './RadioFormGroup';
 import InputFormGroup from './InputFormGroup';
 import validation from '../../modules/validation';
 
-import { Button, Form } from "reactstrap";
+import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -23,8 +23,9 @@ const MakeOrderForm = ({ onAccept, onCancel }) => {
     const user = useSelector(selectCurrent);
     const dispatch = useDispatch();
 
-    const [order, setOrder] = useState({});
+    const [order, setOrder] = useState({ comments: '' });
     const [np, setNp] = useState(false);
+    const [commentValid, setCommentValid] = useState(true);
 
     const [infoModal, setInfoModal] = useState(false);
     const [infoHeader, setInfoHeader] = useState('');
@@ -93,7 +94,7 @@ const MakeOrderForm = ({ onAccept, onCancel }) => {
 
     const acceptOrder = () => {
         if(validate(order)) {
-            onAccept && onAccept(order);
+            onAccept && onAccept({ ...order, comments: order.comments.length > 0 ? order.comments : null });
         }
         else {
             showError('Помилка', 'Не всі обов’язкові поля заповнені');
@@ -108,10 +109,18 @@ const MakeOrderForm = ({ onAccept, onCancel }) => {
 
         const isNpValid = np === true ? order.settlementRef !== undefined && order.warehouseRef !== undefined : true;
 
-        const val = isTextValid && isDeliveryValid && isPaymentValid && isNpValid;
+        const isCommentValid = order.comments.length <= 500;
+
+        const val = isTextValid && isDeliveryValid && isPaymentValid && isNpValid && isCommentValid;
 
         return val;
     };
+
+    const setComments = (e) => {
+        const val = e.target.value;
+        setOrder({ ...order, comments: val });
+        setCommentValid(val.length <= 500);
+    }
 
     const showError = (title, text) => {
         setInfoHeader(title ?? 'Інформація');
@@ -134,6 +143,12 @@ const MakeOrderForm = ({ onAccept, onCancel }) => {
             }
 
             { payments && payments.value && <RadioFormGroup items={ payments.value } initialValue={ order.paymentId } title='Оплата' onChange={ setPayment } /> }
+
+            <FormGroup>
+                <Label>Коментар</Label>
+                <Input type="textarea" max={ 500 } placeholder="Коментар до замовлення" value={ order.comments } onInput={ setComments } invalid={ !commentValid } />
+                <FormFeedback tooltip>Максимум 500 символів</FormFeedback>
+            </FormGroup>
 
             <Button className='m-2' onClick={ acceptOrder }>Надіслати замовлення</Button>
             <Button className='m-2' onClick={ clearInfo }>Скасувати</Button>

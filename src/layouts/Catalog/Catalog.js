@@ -15,6 +15,7 @@ import { useState, useEffect } from 'react';
 import './Catalog.css';
 import { FaRegWindowClose } from 'react-icons/fa';
 import GoTop from '../../components/GoTop';
+import SortingSelect from '../../components/SortingSelect';
 
 const Catalog = () => {
     const values = useSelector(selectValues);
@@ -34,6 +35,24 @@ const Catalog = () => {
 
     
     const [filterText, setFilterText] = useState([]);
+
+    const sortingItems = [
+        {
+            title: 'Новинки',
+            value: 0,
+            select: () => dispatch(set({ ...filters, sorting: 'date',  sortingOrder: null }))
+        },
+        {
+            title: 'Від дешевих до дорогих',
+            value: 1,
+            select: () => dispatch(set({ ...filters, sorting: 'price', sortingOrder: 'asc' }))
+        },
+        {
+            title: 'Від дорогих до дешевих',
+            value: 2,
+            select: () => dispatch(set({ ...filters, sorting: 'price',  sortingOrder: null }))
+        }
+    ];
 
     useEffect(() => {
         pages.splice(0, pages.length);
@@ -82,6 +101,13 @@ const Catalog = () => {
         setClear(true);
     }
 
+    const setSorting = (value) => {
+        const sort = sortingItems.find(x => x.value.toString() === value);
+        if(sort) {
+            sort.select();
+        }
+    }
+
     return (
 
         <div className="pt-4">
@@ -108,8 +134,10 @@ const Catalog = () => {
                             { filterText.map((item, idx) => <p key={ idx } className="m-1 border border-light rounded-5 p-2 ps-3 pe-3 d-inline-block">{ item }</p>) }
                         </div>
                     }
-                    <div className="text-white d-flex justify-content-end mb-2">
-                    <PerPageSelect values={ pages } onChange={ (idx) => setPerPage(pages[idx]) } /></div>
+                    <div className="text-white d-flex justify-content-between mb-2">
+                        <PerPageSelect values={ pages } onChange={ (idx) => setPerPage(pages[idx]) } />
+                        <SortingSelect items={ sortingItems } onChange={ setSorting } />
+                    </div>
                     <WatchContainer items={ values.value } />
                     <div className={ status === 'loading' ? 'd-flex justify-content-center' : 'd-none' }><Spinner color="light">Loading...</Spinner></div>
                     { values.hits > 0 ? 

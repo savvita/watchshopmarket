@@ -172,6 +172,14 @@ const getUrl = (filters) => {
         }
     }
 
+    if(filters.sorting) {
+         url += `&sorting=${filters.sorting}`;
+    }
+
+    if(filters.sortingOrder) {
+        url += `&sortingOrder=${filters.sortingOrder}`;
+   }
+
     return url;
 }
 
