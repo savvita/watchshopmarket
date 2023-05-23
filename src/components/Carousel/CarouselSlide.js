@@ -1,4 +1,5 @@
 import { createRef, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 
 const CarouselSlide = ({ item }) => {
@@ -19,7 +20,7 @@ const CarouselSlide = ({ item }) => {
     return (
         <div>
             { item.promotion ? 
-                <a href={ `/promotion/${ item.promotion.id }` }>
+                <Link to={ `/promotion/${ item.promotion.id }` }>
                     <div className="position-relative" ref={ refImgContainer } style={{ objectFit: 'cover', overflow: 'hidden' }}>
                         <img src={ item.imageUrl} style={{ objectFit: 'cover', maxHeight: '100%', maxWidth: '100%' }} />
                         { item.texts && item.texts.map((i, idx) => 
@@ -31,7 +32,7 @@ const CarouselSlide = ({ item }) => {
                             }} >{ i.text }</span>
                         ) }
                     </div>
-                </a>
+                </Link>
                 :
                 <div className="position-relative" ref={ refImgContainer } style={{ objectFit: 'cover', overflow: 'hidden' }}>
                 <img src={ item.imageUrl} style={{ objectFit: 'cover', maxHeight: '100%', maxWidth: '100%' }} />

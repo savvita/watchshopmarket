@@ -167,6 +167,8 @@ const UserProfileTable = () => {
         }
         else {
             setEditMode(false);
+            dispatch(getProfileAsync(user.userName));
+
         }
     }
 
