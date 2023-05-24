@@ -1,6 +1,4 @@
-import { Col, Label, Row } from "reactstrap";
-
-
+import { Col, Row } from "reactstrap";
 
 
 
@@ -36,6 +34,7 @@ const UserData = ({ item }) => {
                 <Col xs="12" sm="6" md="4">Email:</Col>
                 <Col xs="12" sm="6" md="8">{ item.email }</Col>
             </Row>
+
             <Row className="p-2 border-bottom ms-2 me-2 userprofile-table__row">
                 <Col xs="12" sm="6" md="4">Телефон:</Col>
                 <Col xs="12" sm="6" md="8">{ item.phoneNumber }</Col>

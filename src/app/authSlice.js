@@ -65,6 +65,14 @@ export const signInAsync = createAsyncThunk(
     }
   );
 
+  export const confirmEmailAsync = createAsyncThunk(
+    'auth/confirmemail',
+    async () => {
+      const response = await db.Users.confirmEmail();
+      return response;
+    }
+  );
+
 export const authSlice = createSlice({
         name: 'auth',
         initialState: {
@@ -174,6 +182,14 @@ export const authSlice = createSlice({
                   else {
                     state.currentValue = null;
                   }
+                return state;
+              })
+              .addCase(confirmEmailAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(confirmEmailAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+
                 return state;
               });
           },

@@ -6,16 +6,17 @@ import { Button, Col, Label, Row, Spinner } from "reactstrap";
 
 import validation from '../../modules/validation';
 
-import { selectProfile, selectCurrent, selectStatus, getProfileAsync, updateAsync, deleteAsync, logOut } from '../../app/authSlice';
+import { selectProfile, selectCurrent, selectStatus, getProfileAsync, updateAsync, deleteAsync, logOut, confirmEmailAsync } from '../../app/authSlice';
 import EditableCell from "./EditableCell";
 
 import './UserProfileTable.css';
 import InfoModal from "../InfoModal";
 import ConfirmDeletingModal from "./ConfirmDeletingModal";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const UserProfileTable = () => {
+    const navigate = useNavigate();
     const profile = useSelector(selectProfile);
     const user = useSelector(selectCurrent);
     const status = useSelector(selectStatus);
@@ -194,6 +195,19 @@ const UserProfileTable = () => {
         setDeleteModal(false);
     }
 
+    const confirmEmail = async () => {
+        const res = await dispatch(confirmEmailAsync());
+        console.log(res);
+        if(!res || !res.payload || !res.payload.value || res.payload.value.statusCode !== 200) {
+            setInfoHeader('Помилка');
+            setInfoText(`Виникла помилка. Спробуйте пізніше`);
+            setInfoModal(true);
+        }
+        else {
+            navigate("/user/emailconfirmation");
+        }
+    }
+
     return (
         <div>
             { user && user.isActive && profile &&
@@ -254,6 +268,7 @@ const UserProfileTable = () => {
                         </Col>
                         <Col sm="12" md="8">
                             <EditableCell value={ values.email.value } editMode={ editMode } onInput={ value => setValue("email", value) } validationRule={ validation.notEmptyValidationRule } validationErrorText="Обов’язкове поле" maxLenght="256" />
+                            { profile && !profile.emailConfirmed && !editMode && <Button color='warning' className="ms-3" onClick={ confirmEmail }>Підтвердити Email</Button> }
                         </Col>
                     </Row>
 

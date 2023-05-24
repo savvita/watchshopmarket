@@ -458,6 +458,10 @@ const Users = function() {
     
         return await db_put(`${this.url}/restore/${id}`, {});
     }
+
+    this.confirmEmail = async function() {
+        return await db_get(`${api}/auth/confirmation`);
+    }
 }
 
 const Payments = function() {

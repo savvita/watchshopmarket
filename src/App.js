@@ -59,6 +59,7 @@ import UserInfo from './components/UserInfo/UserInfo';
 import Promotion from './layouts/Promotion';
 import PromotionDetail from './layouts/PromotionDetail';
 import Slide from './layouts/Slide';
+import EmailConfirmation from './layouts/EmailConfirmation';
 
 function App() {
   return (
@@ -82,6 +83,8 @@ function App() {
             <Route path="profile" element={ <UserProfile /> } />
             <Route path="myorders" element={ <Orders isUserMode={ true } /> } />
             <Route path="reviews" element={ <ReviewTable /> } /> 
+            <Route path="emailconfirmation" element={ <EmailConfirmation /> } /> 
+            <Route path="emailconfirmation/:result" element={ <EmailConfirmation /> } /> 
           </Route>
           <Route path="/manager" element={ <Manager /> }>        
             <Route path="waterresistance" element={ <WaterResistance /> } />  

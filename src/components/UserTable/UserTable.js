@@ -217,8 +217,8 @@ const UserTable = () => {
                 <thead>
                     <tr className="text-center fs-6">
                         <th scope="col">№</th>
-                        <th scope="col" className='sortable' onClick={ (e) => sort(e, 'userName') }>Логін</th>
-                        <th scope="col" className='sortable' onClick={ (e) => sort(e, 'email') }>Email</th>
+                        <th scope="col" className='sortable text-start ps-0' onClick={ (e) => sort(e, 'userName') }>Логін</th>
+                        <th scope="col" className='sortable text-start ps-0' onClick={ (e) => sort(e, 'email') }>Email</th>
                         <th scope="col" className='sortable' onClick={ (e) => sort(e, 'isManager') }>Менеджер</th>
                         <th scope="col" className='sortable' onClick={ (e) => sort(e, 'isAdmin') }>Адмін</th>
                         <th scope="col" className='sortable' onClick={ (e) => sort(e, 'isActive') }>Заблоковано</th>

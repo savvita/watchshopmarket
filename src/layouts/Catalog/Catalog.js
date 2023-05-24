@@ -116,6 +116,7 @@ const Catalog = () => {
     return (
 
         <div className="pt-4">
+
             <Row>
                 <Button className="catalog__sidebar-offcanvas-btn" onClick={ () => setIsOpen(!isOpen) }>Фільтри</Button>
             </Row>
