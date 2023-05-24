@@ -272,6 +272,15 @@ const UserProfileTable = () => {
                         </Col>
                     </Row>
 
+                    { !editMode && <Row className="p-2 border-bottom ms-2 me-2 userprofile-table__row">
+                        <Col sm="12" md="4">
+                            <Label>Пароль:</Label>
+                        </Col>
+                       <Col sm="12" md="8">
+                            <Link to="/user/changepassword" className="btn btn-secondary">Змінити пароль</Link>
+                        </Col> 
+                    </Row> }
+
                     <Row className="m-3">
                         <Col className="d-flex">
                             { editMode ? 

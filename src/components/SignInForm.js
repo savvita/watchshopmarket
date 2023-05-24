@@ -68,9 +68,10 @@ const SignInForm = ({ onSignIn, onError }) => {
                     </Col>
                 </Row>        
             </FormGroup>
-            <Row className="mt-5">
-                <Col><Link to="/signup" className="text-decoration-none">Зареєструватися</Link></Col>
-            </Row>
+            <div className="mt-5 d-flex flex-wrap justify-content-between">
+                <div><Link to="/signup" className="text-decoration-none">Зареєструватися</Link></div>
+                <div><Link to="/resetpassword" className="text-decoration-none">Забув пароль?</Link></div>
+            </div>
             <Row className="d-flex justify-content-center">
                 <Button onClick={ signIn } color="warning" disabled={ !isValid } className="mt-3 ps-4 pe-4">Увійти</Button>
             </Row>

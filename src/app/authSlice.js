@@ -73,6 +73,30 @@ export const signInAsync = createAsyncThunk(
     }
   );
 
+  export const resetPasswordRequestAsync = createAsyncThunk(
+    'auth/resetrequest',
+    async (model) => {
+      const response = await db.Users.resetPasswordRequest(model);
+      return response;
+    }
+  );
+
+  export const resetPasswordAsync = createAsyncThunk(
+    'auth/reset',
+    async (model) => {
+      const response = await db.Users.resetPassword(model);
+      return response;
+    }
+  );
+
+  export const changePasswordAsync = createAsyncThunk(
+    'auth/change',
+    async (model) => {
+      const response = await db.Users.changePassword(model);
+      return response;
+    }
+  );
+
 export const authSlice = createSlice({
         name: 'auth',
         initialState: {
@@ -188,6 +212,30 @@ export const authSlice = createSlice({
                 state.status = 'loading';
               })
               .addCase(confirmEmailAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+
+                return state;
+              })
+              .addCase(resetPasswordRequestAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(resetPasswordRequestAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+
+                return state;
+              })
+              .addCase(resetPasswordAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(resetPasswordAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+
+                return state;
+              })
+              .addCase(changePasswordAsync.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(changePasswordAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
 
                 return state;

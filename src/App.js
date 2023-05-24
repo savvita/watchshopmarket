@@ -60,6 +60,10 @@ import Promotion from './layouts/Promotion';
 import PromotionDetail from './layouts/PromotionDetail';
 import Slide from './layouts/Slide';
 import EmailConfirmation from './layouts/EmailConfirmation';
+import ResetPasswordRequest from './components/ResetPasswordRequest';
+import ResetPassword from './components/ResetPassword';
+import ResetPasswordResult from './components/ResetPasswordResult';
+import ChangePassword from './components/ChangePassword';
 
 function App() {
   return (
@@ -78,6 +82,9 @@ function App() {
             <Route path="watches/:id" element={ <WatchInfoPage /> } />
             <Route path="orders/:id" element={ <OrderDetail isManagerMode={ false } /> } />
             <Route path="promotion/:id" element={ <PromotionDetail isManagerMode={ false } /> } />
+            <Route path="resetpassword" element={ <ResetPasswordRequest /> } /> 
+            <Route path="resetpassword/:result" element={ <ResetPasswordResult /> } /> 
+            <Route path="reset/:userId/:code" element={ <ResetPassword /> } /> 
           </Route>
           <Route path="/user" element={ <User /> }>
             <Route path="profile" element={ <UserProfile /> } />
@@ -85,6 +92,7 @@ function App() {
             <Route path="reviews" element={ <ReviewTable /> } /> 
             <Route path="emailconfirmation" element={ <EmailConfirmation /> } /> 
             <Route path="emailconfirmation/:result" element={ <EmailConfirmation /> } /> 
+            <Route path="changepassword" element={ <ChangePassword /> } /> 
           </Route>
           <Route path="/manager" element={ <Manager /> }>        
             <Route path="waterresistance" element={ <WaterResistance /> } />  

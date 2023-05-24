@@ -462,6 +462,30 @@ const Users = function() {
     this.confirmEmail = async function() {
         return await db_get(`${api}/auth/confirmation`);
     }
+
+    this.resetPasswordRequest = async function(model) {
+        if(!model) {
+            return undefined;
+        }
+
+        return await db_post(`${api}/auth/reset`, model);
+    }
+
+    this.resetPassword = async function(model) {
+        if(!model) {
+            return undefined;
+        }
+        
+        return await db_post(`${api}/auth/resetPassword`, model);
+    }
+
+    this.changePassword = async function(model) {
+        if(!model) {
+            return undefined;
+        }
+        
+        return await db_post(`${api}/auth/changepassword`, model);
+    }
 }
 
 const Payments = function() {
