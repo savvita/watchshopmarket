@@ -1,70 +1,91 @@
-# Getting Started with Create React App
+# Інтернет-магазин наручних годинників
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+В магазині передбачено чотири режими доступу:
+1. **Неавторизований користувач**. В цьому режимі користувач може лише переглядати товари.
+2. **Режим звичайного користувача**. Доступний після авторизації. В цьому режимі користувачеві доступні функції:
+  -    Перегляд товарів.
+  -    Додавання товарів у кошик, редагування та очищення кошика.
+  -    Оформлення замовлення та скасування замовлення, яке є активним.
+  -    Написання відгуків. Також передбачено редагування та видалення своїх відгуків.
+  -    Перегляд та редагування свого профілю, перегляд історії замовлень та залишених відгуків.
+3. **Режим менеджера**. Доступ до цього режиму надається адміністратором. Можливості:
+  -   Управління товарами: додавання, редагування, зняття з продажу.
+  -   Управління окремими характеристиками товару: додавання, редагування видалення.
+  -   Перегляд статистики продажів:
+      -     за кожним товаром та за кожною окремою характеристикою – дані за поточний рік по місяцях;
+      -     за кожною характеристикою – дані за весь час та поточний місяць.
+  -  Управління замовленнями.
+  -  Модерація відгуків.
+  -  Управління акціями: створення, редагування та видалення.
+  -  Створення та управління появою слайдів на каруселі на головній сторінці.
+4. **Режим адміністратора**. Доступ до цього режиму надається іншим адміністратором. Можливості:
+  -  Перегляд зареєстрованих користувачів, управління їх доступом, блокування та розблокування користувачів.
+  -  Управління файлами у сховищі, які не використовуються.
+  -  Оновлення реєстрів з Нової пошти.
+  -  Управління способами доставки та оплати: створення, редагування, видалення.
+____________________________
 
-## Available Scripts
+**Авторизація**: логін має бути унікальним.
 
-In the project directory, you can run:
+**Підтвердження email**: вимагається тільки для відновлення паролю. При зміні email необхідно повторно проходити верифікацію.
 
-### `npm start`
+**Зв’язок:**
+1. Користувачеві автоматично надсилаються листи на електронну пошту при:
+    - реєстрації;
+    - зміні або відновленні паролю;
+    - створенні нового замовлення.
+2. Для відновлення пароля на пошту відправляється посилання для скидання паролю. Лист відправляється лише на пошту, яка була підтверджена раніше.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**Карусель:**
+  -  Відображаються слайди, які були створені менеджером. Якщо до слайду прив’язана акція, то слайд веде на сторінку акції.
+  -  Кожен слайд має свій індекс, згідно якого він з’являється у каруселі.
+  -  Активних слайдів не може бути більше 5.
+  -  Якщо створених слайдів менше, карусель доповнюється статичними слайдами.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**Головна:** відображаються товари з категорії Популярне (не більше 9, з останніх добавлених).
 
-### `npm test`
+**Header:**
+1. Меню формується в залежності від прав користувача.
+2. При спробі доступу до сторінки, яка потребує дозволів, користувач без відповідних прав допущений не буде.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Каталог:** відображаються всі товари, які в продажі.
 
-### `npm run build`
+**Замовлення:**
+1. У кожного замовлення є відповідальний менеджер.
+2. Тільки відповідальний менеджер може управляти замовленням. 
+3. Користувач, який створив замовлення, може скасувати замовлення, якщо воно не було скасовано раніше або виконане.
+    
+**Відгуки:**
+1. Добавляти відгуки може тільки авторизований користувач
+2. Перед публікацією проходять модерацію.
+3. Після редагування відгук проходить повторну модерацію.
+4. Заборонено редагувати видалені відгуки.
+5. Рейтинг враховується тільки у коментарів, які пройшли модерацію та не були видалені.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Нова пошта:** інтегровано перелік населених пунктів та відділень Нової пошти. У адміністратора є можливість оновлювати перелік за допомогою API Нової пошти.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**Акції:**
+1. Знижка може бути або на товар конкретного виробника, або на весь товар у магазині.
+2. Якщо добавляється акція, яка діє на весь товар, всі інші акції відключаються.
+3. Якщо добавляється акція, яка діє на товар конкретного виробника, всі інші акції, пов’язані з цим виробником, відключаються.
+4. При додаванні нового товару, який підпадає під вже існуючу акцію, на нього автоматично розповсюджується дія акції. 
+5. Знижки, які були вручну встановлені на акційні товари, переписуються і не відновлюються після завершення акції.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**Сховище:**
+1. При видаленні зображень товару файли фізично не видаляються.
+2. Адміністратор має доступ до переліку таких файлів та за необхідності може їх завантажити.
+3. Адміністратор може видалити непотрібні файли.
+4. Адміністратор не може видаляти файли, які належать товару або слайду.
 
-### `npm run eject`
+____________________________
+Фронт реалізовано за допомогою React, бек – ASP.NET
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+**База даних:**
+1. Для взаємодії з базою даних використовується Entity Framework.
+2. Більшість даних фактично не видаляється з бази даних, а маркується як видалене.
+3. При фактичному видаленні даних, в інших таблицях, які посилаються на видалені дані, встановлюється NULL.
+4. Редагування товару/слайду/акції/профілю/тощо: використовується механізм оптимістичного блокування на випадок одночасного редагування.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**GitGub:**
+- Фронт: https://github.com/savvita/watchshopmarket
+- Бек: https://github.com/savvita/Watch/tree/dev
