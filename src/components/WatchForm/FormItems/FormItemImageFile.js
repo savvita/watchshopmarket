@@ -67,6 +67,7 @@ const FormItemImageFile = ({ initialValues, onChange }) => {
     return (
         <div className='pt-2'>
             <Input name="file" type="file" onChange={ handleFiles } multiple size={ 1024 * 1024 } accept="image/jpeg" />
+            <FormText>*&nbsp;Максимум 5 файлів</FormText><br />
             <FormText>*&nbsp;Максимальний розмір 1&nbsp;Мб</FormText><br />
             { errors.map((item, idx) => <p key={ idx } className='text-danger'>{ item }</p>) }
             { imgs && imgs.map((item, idx) => <ImagePreview key={ idx } img={ item } onDelete={ deleteImage } />) } 

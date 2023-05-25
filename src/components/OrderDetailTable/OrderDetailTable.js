@@ -166,7 +166,7 @@ const OrderDetailTable = ({ item, isManagerMode, viewOnly }) => {
                         </div>
                     }
                     
-                    { viewOnly !== true && item.delivery && item.delivery.id === 2 && !item.en && <div className="d-flex">
+                    { isManagerMode && viewOnly !== true && item.delivery && item.delivery.id === 2 && !item.en && <div className="d-flex">
                         <Button className="me-2" onClick={ () => setEnVisible(true) }>Додати номер ЕН</Button>
                         <ENInput visible={ enVisible } validationRule={ validateEN } validationErrorText={ enErrorText } onCancel={ () => setEnVisible(false) } onAccept={ setEN } />
                     </div> }

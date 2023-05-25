@@ -40,7 +40,8 @@ const BasketActions = ({ onOrdering }) => {
         <div>
             <Button className='m-2' onClick={ updateBasket } disabled={ !isValid }>Зберегти</Button>
             <Button className='m-2' onClick={ clearBasket } disabled={ basket && basket.details && basket.details.length === 0 }>Очистити</Button>
-            <Button className='m-2' onClick={ onOrdering } disabled={ !isValid }>Оформити замовлення</Button>
+            {/* <Button className='m-2' onClick={ onOrdering } disabled={ !isValid }>Оформити замовлення</Button> */}
+            <Button className='m-2' onClick={ onOrdering }>Оформити замовлення</Button>
         </div>
     );
 }

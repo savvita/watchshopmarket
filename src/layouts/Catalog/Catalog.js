@@ -140,7 +140,7 @@ const Catalog = () => {
                             { filterText.map((item, idx) => <p key={ idx } className="m-1 border border-light rounded-5 p-2 ps-3 pe-3 d-inline-block">{ item }</p>) }
                         </div>
                     }
-                    <div className="text-white d-flex justify-content-between mb-2">
+                    <div className="text-white d-flex justify-content-between mb-2 mt-2">
                         <PerPageSelect values={ pages } onChange={ (idx) => setPerPage(pages[idx]) } />
                         <SortingSelect items={ sortingItems } onChange={ setSorting } />
                     </div>

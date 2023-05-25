@@ -5,6 +5,7 @@ import { Input, FormGroup } from 'reactstrap';
 import { useState } from 'react';
 
 import './WatchPropertyTable.css';
+import { Link } from 'react-router-dom';
 
 const WatchPropertyTableRow = ({ idx, item, className, onEdit, link, onOnSaleChange, onIsTopChange }) => {
     const [onSale, setOnSale] = useState(item && item.onSale);
@@ -34,12 +35,15 @@ const WatchPropertyTableRow = ({ idx, item, className, onEdit, link, onOnSaleCha
             setIsTop(!isTop);
         }
     }
+    if(!item) {
+        return null;
+    }
 
     return (
         <tr className={ className }>
             <th scope="row" className='text-center ms-4 me-4'><p className="p-1 m-0">{ idx }</p></th>
             <td><p className="p-1 m-0">{ item && item.id }</p></td>
-            <td>{ item && item.title }</td>
+            <td><Link to={ `/watches/${ item.id }` } className="text-white text-decoration-none">{ item && item.title }</Link></td>
             <td>{ item && item.model }</td>
             <td>{ item && item.price }</td>
             <td>{ item && item.discount }</td>

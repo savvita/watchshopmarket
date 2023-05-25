@@ -12,7 +12,7 @@ const FileTableRow = ({ idx, item, onDownload, onDelete }) => {
                 <p className="p-1 m-0"> { item  }</p>
             </td>
             <td className="text-center">
-                <a href={ item } alt={ item }>
+                <a href={ item } alt={ item } target="_blank">
                     <div id={ `file${ idx }__download` } className="d-inline-block overflow-hidden p-1">
                         <FaDownload className="property-table__icon" onClick={ onDownload } />
                     </div>

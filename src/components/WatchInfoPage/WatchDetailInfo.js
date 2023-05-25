@@ -4,14 +4,16 @@ import { Nav, NavItem, NavLink, TabContent, TabPane, Table, Row, Col } from 'rea
 import Reviews from '../Reviews/Reviews';
 
 import { createAsync } from '../../app/reviewSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { getByIdAsync } from '../../app/watchSlice';
 import InfoModal from '../InfoModal';
 import NewReview from '../Reviews/NewReview';
-
+import { selectCurrent } from '../../app/authSlice';
 
 const WatchDetailInfo = ({ item, className }) => {
+    const user = useSelector(selectCurrent);
+
     const [activeTab, setActiveTab] = useState('1');
 
     const [value, setValue] = useState({});
@@ -195,7 +197,7 @@ const WatchDetailInfo = ({ item, className }) => {
                 <TabPane tabId="3">
                     <Row className="flex-row-reverse">
                         <Col md="12" lg="6">
-                            <NewReview onAccept={ saveReview } />
+                            { user && user.isUser && user.isActive && <NewReview onAccept={ saveReview } /> }
                         </Col>
                         <Col md="12" lg="6">
                             { value.reviews && <Reviews items={ value.reviews } /> }

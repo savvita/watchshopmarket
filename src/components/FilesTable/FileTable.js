@@ -100,7 +100,9 @@ const FileTable = () => {
             setInfoModal(true);
         }
         else {
-            await dispatch(getAsync());
+            setTimeout(async function() {
+                await dispatch(getAsync());
+            }, 500);
         }
     }
 
